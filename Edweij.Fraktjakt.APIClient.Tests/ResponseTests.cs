@@ -30,6 +30,6 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             
         }
 
-        public static Response Exposed(string message) => Response.UnbindableResponse(message);
+        public static Response Exposed(string message) => Response.CreateErrorResponse(message);
     }
 }

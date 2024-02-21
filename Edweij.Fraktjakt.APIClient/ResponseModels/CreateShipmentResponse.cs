@@ -8,8 +8,8 @@ public record CreateShipmentResponse(string ServerStatus, ResponseStatus Respons
 {
     public static async Task<Response> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
-        if (httpResponseMessage == null) return UnbindableResponse("HttpResponseMessage was null");
-        if (!httpResponseMessage.IsSuccessStatusCode) return UnbindableResponse($"Not successfull response ({httpResponseMessage.StatusCode}). Response Content: '{await httpResponseMessage.Content.ReadAsStringAsync()}'.");
+        if (httpResponseMessage == null) return CreateErrorResponse("HttpResponseMessage was null");
+        if (!httpResponseMessage.IsSuccessStatusCode) return CreateErrorResponse($"Not successfull response ({httpResponseMessage.StatusCode}). Response Content: '{await httpResponseMessage.Content.ReadAsStringAsync()}'.");
         string xml = await httpResponseMessage.Content.ReadAsStringAsync();
         return FromXml(xml);
     }
@@ -35,7 +35,7 @@ public record CreateShipmentResponse(string ServerStatus, ResponseStatus Respons
         }
         catch (Exception ex)
         {
-            return UnbindableResponse($"Invalid xml: {ex.Message}");
+            return CreateErrorResponse($"Invalid xml: {ex.Message}");
         }
     }
 

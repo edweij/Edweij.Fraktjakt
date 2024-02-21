@@ -14,6 +14,7 @@ namespace Edweij.Fraktjakt.TestConsole
             var configuration = builder.Build();
             int id = int.Parse(configuration["Id"] ?? "0");
             string key = configuration["Key"] ?? string.Empty;
+
             var sender = new Sender(id, key)
             {
                 Currency = "SEK",
@@ -51,7 +52,7 @@ namespace Edweij.Fraktjakt.TestConsole
             Console.WriteLine($"Before query: {DateTime.Now}");
             var response = await client.Query(shipment);
             Console.WriteLine($"After query: {DateTime.Now}");
-            if (response.ResponseStatus != ResponseStatus.Error &&  response is ShipmentResponse shipmentResponse)
+            if (response.ResponseStatus == ResponseStatus.Ok &&  response is ShipmentResponse shipmentResponse)
             {                
                 var product = shipmentResponse.Products.FirstOrDefault(p => !string.IsNullOrEmpty(p.ServicePointLocatorApi));
                 if (product != null)
