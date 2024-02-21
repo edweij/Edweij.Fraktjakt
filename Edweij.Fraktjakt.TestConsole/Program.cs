@@ -1,4 +1,5 @@
 ﻿using Edweij.Fraktjakt.APIClient;
+using Microsoft.Extensions.Configuration;
 
 namespace Edweij.Fraktjakt.TestConsole
 {
@@ -6,8 +7,10 @@ namespace Edweij.Fraktjakt.TestConsole
     {
         static async Task Main(string[] args)
         {
-            int id = 37195;
-            string key = "fd23c28a493774889c406ea1f3122fa476eb76f8";
+            var builder = new ConfigurationBuilder().AddJsonFile("secrets.json");
+            var configuration = builder.Build();
+            int id = int.Parse(configuration["Id"] ?? "0");
+            string key = configuration["Key"] ?? string.Empty;
             var sender = new Sender(id, key)
             {
                 Currency = "SEK",
