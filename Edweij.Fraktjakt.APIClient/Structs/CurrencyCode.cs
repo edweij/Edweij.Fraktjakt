@@ -6,7 +6,7 @@ public readonly struct CurrencyCode
 
     public CurrencyCode()
     {
-        Code = "SE";
+        Code = "SEK";
     }
 
     public CurrencyCode(string code)

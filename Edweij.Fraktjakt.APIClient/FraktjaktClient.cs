@@ -51,7 +51,6 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     public async Task<Response> Query(ShipmentQuery shipment)
     {
-        if (shipment == null) throw new ArgumentNullException(nameof(shipment));            
         if (!shipment.IsValid) throw new ArgumentException("Shipment is not valid");
         if (shipment.Sender != Sender) throw new ArgumentException("Sender in shipment is different from the clients sender");
 
@@ -67,7 +66,6 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     public async Task<Response> Order(Order order)
     {
-        if (order == null) throw new ArgumentNullException(nameof(order));
         if (!order.IsValid) throw new ArgumentException("Order is not valid");
         if (order.Sender != Sender) throw new ArgumentException("Sender in order is different from the clients sender");
 
@@ -83,7 +81,6 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     public async Task<Response> CreateShipment(CreateShipment createShipment)
     {
-        if (createShipment == null) throw new ArgumentNullException(nameof(createShipment));
         if (!createShipment.IsValid) throw new ArgumentException("createShipment is not valid");
         if (createShipment.Sender != Sender) throw new ArgumentException("Sender in createShipment is different from the clients sender");
 
