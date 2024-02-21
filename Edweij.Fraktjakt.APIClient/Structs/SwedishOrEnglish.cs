@@ -5,9 +5,11 @@ public readonly struct SwedishOrEnglish
     public string Code { get; init; }
 
     private static readonly HashSet<string> ValidCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
-{
-    "SV", "EN"
-};
+        {
+            "SV", "EN"
+        };
+
+    public SwedishOrEnglish() { Code = "SV"; }
 
     public SwedishOrEnglish(string code)
     {
@@ -24,4 +26,14 @@ public readonly struct SwedishOrEnglish
     }
 
     public override string ToString() => Code;
+
+    public static SwedishOrEnglish Swedish()
+    {
+        return new SwedishOrEnglish("SV");
+    }
+
+    public static SwedishOrEnglish English()
+    {
+        return new SwedishOrEnglish("EN");
+    }
 }
