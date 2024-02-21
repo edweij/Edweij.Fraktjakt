@@ -1,3 +1,5 @@
+using Edweij.Fraktjakt.APIClient.Structs;
+
 namespace Edweij.Fraktjakt.APIClient.Tests
 {
     public class CountryCodeTests

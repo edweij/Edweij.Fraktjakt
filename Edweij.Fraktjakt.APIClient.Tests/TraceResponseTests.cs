@@ -1,4 +1,6 @@
-﻿using System.Net;
+﻿using Edweij.Fraktjakt.APIClient.Enums;
+using Edweij.Fraktjakt.APIClient.ResponseModels;
+using System.Net;
 
 namespace Edweij.Fraktjakt.APIClient.Tests
 {

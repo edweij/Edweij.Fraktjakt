@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.Tests

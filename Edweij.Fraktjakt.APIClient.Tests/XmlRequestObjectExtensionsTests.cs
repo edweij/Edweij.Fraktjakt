@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Edweij.Fraktjakt.APIClient.RequestModels;
+using System.Text;
 
 namespace Edweij.Fraktjakt.APIClient.Tests
 {

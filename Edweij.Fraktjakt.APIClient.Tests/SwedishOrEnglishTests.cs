@@ -1,4 +1,6 @@
-﻿namespace Edweij.Fraktjakt.APIClient.Tests
+﻿using Edweij.Fraktjakt.APIClient.Structs;
+
+namespace Edweij.Fraktjakt.APIClient.Tests
 {
     [TestFixture]
     public class SwedishOrEnglishTests

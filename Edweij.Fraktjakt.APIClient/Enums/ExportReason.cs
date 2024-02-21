@@ -1,12 +1,11 @@
-﻿namespace Edweij.Fraktjakt.APIClient
+﻿namespace Edweij.Fraktjakt.APIClient.Enums;
+
+public enum ExportReason
 {
-    public enum ExportReason
-    {
-        SALE,
-        GIFT,
-        SAMPLE,
-        RETURN,
-        REPAIR,
-        PERSONAL_EFFECTS
-    }
+    SALE,
+    GIFT,
+    SAMPLE,
+    RETURN,
+    REPAIR,
+    PERSONAL_EFFECTS
 }

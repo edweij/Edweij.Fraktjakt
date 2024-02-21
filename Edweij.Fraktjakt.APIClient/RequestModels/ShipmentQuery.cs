@@ -1,285 +1,285 @@
-﻿using System.Text;
+﻿using Edweij.Fraktjakt.APIClient.Structs;
+using System.Text;
 using System.Xml;
 
-namespace Edweij.Fraktjakt.APIClient
+namespace Edweij.Fraktjakt.APIClient.RequestModels;
+
+public class ShipmentQuery : XmlRequestObject
 {
-    public class ShipmentQuery : XmlRequestObject
+    public Sender Sender { get; init; }
+    public ToAddress ToAddress { get; init; }
+    
+
+    /// <summary>
+    /// Create a shipment to query available freights for your integration
+    /// </summary>
+    /// <param name="sender">Required parameter with your integration id, API key and other settings</param>
+    /// <param name="toAddress">Required parameter with the receivers address</param>
+    /// <param name="fromAddress">Optional from address, if not provided uses from address in integration settings</param>
+    /// <param name="items">Optional parameter with shipment items. A shipment should contain at least one shipment item or parcel</param>
+    /// <param name="parcels">Optional parameter with parcels. A shipment should contain at least one parcel or shipment item</param>
+    /// <exception cref="ArgumentNullException"></exception>
+    public ShipmentQuery(Sender sender, ToAddress toAddress, FromAddress? fromAddress = null, IEnumerable<ShipmentItem>? items = null, IEnumerable<Parcel>? parcels = null) 
+    { 
+        Sender = sender ?? throw new ArgumentNullException(nameof(sender));
+        ToAddress = toAddress ?? throw new ArgumentNullException(nameof(toAddress));
+
+        if (!Sender.IsValid) throw new ArgumentException("Provided sender not valid");
+        if (!ToAddress.IsValid) throw new ArgumentException("Provided toAddress not valid");
+
+        if (fromAddress != null) FromAddress = fromAddress;
+        if (items != null) Items = items.ToList();
+        if (parcels != null) Parcels = parcels.ToList();            
+    }
+
+    private FromAddress? fromAddress = null;
+    public FromAddress? FromAddress
     {
-        public Sender Sender { get; init; }
-        public ToAddress ToAddress { get; init; }
-        
+        get { return fromAddress; }
 
-        /// <summary>
-        /// Create a shipment to query available freights for your integration
-        /// </summary>
-        /// <param name="sender">Required parameter with your integration id, API key and other settings</param>
-        /// <param name="toAddress">Required parameter with the receivers address</param>
-        /// <param name="fromAddress">Optional from address, if not provided uses from address in integration settings</param>
-        /// <param name="items">Optional parameter with shipment items. A shipment should contain at least one shipment item or parcel</param>
-        /// <param name="parcels">Optional parameter with parcels. A shipment should contain at least one parcel or shipment item</param>
-        /// <exception cref="ArgumentNullException"></exception>
-        public ShipmentQuery(Sender sender, ToAddress toAddress, FromAddress? fromAddress = null, IEnumerable<ShipmentItem>? items = null, IEnumerable<Parcel>? parcels = null) 
-        { 
-            Sender = sender ?? throw new ArgumentNullException(nameof(sender));
-            ToAddress = toAddress ?? throw new ArgumentNullException(nameof(toAddress));
+        set
+        {
+            if (value == null) throw new ArgumentNullException("FromAddress");
+            if (!value.IsValid) throw new ArgumentException("FromAddress not valid");
+            fromAddress = value;
+        }
+    }
+    private List<ShipmentItem> items = new();
+    public IEnumerable<ShipmentItem> Items
+    {
+        get { return items; }
+        set
+        {
+            if (value == null) throw new ArgumentNullException("Items");
+            if (value.Any(i => !i.IsValid)) throw new ArgumentException("Items not valid");
+            items = value.ToList();
+        }
+    }
+    private List<Parcel> parcels = new List<Parcel>();
+    public IEnumerable<Parcel> Parcels 
+    {
+        get { return parcels; } 
+        set
+        {
+            if (value == null) throw new ArgumentNullException("Parcels");
+            if (value.Any(p => !p.IsValid)) throw new ArgumentException("Parcels not valid");
+            parcels = value.ToList();
+        }
+    }
 
-            if (!Sender.IsValid) throw new ArgumentException("Provided sender not valid");
-            if (!ToAddress.IsValid) throw new ArgumentException("Provided toAddress not valid");
+    public void AddShipmentItem(ShipmentItem item)
+    {
+        if (item != null && item.IsValid) items.Add(item);
+    }
 
-            if (fromAddress != null) FromAddress = fromAddress;
-            if (items != null) Items = items.ToList();
-            if (parcels != null) Parcels = parcels.ToList();            
+    public void AddParcel(Parcel parcel)
+    {
+        if (parcel != null && parcel.IsValid) parcels.Add(parcel);
+    }
+
+
+    /// <summary>
+    /// URL to your own webhook, if used replaces the webhook url in the integation settings
+    /// </summary>
+    public string? CallbackUrl { get; set; }
+    /// <summary>
+    /// Should the shipping be insured, if used replaces the integration settings
+    /// </summary>
+    public bool InsureDefault { get; set; } = false;
+    /// <summary>
+    /// Value of all items in the shipment, use this field if the value isn't specified in commodities element
+    /// </summary>
+    public float? Value { get; set; }
+    /// <summary>
+    /// ISO 4217, the currency for the value tag
+    /// </summary>
+    public CurrencyCode Currency { get; set; } = "SEK";
+    /// <summary>
+    /// Use if specify sorting instead of the integration setting
+    /// </summary>
+    public bool PriceSort { get; set; } = true;
+    /// <summary>
+    /// Set to true if the result should only return express options
+    /// </summary>
+    public bool Express { get; set; } = false;
+    /// <summary>
+    /// Set to true if the result should only return freights with pickup
+    /// </summary>
+    public bool Pickup { get; set; } = false;
+    /// <summary>
+    /// Set to true if the result should only return freights with dropoff/home delivery
+    /// </summary>
+    public bool Dropoff { get; set; } = false;
+    /// <summary>
+    /// Set to true if the result should only return freights with environmental labelling
+    /// </summary>
+    public bool Green { get; set; } = false;
+    /// <summary>
+    /// Set to true if the result should only return freights with quality label
+    /// </summary>
+    public bool Quality { get; set; } = false;
+    /// <summary>
+    /// Set to true if the result should only return freights with delivery time guarantee
+    /// </summary>
+    public bool TimeGuarantee { get; set; } = false;
+    /// <summary>
+    /// Does the freight contains refrigerated goods
+    /// </summary>
+    public bool ColdContent { get; set; } = false;
+    /// <summary>
+    /// Does the freight contains frozen goods
+    /// </summary>
+    public bool FrozenContent { get; set; } = false;
+    /// <summary>
+    /// Use to specify a single product
+    /// </summary>
+    public int? ShippingProductId { get; set; } = null;
+    /// <summary>
+    /// Set to true to exclude postal agents from the result, use for faster queries
+    /// </summary>
+    public bool NoAgents { get; set; } = false;
+    /// <summary>
+    /// Set to true to exclude freight price from the result, use for faster queries
+    /// </summary>
+    public bool NoPrices { get; set; } = false;
+    /// <summary>
+    /// Set to true to include information about closest agent for submission, will result in slower queries
+    /// </summary>
+    public bool AgentsIn { get; set; } = false;
+    /// <summary>
+    /// Set to true to include id, name and logourl for shipping options in the result
+    /// </summary>
+    public bool ShipperInfo { get; set; } = false;
+            
+    public override IEnumerable<RuleViolation> GetRuleViolations()
+    {
+        if (!Sender.IsValid)
+        {
+            yield return new RuleViolation("Sender", "Sender is not valid");
+            foreach (var err in Sender.GetRuleViolations()) yield return err;
         }
 
-        private FromAddress? fromAddress = null;
-        public FromAddress? FromAddress
+        if (!ToAddress.IsValid)
         {
-            get { return fromAddress; }
+            yield return new RuleViolation("ToAddress", "ToAddress is not valid");
+            foreach (var err in ToAddress.GetRuleViolations()) yield return err;
+        }
 
-            set
-            {
-                if (value == null) throw new ArgumentNullException("FromAddress");
-                if (!value.IsValid) throw new ArgumentException("FromAddress not valid");
-                fromAddress = value;
-            }
-        }
-        private List<ShipmentItem> items = new();
-        public IEnumerable<ShipmentItem> Items
+        if (FromAddress != null && !FromAddress.IsValid)
         {
-            get { return items; }
-            set
-            {
-                if (value == null) throw new ArgumentNullException("Items");
-                if (value.Any(i => !i.IsValid)) throw new ArgumentException("Items not valid");
-                items = value.ToList();
-            }
+            yield return new RuleViolation("FromAddress", "FromAddress is not valid");
+            foreach (var err in FromAddress.GetRuleViolations()) yield return err;
         }
-        private List<Parcel> parcels = new List<Parcel>();
-        public IEnumerable<Parcel> Parcels 
+
+        if (!Items.Any() && !Parcels.Any())
         {
-            get { return parcels; } 
-            set
+            yield return new RuleViolation("Items", "Provide either a shipment item or a parcel");
+            yield return new RuleViolation("Parcels", "Provide either a shipment item or a parcel");
+        }
+
+        if (Items.Any(i => !i.IsValid))
+        {
+            yield return new RuleViolation("Items", "Items contain an invalid item");
+            foreach (var item in Items)
             {
-                if (value == null) throw new ArgumentNullException("Parcels");
-                if (value.Any(p => !p.IsValid)) throw new ArgumentException("Parcels not valid");
-                parcels = value.ToList();
+                foreach (var err in item.GetRuleViolations()) yield return err;
             }
         }
 
-        public void AddShipmentItem(ShipmentItem item)
+        if (Parcels.Any(p => !p.IsValid))
         {
-            if (item != null && item.IsValid) items.Add(item);
+            yield return new RuleViolation("Parcels", "Parcels contain an invalid parcel");
+            foreach (var parcel in Parcels)
+            {
+                foreach (var err in parcel.GetRuleViolations()) yield return err;
+            }
         }
 
-        public void AddParcel(Parcel parcel)
+
+        if (!string.IsNullOrEmpty(CallbackUrl))
         {
-            if (parcel != null && parcel.IsValid) parcels.Add(parcel);
+            if (string.IsNullOrWhiteSpace(CallbackUrl)) yield return new RuleViolation("CallbackUrl", "If a callbackurl is provided it should not be whitespace only");
         }
 
-
-        /// <summary>
-        /// URL to your own webhook, if used replaces the webhook url in the integation settings
-        /// </summary>
-        public string? CallbackUrl { get; set; }
-        /// <summary>
-        /// Should the shipping be insured, if used replaces the integration settings
-        /// </summary>
-        public bool InsureDefault { get; set; } = false;
-        /// <summary>
-        /// Value of all items in the shipment, use this field if the value isn't specified in commodities element
-        /// </summary>
-        public float? Value { get; set; }
-        /// <summary>
-        /// ISO 4217, the currency for the value tag
-        /// </summary>
-        public CurrencyCode Currency { get; set; } = "SEK";
-        /// <summary>
-        /// Use if specify sorting instead of the integration setting
-        /// </summary>
-        public bool PriceSort { get; set; } = true;
-        /// <summary>
-        /// Set to true if the result should only return express options
-        /// </summary>
-        public bool Express { get; set; } = false;
-        /// <summary>
-        /// Set to true if the result should only return freights with pickup
-        /// </summary>
-        public bool Pickup { get; set; } = false;
-        /// <summary>
-        /// Set to true if the result should only return freights with dropoff/home delivery
-        /// </summary>
-        public bool Dropoff { get; set; } = false;
-        /// <summary>
-        /// Set to true if the result should only return freights with environmental labelling
-        /// </summary>
-        public bool Green { get; set; } = false;
-        /// <summary>
-        /// Set to true if the result should only return freights with quality label
-        /// </summary>
-        public bool Quality { get; set; } = false;
-        /// <summary>
-        /// Set to true if the result should only return freights with delivery time guarantee
-        /// </summary>
-        public bool TimeGuarantee { get; set; } = false;
-        /// <summary>
-        /// Does the freight contains refrigerated goods
-        /// </summary>
-        public bool ColdContent { get; set; } = false;
-        /// <summary>
-        /// Does the freight contains frozen goods
-        /// </summary>
-        public bool FrozenContent { get; set; } = false;
-        /// <summary>
-        /// Use to specify a single product
-        /// </summary>
-        public int? ShippingProductId { get; set; } = null;
-        /// <summary>
-        /// Set to true to exclude postal agents from the result, use for faster queries
-        /// </summary>
-        public bool NoAgents { get; set; } = false;
-        /// <summary>
-        /// Set to true to exclude freight price from the result, use for faster queries
-        /// </summary>
-        public bool NoPrices { get; set; } = false;
-        /// <summary>
-        /// Set to true to include information about closest agent for submission, will result in slower queries
-        /// </summary>
-        public bool AgentsIn { get; set; } = false;
-        /// <summary>
-        /// Set to true to include id, name and logourl for shipping options in the result
-        /// </summary>
-        public bool ShipperInfo { get; set; } = false;
-                
-        public override IEnumerable<RuleViolation> GetRuleViolations()
+        if (Value.HasValue)
         {
-            if (!Sender.IsValid)
-            {
-                yield return new RuleViolation("Sender", "Sender is not valid");
-                foreach (var err in Sender.GetRuleViolations()) yield return err;
-            }
+            if (Value.Value < 0f) yield return new RuleViolation("Value", "Don't use a negative value for Value");
+        }
 
-            if (!ToAddress.IsValid)
-            {
-                yield return new RuleViolation("ToAddress", "ToAddress is not valid");
-                foreach (var err in ToAddress.GetRuleViolations()) yield return err;
-            }
+        if (ShippingProductId.HasValue)
+        {
+            if (ShippingProductId.Value < 1) yield return new RuleViolation("ShippingProductId", "Don't use a negative value for ShippingProductId");
+        }
 
-            if (FromAddress != null && !FromAddress.IsValid)
-            {
-                yield return new RuleViolation("FromAddress", "FromAddress is not valid");
-                foreach (var err in FromAddress.GetRuleViolations()) yield return err;
-            }
+        yield break;
+    }
 
-            if (!Items.Any() && !Parcels.Any())
+    public override string ToXml()
+    {
+        if (IsValid)
+        {
+            var sb = new StringBuilder();
+            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
             {
-                yield return new RuleViolation("Items", "Provide either a shipment item or a parcel");
-                yield return new RuleViolation("Parcels", "Provide either a shipment item or a parcel");
-            }
-
-            if (Items.Any(i => !i.IsValid))
-            {
-                yield return new RuleViolation("Items", "Items contain an invalid item");
-                foreach (var item in Items)
+                w.WriteStartElement("shipment");
+                if (!string.IsNullOrEmpty(CallbackUrl))
                 {
-                    foreach (var err in item.GetRuleViolations()) yield return err;
+                    w.WriteElementString("callback_url", CallbackUrl);
                 }
-            }
-
-            if (Parcels.Any(p => !p.IsValid))
-            {
-                yield return new RuleViolation("Parcels", "Parcels contain an invalid parcel");
-                foreach (var parcel in Parcels)
+                if (Value.HasValue)
                 {
-                    foreach (var err in parcel.GetRuleViolations()) yield return err;
+                    w.WriteElementString("value", Value.Value.ToStringPeriodDecimalSeparator());
+                    w.WriteElementString("currency", Currency.ToString());
                 }
-            }
 
-
-            if (!string.IsNullOrEmpty(CallbackUrl))
-            {
-                if (string.IsNullOrWhiteSpace(CallbackUrl)) yield return new RuleViolation("CallbackUrl", "If a callbackurl is provided it should not be whitespace only");
-            }
-
-            if (Value.HasValue)
-            {
-                if (Value.Value < 0f) yield return new RuleViolation("Value", "Don't use a negative value for Value");
-            }
-
-            if (ShippingProductId.HasValue)
-            {
-                if (ShippingProductId.Value < 1) yield return new RuleViolation("ShippingProductId", "Don't use a negative value for ShippingProductId");
-            }
-
-            yield break;
-        }
-
-        public override string ToXml()
-        {
-            if (IsValid)
-            {
-                var sb = new StringBuilder();
-                using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+                if (ShippingProductId.HasValue)
                 {
-                    w.WriteStartElement("shipment");
-                    if (!string.IsNullOrEmpty(CallbackUrl))
-                    {
-                        w.WriteElementString("callback_url", CallbackUrl);
-                    }
-                    if (Value.HasValue)
-                    {
-                        w.WriteElementString("value", Value.Value.ToStringPeriodDecimalSeparator());
-                        w.WriteElementString("currency", Currency.ToString());
-                    }
-
-                    if (ShippingProductId.HasValue)
-                    {
-                        w.WriteElementString("shipping_product_id", ShippingProductId.Value.ToString());
-                    }
-
-                    w.WriteRaw(Sender.ToXml());
-
-                    // Should we include elements with default value or not? Best practices?
-                    w.WriteElementString("insure_default", InsureDefault ? "1" : "0");
-                    w.WriteElementString("price_sort", PriceSort ? "1" : "0");
-                    w.WriteElementString("express", Express ? "1" : "0");
-                    w.WriteElementString("pickup", Pickup ? "1" : "0");
-                    w.WriteElementString("dropoff", Dropoff ? "1" : "0");
-                    w.WriteElementString("green", Green ? "1" : "0");
-                    w.WriteElementString("quality", Quality ? "1" : "0");
-                    w.WriteElementString("time_guarantee", TimeGuarantee ? "1" : "0");
-                    w.WriteElementString("cold", ColdContent ? "1" : "0");
-                    w.WriteElementString("frozen", FrozenContent ? "1" : "0");
-                    w.WriteElementString("no_agents", NoAgents ? "1" : "0");
-                    w.WriteElementString("no_prices", NoPrices ? "1" : "0");
-                    w.WriteElementString("agents_in", AgentsIn ? "1" : "0");
-                    w.WriteElementString("shipper_info", ShipperInfo ? "1" : "0");
-
-                    if (Items != null && Items.Any())
-                    {
-                        w.WriteStartElement("commodities");
-                        foreach (var item in Items)
-                        {
-                            w.WriteRaw(item.ToXml());
-                        }
-                        w.WriteEndElement();
-                    }
-
-                    if (Parcels != null && Parcels.Any())
-                    {
-                        w.WriteStartElement("parcels");
-                        foreach (var p in Parcels)
-                        {
-                            w.WriteRaw(p.ToXml());
-                        }
-                        w.WriteEndElement();
-                    }
-
-                    if (FromAddress != null) w.WriteRaw(FromAddress.ToXml());
-                    w.WriteRaw(ToAddress.ToXml());
+                    w.WriteElementString("shipping_product_id", ShippingProductId.Value.ToString());
                 }
-                return sb.ToString();                
+
+                w.WriteRaw(Sender.ToXml());
+
+                // Should we include elements with default value or not? Best practices?
+                w.WriteElementString("insure_default", InsureDefault ? "1" : "0");
+                w.WriteElementString("price_sort", PriceSort ? "1" : "0");
+                w.WriteElementString("express", Express ? "1" : "0");
+                w.WriteElementString("pickup", Pickup ? "1" : "0");
+                w.WriteElementString("dropoff", Dropoff ? "1" : "0");
+                w.WriteElementString("green", Green ? "1" : "0");
+                w.WriteElementString("quality", Quality ? "1" : "0");
+                w.WriteElementString("time_guarantee", TimeGuarantee ? "1" : "0");
+                w.WriteElementString("cold", ColdContent ? "1" : "0");
+                w.WriteElementString("frozen", FrozenContent ? "1" : "0");
+                w.WriteElementString("no_agents", NoAgents ? "1" : "0");
+                w.WriteElementString("no_prices", NoPrices ? "1" : "0");
+                w.WriteElementString("agents_in", AgentsIn ? "1" : "0");
+                w.WriteElementString("shipper_info", ShipperInfo ? "1" : "0");
+
+                if (Items != null && Items.Any())
+                {
+                    w.WriteStartElement("commodities");
+                    foreach (var item in Items)
+                    {
+                        w.WriteRaw(item.ToXml());
+                    }
+                    w.WriteEndElement();
+                }
+
+                if (Parcels != null && Parcels.Any())
+                {
+                    w.WriteStartElement("parcels");
+                    foreach (var p in Parcels)
+                    {
+                        w.WriteRaw(p.ToXml());
+                    }
+                    w.WriteEndElement();
+                }
+
+                if (FromAddress != null) w.WriteRaw(FromAddress.ToXml());
+                w.WriteRaw(ToAddress.ToXml());
             }
-            throw new ArgumentException("Shipment element is not valid");
+            return sb.ToString();                
         }
+        throw new ArgumentException("Shipment element is not valid");
     }
 }

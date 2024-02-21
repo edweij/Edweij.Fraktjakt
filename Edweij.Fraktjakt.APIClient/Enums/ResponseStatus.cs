@@ -1,9 +1,8 @@
-﻿namespace Edweij.Fraktjakt.APIClient
+﻿namespace Edweij.Fraktjakt.APIClient.Enums;
+
+public enum ResponseStatus
 {
-    public enum ResponseStatus
-    {
-        Ok,
-        Warning,
-        Error
-    }
+    Ok,
+    Warning,
+    Error
 }

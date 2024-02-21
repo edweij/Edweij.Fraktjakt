@@ -1,4 +1,6 @@
-﻿using System.Xml.Linq;
+﻿using Edweij.Fraktjakt.APIClient.ResponseModels;
+using Edweij.Fraktjakt.APIClient.Structs;
+using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.Tests
 {

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Edweij.Fraktjakt.APIClient.Enums;
+using Edweij.Fraktjakt.APIClient.ResponseModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;

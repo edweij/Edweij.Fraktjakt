@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Edweij.Fraktjakt.APIClient.RequestModels;
+using System.Text;
 using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.Tests
@@ -15,14 +16,17 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Act
             var xmlWriterSettings = xmlRequestObject.ExposedXmlWriterSettings;
 
-            // Assert
-            Assert.That(xmlWriterSettings, Is.Not.Null);
-            Assert.That(xmlWriterSettings.Indent, Is.False);
-            Assert.That(xmlWriterSettings.Encoding, Is.EqualTo(Encoding.UTF8));
-            Assert.That(xmlWriterSettings.NewLineOnAttributes, Is.False);
-            Assert.That(xmlWriterSettings.CheckCharacters, Is.True);
-            Assert.That(xmlWriterSettings.OmitXmlDeclaration, Is.True);
-            Assert.That(xmlWriterSettings.WriteEndDocumentOnClose, Is.True);
+            // Assert            
+            Assert.Multiple(() =>
+            {
+                Assert.That(xmlWriterSettings, Is.Not.Null);
+                Assert.That(xmlWriterSettings.Indent, Is.False);
+                Assert.That(xmlWriterSettings.Encoding, Is.EqualTo(Encoding.UTF8));
+                Assert.That(xmlWriterSettings.NewLineOnAttributes, Is.False);
+                Assert.That(xmlWriterSettings.CheckCharacters, Is.True);
+                Assert.That(xmlWriterSettings.OmitXmlDeclaration, Is.True);
+                Assert.That(xmlWriterSettings.WriteEndDocumentOnClose, Is.True);
+            });
         }
 
         [Test]
@@ -35,8 +39,11 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             var generatedXml = xmlRequestObject.ToXml();
 
             // Assert
-            Assert.That(generatedXml, Is.Not.Null);
-            Assert.That(xmlRequestObject.IsValidXml(generatedXml), Is.True);
+            Assert.Multiple(() =>
+            {                
+                Assert.That(generatedXml, Is.Not.Null);
+                Assert.That(xmlRequestObject.IsValidXml(generatedXml), Is.True);
+            });
         }
 
         [Test]

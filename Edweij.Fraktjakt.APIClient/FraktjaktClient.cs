@@ -1,4 +1,7 @@
-﻿using System.Web;
+﻿using Edweij.Fraktjakt.APIClient.RequestModels;
+using Edweij.Fraktjakt.APIClient.ResponseModels;
+using Edweij.Fraktjakt.APIClient.Structs;
+using System.Web;
 
 namespace Edweij.Fraktjakt.APIClient
 {
@@ -31,21 +34,21 @@ namespace Edweij.Fraktjakt.APIClient
             _useMD5Checksum = useMD5Checksum;
         }
 
-        public async Task<HttpResponseMessage> Trace(int shipmentId, SwedishOrEnglish lang)
+        public async Task<Response> Trace(int shipmentId, SwedishOrEnglish lang)
         {
             var url = $"/trace/xml_trace?consignor_id={Sender.Id}&consignor_key={Sender.Key}&shipment_id={shipmentId}&locale={lang}";
             var response = await _httpClient.GetAsync(url);
-            return response;
+            return await TraceResponse.FromHttpResponse(response);
         }
 
-        public async Task<HttpResponseMessage> ShippingDocuments(int shipmentId, SwedishOrEnglish lang)
+        public async Task<Response> ShippingDocuments(int shipmentId, SwedishOrEnglish lang)
         {
             var url = $"/shipping_documents/xml_get?consignor_id={Sender.Id}&consignor_key={Sender.Key}&shipment_id={shipmentId}&locale={lang}";
             var response = await _httpClient.GetAsync(url);
-            return response;
+            return await ShippingDocumentsResponse.FromHttpResponse(response);
         }
 
-        public async Task<HttpResponseMessage> Query(ShipmentQuery shipment)
+        public async Task<Response> Query(ShipmentQuery shipment)
         {
             if (shipment == null) throw new ArgumentNullException(nameof(shipment));            
             if (!shipment.IsValid) throw new ArgumentException("Shipment is not valid");
@@ -58,10 +61,10 @@ namespace Edweij.Fraktjakt.APIClient
                 url += $"&md5_checksum={MD5(xml)}";
             }
             var response = await _httpClient.GetAsync(url);
-            return response;
+            return await ShipmentResponse.FromHttpResponse(response);
         }
 
-        public async Task<HttpResponseMessage> Order(Order order)
+        public async Task<Response> Order(Order order)
         {
             if (order == null) throw new ArgumentNullException(nameof(order));
             if (!order.IsValid) throw new ArgumentException("Order is not valid");
@@ -74,10 +77,10 @@ namespace Edweij.Fraktjakt.APIClient
                 url += $"&md5_checksum={MD5(xml)}";
             }
             var response = await _httpClient.GetAsync(url);
-            return response;
+            return await OrderResponse.FromHttpResponse(response);
         }
 
-        public async Task<HttpResponseMessage> CreateShipment(CreateShipment createShipment)
+        public async Task<Response> CreateShipment(CreateShipment createShipment)
         {
             if (createShipment == null) throw new ArgumentNullException(nameof(createShipment));
             if (!createShipment.IsValid) throw new ArgumentException("createShipment is not valid");
@@ -90,21 +93,22 @@ namespace Edweij.Fraktjakt.APIClient
                 url += $"&md5_checksum={MD5(xml)}";
             }
             var response = await _httpClient.GetAsync(url);
-            return response;
+            return await CreateShipmentResponse.FromHttpResponse(response);
         }
 
-        public async Task<HttpResponseMessage> GetServicePoints(string url)
+        public async Task<Response> GetServicePoints(string url)
         {
             if (string.IsNullOrEmpty(url)) throw new ArgumentNullException(nameof(url));
-            return await _httpClient.GetAsync(url);            
+            var response = await _httpClient.GetAsync(url);
+            return await AgentListResponse.FromHttpResponse(response);
         }
 
-        public string UrlEncode(string input)
+        public static string UrlEncode(string input)
         {
             return HttpUtility.UrlEncode(input);
         }
 
-        public string MD5(string input)
+        public static string MD5(string input)
         {
             using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
             {

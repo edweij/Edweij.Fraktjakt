@@ -1,11 +1,10 @@
-﻿namespace Edweij.Fraktjakt.APIClient
+﻿namespace Edweij.Fraktjakt.APIClient.Enums;
+
+public enum QuantityUnit
 {
-    public enum QuantityUnit
-    {
-        EA,
-        DZ,
-        L,
-        ML,
-        KG
-    }
+    EA,
+    DZ,
+    L,
+    ML,
+    KG
 }

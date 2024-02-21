@@ -1,4 +1,5 @@
-﻿using NUnit.Framework.Internal;
+﻿using Edweij.Fraktjakt.APIClient.RequestModels;
+using NUnit.Framework.Internal;
 using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.Tests

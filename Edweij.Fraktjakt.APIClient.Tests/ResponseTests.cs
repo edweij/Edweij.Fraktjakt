@@ -1,4 +1,7 @@
-﻿namespace Edweij.Fraktjakt.APIClient.Tests
+﻿using Edweij.Fraktjakt.APIClient.Enums;
+using Edweij.Fraktjakt.APIClient.ResponseModels;
+
+namespace Edweij.Fraktjakt.APIClient.Tests
 {
     [TestFixture]
     public class ResponseTests

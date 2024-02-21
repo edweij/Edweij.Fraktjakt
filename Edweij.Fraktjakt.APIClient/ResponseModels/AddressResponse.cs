@@ -1,5 +1,6 @@
-﻿namespace Edweij.Fraktjakt.APIClient
-{
-    public record AddressResponse(string PostalCode, string street, string City, CountryCode Country)
-    { }
-}
+﻿using Edweij.Fraktjakt.APIClient.Structs;
+
+namespace Edweij.Fraktjakt.APIClient.responseModels;
+
+public record AddressResponse(string PostalCode, string street, string City, CountryCode Country)
+{ }
