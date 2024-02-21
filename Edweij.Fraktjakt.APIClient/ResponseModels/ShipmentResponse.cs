@@ -2,14 +2,6 @@
 
 namespace Edweij.Fraktjakt.APIClient
 {
-    public record Response(string ServerStatus, ResponseStatus ResponseStatus, string WarningMessage, string ErrorMessage)
-    {
-        protected static Response UnbindableResponse(string message)
-        {
-            return new Response("Server status unknown, no or invalid response.", ResponseStatus.Error, string.Empty, message);
-        }
-    }
-
     public record ShipmentResponse(string ServerStatus, ResponseStatus ResponseStatus, string WarningMessage, string ErrorMessage, CurrencyCode Currency,
             int Id, string AccessCode, string AccessLink, string TrackingCode, string TrackingLink) : Response(ServerStatus, ResponseStatus, WarningMessage, ErrorMessage)
     {
@@ -52,9 +44,6 @@ namespace Edweij.Fraktjakt.APIClient
                 return UnbindableResponse($"Invalid xml: {ex.Message}");
             }
         }
-
-        
-
 
         public string? AgentSelectionLink { get; init; } = null;
         public IEnumerable<ShippingProductResponse> Products { get; private set; } = Enumerable.Empty<ShippingProductResponse>();

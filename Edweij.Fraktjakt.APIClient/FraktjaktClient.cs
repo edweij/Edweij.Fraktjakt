@@ -2,7 +2,7 @@
 
 namespace Edweij.Fraktjakt.APIClient
 {
-    public class Client : IDisposable
+    public class FraktjaktClient : IDisposable
     {
         private readonly HttpClient _httpClient;
         private readonly bool _useMD5Checksum = true;
@@ -10,7 +10,7 @@ namespace Edweij.Fraktjakt.APIClient
         public Sender Sender { get; init; }
 
 
-        public Client(int id, string key, bool useMD5Checksum = true) {
+        public FraktjaktClient(int id, string key, bool useMD5Checksum = true) {
             if (id <= 0) throw new ArgumentException(nameof(id));
             if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException(nameof(key));
 
@@ -20,7 +20,7 @@ namespace Edweij.Fraktjakt.APIClient
             _useMD5Checksum = useMD5Checksum;
         }
 
-        public Client(Sender sender, bool useMD5Checksum = true)
+        public FraktjaktClient(Sender sender, bool useMD5Checksum = true)
         {
             if (sender == null) throw new ArgumentNullException(nameof(sender));
             if (!sender.IsValid) throw new ArgumentException("Sender is not valid");

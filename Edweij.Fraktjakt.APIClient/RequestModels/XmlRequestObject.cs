@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Net.Mail;
-using System.Security;
 using System.Text;
 using System.Xml;
 using System.Xml.Linq;
@@ -17,15 +16,16 @@ namespace Edweij.Fraktjakt.APIClient
             xmlWriterSettings.Indent = false;
             xmlWriterSettings.Encoding = Encoding.UTF8;
             xmlWriterSettings.NewLineOnAttributes = false;
-            xmlWriterSettings.CheckCharacters = true;            
+            xmlWriterSettings.CheckCharacters = true;
             xmlWriterSettings.OmitXmlDeclaration = true;
             xmlWriterSettings.WriteEndDocumentOnClose = true;
         }
 
         public abstract string ToXml();
 
-        protected XmlWriterSettings XmlWriterSettings {
-            get 
+        protected XmlWriterSettings XmlWriterSettings
+        {
+            get
             {
                 return xmlWriterSettings;
             }
@@ -47,7 +47,7 @@ namespace Edweij.Fraktjakt.APIClient
 
     public static class XmlRequestObjectExtensions
     {
-        
+
         public static string ToStringPeriodDecimalSeparator(this float value)
         {
             NumberFormatInfo nfi = new NumberFormatInfo();

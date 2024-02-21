@@ -17,7 +17,7 @@ namespace Edweij.Fraktjakt.TestConsole
                 Language = Language6391.sv,
                 SystemName = "Edweij.Fraktjakt"
             };
-            var client = new Client(sender);
+            var client = new FraktjaktClient(sender);
             var toaddress = new ToAddress
             {
                 CityName = "Visby",
