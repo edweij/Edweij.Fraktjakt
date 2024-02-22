@@ -35,18 +35,14 @@ namespace Edweij.Fraktjakt.TestConsole
                 ShipperInfo = true
             };
 
-            shipment.AddShipmentItem(new ShipmentItem
+            shipment.AddShipmentItem(new ShipmentItem("Litteratur, konst och politik i välfärdsstatens Sverige", 4, 100f, 2.112f)
             {
                 ArticleNumber = "9789188763518",
                 CountryOfManufacture = "SE",
                 Currency = "SEK",
-                Name = "Litteratur, konst och politik i välfärdsstatens Sverige",
-                Quantity = 4,
-                TotalWeight = 2.112f,
                 UnitLength = 22.5f,
                 UnitWidth = 15.5f,
                 UnitHeight = 2.0f,
-                UnitPrice = 100f,
                 ShelfPosition = "Ej angett"
             });
             Console.WriteLine($"Before query: {DateTime.Now}");

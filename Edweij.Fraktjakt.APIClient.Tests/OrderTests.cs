@@ -20,13 +20,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         {
             // Create a valid MockOrder instance
             var validSender = new Sender(1, "key");
-            var validItems = new List<ShipmentItem> { new ShipmentItem
-            {
-                Name = "TestItem",
-                Quantity = 2,
-                TotalWeight = 1.5f,
-                UnitPrice = 10.0f
-            } };
+            var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
 
             validMockOrder = new MockOrder(validSender, 1, validItems) { Value = 100.0f };
 
@@ -47,7 +41,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         {
             // Arrange
             var validSender = new Sender(1, "key");
-            var validItems = new List<ShipmentItem> { new ShipmentItem { Name = "Name", Quantity = 1, TotalWeight = 0.5f, UnitPrice = 125f} };
+            var validItems = new List<ShipmentItem> { new ShipmentItem("Name", 1, 0.5f, 125f) };
 
             // Act & Assert
             Assert.Multiple(() =>
@@ -59,7 +53,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(() => new MockOrder(validSender, 0, validItems), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Provided shippingProductId not valid"));
 
                 // Invalid items
-                var invalidItems = new List<ShipmentItem> { new ShipmentItem() }; // Invalid item
+                var invalidItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 1, 1.5f, 10.0f) { Description = "description" } }; // Invalid item
                 Assert.That(() => new MockOrder(validSender, 1, invalidItems), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Items contain invalid item"));
             });
              

@@ -12,13 +12,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Arrange
             var sender = new Sender(1, "key");
             var toAddress = new ToAddress { PostalCode = "12345"};
-            var validItems = new List<ShipmentItem> { new ShipmentItem
-            {
-                Name = "TestItem",
-                Quantity = 2,
-                TotalWeight = 1.5f,
-                UnitPrice = 10.0f
-            } };
+            var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
 
             // Act
             var shipment = new CreateShipment(sender, toAddress, items: validItems);
@@ -50,14 +44,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             var validShipment = new CreateShipment(
                 new Sender(1, "key"),
                 new ToAddress { PostalCode = "123456"},
-            items: new List<ShipmentItem> { new ShipmentItem
-            {
-                Name = "TestItem",
-                Quantity = 2,
-                TotalWeight = 1.5f,
-                UnitPrice = 10.0f
-            } }
-            );
+            items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) });
 
             // Act & Assert
             Assert.That(validShipment.IsValid, Is.True);
@@ -84,13 +71,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             var validShipment = new CreateShipment(
                 new Sender(1, "key"),
                 new ToAddress { PostalCode = "12345" },
-            items: new List<ShipmentItem> { new ShipmentItem
-            {
-                Name = "TestItem",
-                Quantity = 2,
-                TotalWeight = 1.5f,
-                UnitPrice = 10.0f
-            } }
+            items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) }
             );
 
             // Act

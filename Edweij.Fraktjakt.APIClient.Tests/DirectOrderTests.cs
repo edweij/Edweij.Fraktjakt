@@ -17,13 +17,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Create a valid DirectOrder instance
             var validSender = new Sender(1, "key");
             var validToAddress = new ToAddress { PostalCode = "12345" };
-            var validItems = new List<ShipmentItem> { new ShipmentItem
-            {
-                Name = "TestItem",
-                Quantity = 2,
-                TotalWeight = 1.5f,
-                UnitPrice = 10.0f
-            } };
+            var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
             var validFromAddress = new FromAddress { PostalCode = "12345" };
             var validParcels = new List<Parcel> { new Parcel { Weight = 0.5f } };
 
@@ -43,13 +37,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Arrange
             var validSender = new Sender(1, "key");
             var validToAddress = new ToAddress { PostalCode = "12345"};
-            var validItems = new List<ShipmentItem> { new ShipmentItem
-            {
-                Name = "TestItem",
-                Quantity = 2,
-                TotalWeight = 1.5f,
-                UnitPrice = 10.0f
-            } };
+            var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
             var validFromAddress = new FromAddress { PostalCode = "12345"};
             var validParcels = new List<Parcel> { new Parcel { Weight = 0.5f } };
 
@@ -63,7 +51,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Assert.That(() => new DirectOrder(validSender, new ToAddress(), 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("toAddress"));
 
             // Invalid items
-            var invalidItems = new List<ShipmentItem> { new ShipmentItem() }; // Invalid item
+            var invalidItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 1, 1.5f, 10.0f) { Description = "Description" } }; // Invalid item
             Assert.That(() => new DirectOrder(validSender, validToAddress, 1, invalidItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Items contain invalid item"));
 
             // Invalid fromAddress

@@ -55,7 +55,7 @@ public class ShipmentQuery : XmlRequestObject
             items = value.ToList();
         }
     }
-    private List<Parcel> parcels = new List<Parcel>();
+    private List<Parcel> parcels = new();
     public IEnumerable<Parcel> Parcels 
     {
         get { return parcels; } 
