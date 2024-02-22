@@ -23,13 +23,11 @@ public abstract class XmlRequestObject : ValidationObject
 
     public abstract string ToXml();
 
-    protected XmlWriterSettings XmlWriterSettings
+    public XmlWriter CreateXmlWriter(StringBuilder sb, ConformanceLevel conformanceLevel = ConformanceLevel.Document)
     {
-        get
-        {
-            return xmlWriterSettings;
-        }
-    }
+        xmlWriterSettings.ConformanceLevel = conformanceLevel;
+        return XmlWriter.Create(sb, xmlWriterSettings);
+    } 
 
     public bool IsValidXml(string xml)
     {

@@ -108,7 +108,7 @@ public class DirectOrder : Order
                 xml.Add(parcelsElement);
             }
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 xml.WriteTo(w);
             }

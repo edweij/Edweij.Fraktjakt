@@ -31,10 +31,8 @@ public abstract class Address : XmlRequestObject
     {
         if (IsValid)
         {
-            var settings = XmlWriterSettings.Clone();
-            settings.ConformanceLevel = ConformanceLevel.Fragment;
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, settings))
+            using (var w = CreateXmlWriter(sb, ConformanceLevel.Fragment))
             {
                 if (!string.IsNullOrWhiteSpace(StreetAddress1)) w.WriteElementString("street_address_1", StreetAddress1);
                 if (!string.IsNullOrWhiteSpace(StreetAddress2)) w.WriteElementString("street_address_2", StreetAddress2);

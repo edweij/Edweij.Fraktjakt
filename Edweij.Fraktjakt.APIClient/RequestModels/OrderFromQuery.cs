@@ -33,7 +33,7 @@ public class OrderFromQuery : Order
             var xml = XElement.Parse(base.ToXml());
             xml.Add(new XElement("shipment_id", ShipmentId));
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 xml.WriteTo(w);
             }

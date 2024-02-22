@@ -5,10 +5,17 @@ namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public class Parcel : XmlRequestObject
 {
+    public Parcel(float weight) 
+    {
+        if (weight <= 0) throw new ArgumentException("Weight must be larger than 0");
+        Weight = weight;
+    }
+
+
     /// <summary>
     /// Parcel weight in kilograms
     /// </summary>
-    public float? Weight { get; set; }
+    public float Weight { get; init; }
     /// <summary>
     /// Parcel length in centimeters
     /// </summary>
@@ -27,10 +34,10 @@ public class Parcel : XmlRequestObject
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("parcel");
-                w.WriteElementString("weight", Weight!.Value.ToStringPeriodDecimalSeparator());
+                w.WriteElementString("weight", Weight.ToStringPeriodDecimalSeparator());
                 if (Length.HasValue) w.WriteElementString("length", Length!.Value.ToStringPeriodDecimalSeparator());
                 if (Width.HasValue) w.WriteElementString("width", Width!.Value.ToStringPeriodDecimalSeparator());
                 if (Height.HasValue) w.WriteElementString("height", Height!.Value.ToStringPeriodDecimalSeparator());
@@ -42,41 +49,20 @@ public class Parcel : XmlRequestObject
 
     public override IEnumerable<RuleViolation> GetRuleViolations()
     {
-        if (!Weight.HasValue)
+        if (Length.HasValue && Length.Value <= 0)
         {
-            yield return new RuleViolation("Weight", "Weight is required");
-        }
-        else if (Weight.Value <= 0)
-        {
-            yield return new RuleViolation("Weight", "Weight must be larger than 0");
+            yield return new RuleViolation("Length", "Length must be larger than 0");
         }
 
-        if (Length.HasValue)
+        if (Width.HasValue && Width.Value <= 0)
         {
-            if (Length.Value <= 0)
-            {
-                yield return new RuleViolation("Length", "Length must be larger than 0");
-            }
+            yield return new RuleViolation("Width", "Width must be larger than 0");
         }
 
-        if (Width.HasValue)
+        if (Height.HasValue && Height.Value <= 0)
         {
-            if (Width.Value <= 0)
-            {
-                yield return new RuleViolation("Width", "Width must be larger than 0");
-            }
+            yield return new RuleViolation("Height", "Height must be larger than 0");
         }
-
-        if (Height.HasValue)
-        {
-            if (Height.Value <= 0)
-            {
-                yield return new RuleViolation("Height", "Height must be larger than 0");
-            }
-        }
-
-
-        yield break;
     }
 
     

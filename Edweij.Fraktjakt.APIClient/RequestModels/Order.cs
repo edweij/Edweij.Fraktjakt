@@ -116,7 +116,7 @@ public abstract class Order : XmlRequestObject
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("OrderSpecification");
                 if (Value.HasValue)

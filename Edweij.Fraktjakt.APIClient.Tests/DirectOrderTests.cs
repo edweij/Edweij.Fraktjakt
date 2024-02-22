@@ -19,7 +19,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             var validToAddress = new ToAddress { PostalCode = "12345" };
             var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
             var validFromAddress = new FromAddress { PostalCode = "12345" };
-            var validParcels = new List<Parcel> { new Parcel { Weight = 0.5f } };
+            var validParcels = new List<Parcel> { new Parcel(0.5f) };
 
             validDirectOrder = new DirectOrder(validSender, validToAddress, 1, validItems, validFromAddress, validParcels)
             {
@@ -39,7 +39,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             var validToAddress = new ToAddress { PostalCode = "12345"};
             var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
             var validFromAddress = new FromAddress { PostalCode = "12345"};
-            var validParcels = new List<Parcel> { new Parcel { Weight = 0.5f } };
+            var validParcels = new List<Parcel> { new Parcel(0.5f) };
 
             // Act & Assert
             // Invalid sender
@@ -59,7 +59,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Assert.That(() => new DirectOrder(validSender, validToAddress, 1, validItems, invalidFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("fromAddress not valid"));
 
             // Invalid parcels
-            var invalidParcels = new List<Parcel> { new Parcel() }; // Invalid parcel
+            var invalidParcels = new List<Parcel> { new Parcel(0.5f) { Length = 0 } }; // Invalid parcel
             Assert.That(() => new DirectOrder(validSender, validToAddress, 1, validItems, validFromAddress, invalidParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("parcels not valid"));
         }        
 

@@ -13,7 +13,7 @@ public class ToAddress : Address
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("address_to");
                 w.WriteRaw(base.ToXml());

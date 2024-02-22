@@ -30,7 +30,7 @@ public class Dispatcher : Party
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("sender");
                 if (!string.IsNullOrEmpty(CompanyName)) w.WriteElementString("company_from", CompanyName);

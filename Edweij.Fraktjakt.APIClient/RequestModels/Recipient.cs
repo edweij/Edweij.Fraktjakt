@@ -23,7 +23,7 @@ public class Recipient : Party
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("recipient");
                 if (!string.IsNullOrEmpty(CompanyName)) w.WriteElementString("company_to", CompanyName);

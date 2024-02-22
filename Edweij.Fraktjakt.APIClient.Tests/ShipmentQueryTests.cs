@@ -21,7 +21,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.Throws<ArgumentException>(() => new ShipmentQuery(new Sender(1, "key"), new ToAddress())); // invalid to adress
                 Assert.Throws<ArgumentException>(() => new ShipmentQuery(new Sender(1, "key"), new ToAddress { PostalCode = "62141" }, fromAddress: new FromAddress())); // invalid from adress
                 Assert.Throws<ArgumentException>(() => new ShipmentQuery(new Sender(1, "key"), new ToAddress { PostalCode = "62141" }, items: new List<ShipmentItem>() { new ShipmentItem("TestItem", 0, 1.5f, 10.0f) })); // invalid items
-                Assert.Throws<ArgumentException>(() => new ShipmentQuery(new Sender(1, "key"), new ToAddress { PostalCode = "62141" }, parcels: new List<Parcel>() { new Parcel() })); // invalid parcels
+                Assert.Throws<ArgumentException>(() => new ShipmentQuery(new Sender(1, "key"), new ToAddress { PostalCode = "62141" }, parcels: new List<Parcel>() { new Parcel(1.5f) { Length = 0 } })); // invalid parcels
             });
            
         }
@@ -36,7 +36,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.Throws<ArgumentNullException>(() => query.Items = null); // Set items to null
                 Assert.Throws<ArgumentException>(() => query.Items = new List<ShipmentItem>() { new ShipmentItem("TestItem", 0, 1.5f, 10.0f) }); // Set items with invalid item
                 Assert.Throws<ArgumentNullException>(() => query.Parcels = null); // Set parcels to null
-                Assert.Throws<ArgumentException>(() => query.Parcels = new List<Parcel>() { new Parcel() }); // Set parcels with invalid item
+                Assert.Throws<ArgumentException>(() => query.Parcels = new List<Parcel>() { new Parcel(1.5f) { Length = 0} }); // Set parcels with invalid item
             });
             
         }

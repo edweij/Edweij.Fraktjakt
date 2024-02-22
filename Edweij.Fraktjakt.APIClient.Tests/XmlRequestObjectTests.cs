@@ -1,33 +1,11 @@
 ﻿using Edweij.Fraktjakt.APIClient.RequestModels;
-using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.Tests
 {
     [TestFixture]
     public class XmlRequestObjectTests
     {
-        [Test]
-        public void XmlWriterSettings_ShouldHaveCorrectSettings()
-        {
-            // Arrange
-            var xmlRequestObject = new MockXmlRequestObject();
-
-            // Act
-            var xmlWriterSettings = xmlRequestObject.ExposedXmlWriterSettings;
-
-            // Assert            
-            Assert.Multiple(() =>
-            {
-                Assert.That(xmlWriterSettings, Is.Not.Null);
-                Assert.That(xmlWriterSettings.Indent, Is.False);
-                Assert.That(xmlWriterSettings.Encoding, Is.EqualTo(Encoding.UTF8));
-                Assert.That(xmlWriterSettings.NewLineOnAttributes, Is.False);
-                Assert.That(xmlWriterSettings.CheckCharacters, Is.True);
-                Assert.That(xmlWriterSettings.OmitXmlDeclaration, Is.True);
-                Assert.That(xmlWriterSettings.WriteEndDocumentOnClose, Is.True);
-            });
-        }
+        
 
         [Test]
         public void ToXml_ShouldGenerateValidXml()
@@ -70,9 +48,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
     }
 
     public class MockXmlRequestObject : XmlRequestObject
-    {
-        public XmlWriterSettings ExposedXmlWriterSettings => base.XmlWriterSettings;
-
+    {        
         public override IEnumerable<RuleViolation> GetRuleViolations()
         {
             throw new NotImplementedException();

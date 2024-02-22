@@ -28,7 +28,7 @@ public class ReferredSender : XmlRequestObject
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("<referred_consignor>");
                 w.WriteElementString("id", Id.ToString() ?? "");

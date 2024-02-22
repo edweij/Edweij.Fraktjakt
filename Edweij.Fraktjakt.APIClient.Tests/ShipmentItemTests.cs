@@ -67,11 +67,8 @@ public class ShipmentItemTests
     [TestCase("ItemName", 2, 10.5f, -5.5f)]
     public void ToXml_InvalidItem_ShouldThrowArgumentException(string name, int quantity, float unitPrice, float totalWeight)
     {
-        // Arrange
-        var shipmentItem = new ShipmentItem(name, quantity, unitPrice, totalWeight);
-
-        // Act & Assert
-        Assert.Throws<ArgumentException>(() => shipmentItem.ToXml());
+        // Arrange, Act & Assert
+        Assert.Throws<ArgumentException>(() => new ShipmentItem(name, quantity, unitPrice, totalWeight));
     }
 
     [Test]
@@ -89,8 +86,8 @@ public class ShipmentItemTests
         // Assert
         Assert.Multiple(() => {
             Assert.That(ruleViolations, Has.Exactly(1).Items);
-            Assert.That(ruleViolations, Has.Some.Property("Property").EqualTo("Description"));
-            Assert.That(ruleViolations, Has.Some.Property("ErrorMessage").Contains("too short or too long"));
+            Assert.That(ruleViolations, Has.Some.Property("PropertyName").EqualTo("Description"));
+            Assert.That(ruleViolations, Has.Some.Property("Error").Contains("too short or too long"));
         });        
     }
 
@@ -107,9 +104,12 @@ public class ShipmentItemTests
         var ruleViolations = shipmentItem.GetRuleViolations();
 
         // Assert
-        Assert.That(ruleViolations, Has.Exactly(1).Items);
-        Assert.That(ruleViolations, Has.Some.Property("Property").EqualTo("ArticleNumber"));
-        Assert.That(ruleViolations, Has.Some.Property("ErrorMessage").Contains("too long"));
+        Assert.Multiple(() => {
+            Assert.That(ruleViolations, Has.Exactly(1).Items);
+            Assert.That(ruleViolations, Has.Some.Property("PropertyName").EqualTo("ArticleNumber"));
+            Assert.That(ruleViolations, Has.Some.Property("Error").Contains("too long"));
+        });
+        
     }
 
     [Test]
@@ -126,7 +126,7 @@ public class ShipmentItemTests
 
         // Assert
         Assert.That(ruleViolations, Has.Exactly(1).Items);
-        Assert.That(ruleViolations, Has.Some.Property("Property").EqualTo("ShelfPosition"));
-        Assert.That(ruleViolations, Has.Some.Property("ErrorMessage").Contains("too long"));
+        Assert.That(ruleViolations, Has.Some.Property("PropertyName").EqualTo("ShelfPosition"));
+        Assert.That(ruleViolations, Has.Some.Property("Error").Contains("too long"));
     }
 }

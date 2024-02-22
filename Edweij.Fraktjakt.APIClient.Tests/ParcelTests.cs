@@ -10,9 +10,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         public void ToXml_WithValidParcel_ShouldGenerateValidXml()
         {
             // Arrange
-            var validParcel = new Parcel
+            var validParcel = new Parcel(1.5f)
             {
-                Weight = 1.5f,
                 Length = 10.0f,
                 Width = 5.0f,
                 Height = 3.0f
@@ -47,7 +46,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         public void ToXml_WithInvalidParcel_ShouldThrowException()
         {
             // Arrange
-            var invalidParcel = new Parcel(); // Weight is not set
+            var invalidParcel = new Parcel(1.5f) { Length = 0}; // invalid length
 
             // Act & Assert
             Assert.That(invalidParcel.ToXml, Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Parcel element is not valid"));
@@ -57,9 +56,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         public void GetRuleViolations_WithValidParcel_ShouldReturnEmptyList()
         {
             // Arrange
-            var validParcel = new Parcel
+            var validParcel = new Parcel(1.5f)
             {
-                Weight = 1.5f,
                 Length = 10.0f,
                 Width = 5.0f,
                 Height = 3.0f
@@ -72,20 +70,17 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Assert.That(ruleViolations, Is.Empty);
         }
 
-        [TestCase(null, null, null, null, "Weight is required")]
-        [TestCase(-1.0f, null, null, null, "Weight must be larger than 0")]
         [TestCase(1.5f, 0.0f, null, null, "Length must be larger than 0")]
         [TestCase(1.5f, -1.0f, null, null, "Length must be larger than 0")]
         [TestCase(1.5f, 10.0f, 0.0f, null, "Width must be larger than 0")]
         [TestCase(1.5f, 10.0f, -1.0f, null, "Width must be larger than 0")]
         [TestCase(1.5f, 10.0f, 5.0f, 0.0f, "Height must be larger than 0")]
         [TestCase(1.5f, 10.0f, 5.0f, -1.0f, "Height must be larger than 0")]
-        public void GetRuleViolations_WithInvalidParcel_ShouldReturnExpectedViolations(float? weight, float? length, float? width, float? height, params string[] expectedMessages)
+        public void GetRuleViolations_WithInvalidParcel_ShouldReturnExpectedViolations(float weight, float? length, float? width, float? height, params string[] expectedMessages)
         {
             // Arrange
-            var invalidParcel = new Parcel
+            var invalidParcel = new Parcel(weight)
             {
-                Weight = weight,
                 Length = length,
                 Width = width,
                 Height = height

@@ -11,7 +11,7 @@ public class FromAddress : Address
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("address_from");
                 w.WriteRaw(base.ToXml());

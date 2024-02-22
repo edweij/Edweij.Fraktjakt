@@ -5,7 +5,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IncrementVersionOnBuild>yyyy.0.1.0+</IncrementVersionOnBuild>
-    <Version>2024.0.1.141</Version>
+    <Version>2024.0.1.150</Version>
   </PropertyGroup>
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">

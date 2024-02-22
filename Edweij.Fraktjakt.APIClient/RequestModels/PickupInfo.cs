@@ -20,7 +20,7 @@ public class PickupInfo : XmlRequestObject
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("booking");
                 if (!string.IsNullOrEmpty(DrivingInstructions)) w.WriteElementString("driving_instructions", DrivingInstructions);

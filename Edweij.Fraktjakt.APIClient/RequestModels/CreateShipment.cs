@@ -218,7 +218,7 @@ public class CreateShipment : XmlRequestObject
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("CreateShipment");
                 w.WriteRaw(Sender.ToXml());

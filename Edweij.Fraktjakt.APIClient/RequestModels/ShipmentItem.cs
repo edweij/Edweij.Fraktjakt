@@ -60,7 +60,7 @@ public class ShipmentItem : XmlRequestObject
         if (IsValid)
         {
             var sb = new StringBuilder();
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("commodity");
                 w.WriteElementString("name", Name);

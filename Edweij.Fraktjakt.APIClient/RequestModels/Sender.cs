@@ -34,7 +34,7 @@ public class Sender : ReferredSender
         if (IsValid)
         {
             var sb = new StringBuilder();                
-            using (var w = XmlWriter.Create(sb, XmlWriterSettings))
+            using (var w = CreateXmlWriter(sb))
             {
                 w.WriteStartElement("consignor");
                 w.WriteElementString("id", Id.ToString());
