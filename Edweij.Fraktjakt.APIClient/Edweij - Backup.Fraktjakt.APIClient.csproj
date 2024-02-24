@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IncrementVersionOnBuild>yyyy.0.1.0+</IncrementVersionOnBuild>
+    <Version>$(Version)-pre-release</Version>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>Fraktjakt API Client</Title>
+    <Authors>edweij</Authors>
+    <PackageTags>Fraktjakt; API Client</PackageTags>
+    <Description>Fraktjakt.APIClient is a library written in c# to integrate with Fraktjakt.</Description>
+    <Copyright>Copyright (c) 2024 Edvin Weijmers</Copyright>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+  </PropertyGroup>
+	<ItemGroup>
+		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+			<_Parameter1>Edweij.Fraktjakt.APIClient.Tests</_Parameter1>
+		</AssemblyAttribute>
+	</ItemGroup>
+	<ItemGroup>
+	  <None Include="..\README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+	<ItemGroup>
+	  <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+	  <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="README.md">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
+	</ItemGroup>
+
+</Project>

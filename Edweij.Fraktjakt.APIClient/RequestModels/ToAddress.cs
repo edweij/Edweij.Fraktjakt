@@ -1,11 +1,11 @@
 ﻿using Edweij.Fraktjakt.APIClient.Enums;
 using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public class ToAddress : Address
 {
+    public ToAddress(string postalCode) : base(postalCode) { }
     public Language6391 Language { get; set; } = Language6391.sv;
 
     public override string ToXml()

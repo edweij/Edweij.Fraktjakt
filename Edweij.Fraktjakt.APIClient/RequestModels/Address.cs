@@ -6,11 +6,17 @@ namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public abstract class Address : XmlRequestObject
 {
+    public Address(string postalCode)
+    {
+        if (string.IsNullOrWhiteSpace(postalCode)) throw new ArgumentException("Invalid postalcode");
+        if (postalCode.Length > 16) throw new ArgumentException("postalCode max length 16");
+        PostalCode = postalCode;
+    }
 
     public string? StreetAddress1 { get; set; } = null;
     public string? StreetAddress2 { get; set; } = null;
     public string? StreetAddress3 { get; set; } = null;
-    public string? PostalCode { get; set; } = null;
+    public string PostalCode { get; init; }
     public string? CityName { get; set; } = null;
     public bool IsResidental { get; set; } = true;
     public CountryCode CountryCode { get; set; } = new();
@@ -19,12 +25,35 @@ public abstract class Address : XmlRequestObject
 
     public override IEnumerable<RuleViolation> GetRuleViolations()
     {
-        if (string.IsNullOrEmpty(PostalCode))
+        if (!string.IsNullOrEmpty(StreetAddress1))
         {
-            yield return new RuleViolation("PostalCode", "PostalCode is required");
+            if (StreetAddress1.Length > 35)
+            {
+                yield return new RuleViolation("StreetAddress1", "Max length 35");
+            }
+        }
+        if (!string.IsNullOrEmpty(StreetAddress2))
+        {
+            if (StreetAddress2.Length > 35)
+            {
+                yield return new RuleViolation("StreetAddress2", "Max length 35");
+            }
+        }
+        if (!string.IsNullOrEmpty(StreetAddress3))
+        {
+            if (StreetAddress3.Length > 35)
+            {
+                yield return new RuleViolation("StreetAddress3", "Max length 35");
+            }
+        }
+        if (!string.IsNullOrEmpty(CityName))
+        {
+            if (CityName.Length > 32)
+            {
+                yield return new RuleViolation("CityName", "Max length 32");
+            }
         }
 
-        yield break;
     }
 
     public override string ToXml()
@@ -37,7 +66,7 @@ public abstract class Address : XmlRequestObject
                 if (!string.IsNullOrWhiteSpace(StreetAddress1)) w.WriteElementString("street_address_1", StreetAddress1);
                 if (!string.IsNullOrWhiteSpace(StreetAddress2)) w.WriteElementString("street_address_2", StreetAddress2);
                 if (!string.IsNullOrWhiteSpace(StreetAddress3)) w.WriteElementString("street_address_3", StreetAddress3);
-                w.WriteElementString("postal_code", PostalCode!);
+                w.WriteElementString("postal_code", PostalCode);
                 if (!string.IsNullOrWhiteSpace(CityName)) w.WriteElementString("city_name", CityName);
                 w.WriteElementString("residental", IsResidental ? "1" : "0");
                 w.WriteElementString("country_code", CountryCode.ToString());

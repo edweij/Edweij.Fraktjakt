@@ -12,8 +12,6 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
     private readonly bool _useMD5Checksum = true;
 
     public Sender Sender { get; init; }
-
-
     public FraktjaktClient(int id, string key, bool useMD5Checksum = true) {
         if (id <= 0) throw new ArgumentException(nameof(id));
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException(nameof(key));

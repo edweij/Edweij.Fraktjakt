@@ -16,9 +16,9 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         {
             // Create a valid DirectOrder instance
             var validSender = new Sender(1, "key");
-            var validToAddress = new ToAddress { PostalCode = "12345" };
+            var validToAddress = new ToAddress("12345");
             var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
-            var validFromAddress = new FromAddress { PostalCode = "12345" };
+            var validFromAddress = new FromAddress("12345");
             var validParcels = new List<Parcel> { new Parcel(0.5f) };
 
             validDirectOrder = new DirectOrder(validSender, validToAddress, 1, validItems, validFromAddress, validParcels)
@@ -27,18 +27,18 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             };
 
             // Create an invalid DirectOrder instance
-            var invalidToAddress = new ToAddress { PostalCode = "12345" };
+            var invalidToAddress = new ToAddress("12345");
             invalidDirectOrder = new DirectOrder(validSender, invalidToAddress, 1, validItems, validFromAddress, validParcels);
-            invalidDirectOrder.ToAddress.PostalCode = "";
+            invalidDirectOrder.ToAddress.StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam";
         }
         [Test]
         public void Constructor_WithInvalidArguments_ShouldThrowException()
         {
             // Arrange
             var validSender = new Sender(1, "key");
-            var validToAddress = new ToAddress { PostalCode = "12345"};
+            var validToAddress = new ToAddress("12345");
             var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
-            var validFromAddress = new FromAddress { PostalCode = "12345"};
+            var validFromAddress = new FromAddress("12345");
             var validParcels = new List<Parcel> { new Parcel(0.5f) };
 
             // Act & Assert
@@ -48,14 +48,14 @@ namespace Edweij.Fraktjakt.APIClient.Tests
 
             // Invalid toAddress
             Assert.That(() => new DirectOrder(validSender, null, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("toAddress"));
-            Assert.That(() => new DirectOrder(validSender, new ToAddress(), 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("toAddress"));
+            Assert.That(() => new DirectOrder(validSender, new ToAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("toAddress"));
 
             // Invalid items
             var invalidItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 1, 1.5f, 10.0f) { Description = "Description" } }; // Invalid item
             Assert.That(() => new DirectOrder(validSender, validToAddress, 1, invalidItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Items contain invalid item"));
 
             // Invalid fromAddress
-            var invalidFromAddress = new FromAddress(); // Invalid fromAddress
+            var invalidFromAddress = new FromAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }; // Invalid fromAddress
             Assert.That(() => new DirectOrder(validSender, validToAddress, 1, validItems, invalidFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("fromAddress not valid"));
 
             // Invalid parcels
@@ -118,7 +118,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(ruleViolations.Count(), Is.EqualTo(1));
-                Assert.That(ruleViolations, Has.Some.Matches<RuleViolation>(v => v.PropertyName == "PostalCode" && v.Error == "PostalCode is required"));                
+                Assert.That(ruleViolations, Has.Some.Matches<RuleViolation>(v => v.PropertyName == "StreetAddress1" && v.Error == "Max length 35"));                
             });
         }
 

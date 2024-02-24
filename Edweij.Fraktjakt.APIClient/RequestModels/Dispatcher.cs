@@ -6,7 +6,6 @@ namespace Edweij.Fraktjakt.APIClient.RequestModels;
 public class Dispatcher : Party
 {
     public string? Rex { get; set; } = null;
-
     public string? Voec { get; set; } = null;
     public string? GbVat { get; set; } = null;
     public string? Ioss { get; set; } = null;

@@ -22,12 +22,11 @@ namespace Edweij.Fraktjakt.TestConsole
                 SystemName = "Edweij.Fraktjakt"
             };
             var client = new FraktjaktClient(sender);
-            var toaddress = new ToAddress
+            var toaddress = new ToAddress("62141")
             {
                 CityName = "Visby",
                 CountryCode = "SE",
                 IsResidental = true,
-                PostalCode = "62141",
                 StreetAddress1 = "Skarphällsgatan 13"
             };
             var shipment = new ShipmentQuery(sender, toaddress)

@@ -11,7 +11,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         {
             // Arrange
             var sender = new Sender(1, "key");
-            var toAddress = new ToAddress { PostalCode = "12345"};
+            var toAddress = new ToAddress("12345");
             var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
 
             // Act
@@ -31,7 +31,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         {
             // Arrange
             var sender = new Sender(1, "key");
-            var invalidToAddress = new ToAddress(); // Invalid to address details
+            var invalidToAddress = new ToAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }; // Invalid to address details
 
             // Act & Assert
             Assert.That(() => new CreateShipment(sender, invalidToAddress), Throws.ArgumentException.With.Message.EqualTo("Provided toAddress not valid"));
@@ -43,7 +43,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Arrange
             var validShipment = new CreateShipment(
                 new Sender(1, "key"),
-                new ToAddress { PostalCode = "123456"},
+                new ToAddress("12345"),
             items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) });
 
             // Act & Assert
@@ -56,7 +56,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Arrange
             var invalidShipment = new CreateShipment(
                 new Sender(1, "key"),
-                new ToAddress { PostalCode = "12345"}            
+                new ToAddress("12345") 
                 /* no items == invalid */
             );
 
@@ -70,7 +70,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Arrange
             var validShipment = new CreateShipment(
                 new Sender(1, "key"),
-                new ToAddress { PostalCode = "12345" },
+                new ToAddress("12345"),
             items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) }
             );
 
@@ -99,7 +99,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Arrange
             var invalidShipment = new CreateShipment(
                 new Sender(1, "key"),
-                new ToAddress { PostalCode = "12345"}            
+                new ToAddress("12345")            
                 /* no items or parcels == invalid */
             );
 

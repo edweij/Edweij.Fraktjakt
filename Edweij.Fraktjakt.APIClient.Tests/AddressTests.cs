@@ -14,7 +14,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         [Test]
         public void MinimalFromAdressGeneratesCorrectXml()
         {
-            var address = new FromAddress { PostalCode = "62141" };
+            var address = new FromAddress("62141");
             var element = XElement.Parse(address.ToXml());
             Assert.Multiple(() =>
             {
@@ -33,7 +33,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         [Test]
         public void MinimalToAdressGeneratesCorrectXml()
         {
-            var address = new ToAddress { PostalCode = "62141" };
+            var address = new ToAddress("62141");
             var element = XElement.Parse(address.ToXml());
             Assert.Multiple(() =>
             {
@@ -54,13 +54,12 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         [Test]
         public void MaximumFromAdressGeneratesCorrectXml()
         {
-            var address = new FromAddress { 
+            var address = new FromAddress("62141") { 
                 CityName = "city",
                 CountryCode = "SE",
                 EntryCode = "1234",
                 Instructions = "instructions",
                 IsResidental = false,
-                PostalCode = "62141",
                 StreetAddress1 = "street1",
                 StreetAddress2 = "street2",
                 StreetAddress3 = "street3"
@@ -95,14 +94,13 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         [Test]
         public void MaximumToAdressGeneratesCorrectXml()
         {
-            var address = new ToAddress
+            var address = new ToAddress("62141")
             {
                 CityName = "city",
                 CountryCode = "SE",
                 EntryCode = "1234",
                 Instructions = "instructions",
                 IsResidental = false,
-                PostalCode = "62141",
                 StreetAddress1 = "street1",
                 StreetAddress2 = "street2",
                 StreetAddress3 = "street3",
@@ -138,16 +136,32 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         }
 
         [Test]
-        public void InvalidToAddressShouldThrow()
+        [TestCase("   ")]
+        [TestCase("12345678901234567")]
+        public void InvalidConstructor_ToAddress_ShouldThrow(string postalCode)
         {
-            var address = new ToAddress();
+            Assert.Throws<ArgumentException>(() => new ToAddress(postalCode));
+        }
+
+        [Test]
+        [TestCase("   ")]
+        [TestCase("12345678901234567")]
+        public void InvalidConstructor_FromAddress_ShouldThrow(string postalCode)
+        {
+            Assert.Throws<ArgumentException>(() => new FromAddress(postalCode));
+        }
+
+        [Test]
+        public void Invalid_ToAddress_ToXml_ShouldThrow()
+        {
+            var address = new ToAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" };
             Assert.Throws<ArgumentException>(() => address.ToXml());
         }
 
         [Test]
-        public void InvalidFromAddressShouldThrow()
+        public void Invalid_FromAddress_ToXml_ShouldThrow()
         {
-            var address = new FromAddress();
+            var address = new FromAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" };
             Assert.Throws<ArgumentException>(() => address.ToXml());
         }
 

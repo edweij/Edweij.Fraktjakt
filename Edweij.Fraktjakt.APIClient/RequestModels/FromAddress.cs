@@ -1,11 +1,11 @@
-﻿using Edweij.Fraktjakt.APIClient.RequestModels;
-using System.Text;
-using System.Xml;
+﻿using System.Text;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public class FromAddress : Address
 {
+    public FromAddress(string postalCode) : base(postalCode) { }
+
     public override string ToXml()
     {
         if (IsValid)
@@ -17,7 +17,6 @@ public class FromAddress : Address
                 w.WriteRaw(base.ToXml());
             }
             return sb.ToString();
-
         }
         throw new ArgumentException("Address element is not valid");
     }
