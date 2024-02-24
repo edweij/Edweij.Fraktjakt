@@ -7,8 +7,8 @@ public record AgentListResponse(string ServerStatus, ResponseStatus ResponseStat
 {
     public static async Task<Response> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
-        if (httpResponseMessage == null) throw new ArgumentNullException(nameof(httpResponseMessage));
-        if (!httpResponseMessage.IsSuccessStatusCode) throw new ArgumentException($"Not successfull response ({httpResponseMessage.StatusCode}). Response Content: '{await httpResponseMessage.Content.ReadAsStringAsync()}'.");
+        if (httpResponseMessage == null) return CreateErrorResponse("HttpResponseMessage was null");
+        if (!httpResponseMessage.IsSuccessStatusCode) return CreateErrorResponse($"Not successful response ({httpResponseMessage.StatusCode}). Response Content: '{await httpResponseMessage.Content.ReadAsStringAsync()}'.");
         string json = await httpResponseMessage.Content.ReadAsStringAsync();
         return FromJson(json);
     }
@@ -23,7 +23,7 @@ public record AgentListResponse(string ServerStatus, ResponseStatus ResponseStat
         }
         else
         {
-            return Response.CreateErrorResponse("Could't bind agentlist response from json");
+            return CreateErrorResponse("Could't bind agentlist response from json");
         }
         
     }

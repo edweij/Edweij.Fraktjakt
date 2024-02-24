@@ -10,7 +10,7 @@ public record ShipmentResponse(string ServerStatus, ResponseStatus ResponseStatu
     public static async Task<Response> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
         if (httpResponseMessage == null) return CreateErrorResponse("HttpResponseMessage was null");
-        if (!httpResponseMessage.IsSuccessStatusCode) return CreateErrorResponse($"Not successfull response ({httpResponseMessage.StatusCode}). Response Content: '{await httpResponseMessage.Content.ReadAsStringAsync()}'.");
+        if (!httpResponseMessage.IsSuccessStatusCode) return CreateErrorResponse($"Not successful response ({httpResponseMessage.StatusCode}). Response Content: '{await httpResponseMessage.Content.ReadAsStringAsync()}'.");
         string xml = await httpResponseMessage.Content.ReadAsStringAsync();
         return FromXml(xml);
     }

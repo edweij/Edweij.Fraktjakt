@@ -43,7 +43,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
                 Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
                 Assert.That(response.WarningMessage, Is.Empty);
-                Assert.That(response.ErrorMessage, Is.EqualTo("Not successfull response (BadRequest). Response Content: 'Error Content'."));
+                Assert.That(response.ErrorMessage, Is.EqualTo("Not successful response (BadRequest). Response Content: 'Error Content'."));
             });
             
         }

@@ -168,7 +168,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(response, Is.TypeOf<Response>());
-                Assert.That(response.ErrorMessage, Is.EqualTo("Not successfull response (BadRequest). Response Content: 'Error Content'."));
+                Assert.That(response.ErrorMessage, Is.EqualTo("Not successful response (BadRequest). Response Content: 'Error Content'."));
             });
         }
 
