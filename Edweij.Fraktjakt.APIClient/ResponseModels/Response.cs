@@ -6,6 +6,6 @@ public record Response(string ServerStatus, ResponseStatus ResponseStatus, strin
 {
     protected static Response CreateErrorResponse(string message)
     {
-        return new Response("Server status unknown, no or invalid response.", ResponseStatus.Error, string.Empty, message);
+        return new Response("Server status unknown, invalid or no response.", ResponseStatus.Error, string.Empty, message);
     }
 }

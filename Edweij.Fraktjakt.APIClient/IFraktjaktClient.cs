@@ -6,10 +6,12 @@ namespace Edweij.Fraktjakt.APIClient;
 
 public interface IFraktjaktClient
 {
-    public Task<Response> Trace(int shipmentId, SwedishOrEnglish lang);
-    public Task<Response> ShippingDocuments(int shipmentId, SwedishOrEnglish lang);
-    public Task<Response> Query(ShipmentQuery shipment);
-    public Task<Response> Order(Order order);
-    public Task<Response> CreateShipment(CreateShipment createShipment);
-    public Task<Response> GetServicePoints(string url);
+    Task<Response> Trace(int shipmentId, SwedishOrEnglish lang);
+    Task<Response> ShippingDocuments(int shipmentId, SwedishOrEnglish lang);
+    Task<Response> Query(ShipmentQuery shipment);
+    Task<Response> ReQuery(ShipmentReQuery shipment);
+    Task<Response> ReQuery(int shipmentId, bool shipperInfo, float? value);
+    Task<Response> Order(Order order);
+    Task<Response> CreateShipment(CreateShipment createShipment);
+    Task<Response> GetServicePoints(string url);
 }

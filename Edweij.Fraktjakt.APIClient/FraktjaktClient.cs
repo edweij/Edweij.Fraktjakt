@@ -22,12 +22,34 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         _useMD5Checksum = useMD5Checksum;
     }
 
+    public FraktjaktClient(int id, string key, HttpClient httpClient, bool useMD5Checksum = true)
+    {
+        if (id <= 0) throw new ArgumentException(nameof(id));
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException(nameof(key));
+
+        _httpClient = httpClient ?? new HttpClient();
+        _httpClient.BaseAddress = new Uri("https://api.fraktjakt.se");
+        Sender = new Sender(id, key);
+        _useMD5Checksum = useMD5Checksum;
+    }
+
     public FraktjaktClient(Sender sender, bool useMD5Checksum = true)
     {
         if (sender == null) throw new ArgumentNullException(nameof(sender));
         if (!sender.IsValid) throw new ArgumentException("Sender is not valid");
 
         _httpClient = new HttpClient();
+        _httpClient.BaseAddress = new Uri("https://api.fraktjakt.se");
+        Sender = sender;
+        _useMD5Checksum = useMD5Checksum;
+    }
+
+    public FraktjaktClient(Sender sender, HttpClient httpClient, bool useMD5Checksum = true)
+    {
+        if (sender == null) throw new ArgumentNullException(nameof(sender));
+        if (!sender.IsValid) throw new ArgumentException("Sender is not valid");
+
+        _httpClient = httpClient ?? new HttpClient();
         _httpClient.BaseAddress = new Uri("https://api.fraktjakt.se");
         Sender = sender;
         _useMD5Checksum = useMD5Checksum;
@@ -60,6 +82,31 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         }
         var response = await _httpClient.GetAsync(url);
         return await ShipmentResponse.FromHttpResponse(response);
+    }
+
+    public async Task<Response> ReQuery(ShipmentReQuery shipment)
+    {
+        if (!shipment.IsValid) throw new ArgumentException("Shipment is not valid");
+        if (shipment.Sender != Sender) throw new ArgumentException("Sender in shipment is different from the clients sender");
+
+        var xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>" + shipment.ToXml();
+        var url = $"/fraktjakt/requery_xml?xml={UrlEncode(xml)}";
+        if (_useMD5Checksum)
+        {
+            url += $"&md5_checksum={MD5(xml)}";
+        }
+        var response = await _httpClient.GetAsync(url);
+        return await ShipmentResponse.FromHttpResponse(response);
+    }
+
+    public async Task<Response> ReQuery(int shipmentId, bool shipperInfo, float? value)
+    {
+        var query = new ShipmentReQuery(Sender, shipmentId)
+        {
+            ShipperInfo = shipperInfo,
+            Value = value
+        };
+        return await ReQuery(query);
     }
 
     public async Task<Response> Order(Order order)
@@ -117,7 +164,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
     public void Dispose()
     {
         _httpClient.Dispose();
-    }
+    }    
 }
 
 public static class FraktjaktClientExtensions

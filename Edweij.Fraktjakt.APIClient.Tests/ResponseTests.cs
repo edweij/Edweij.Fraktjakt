@@ -16,7 +16,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Response response = MockResponse.Exposed(errorMessage);
 
             // Assert
-            Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, no or invalid response."));
+            Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
             Assert.That(response.WarningMessage, Is.EqualTo(string.Empty));
             Assert.That(response.ErrorMessage, Is.EqualTo(errorMessage));

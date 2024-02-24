@@ -19,7 +19,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, no or invalid response."));
+                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
                 Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
                 Assert.That(response.WarningMessage, Is.Empty);
                 Assert.That(response.ErrorMessage, Is.EqualTo("HttpResponseMessage was null"));
@@ -41,7 +41,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, no or invalid response."));
+                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
                 Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
                 Assert.That(response.WarningMessage, Is.Empty);
                 Assert.That(response.ErrorMessage, Is.EqualTo("Not successfull response (BadRequest). Response Content: 'Error Content'."));
@@ -123,7 +123,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, no or invalid response."));
+                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
                 Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
                 Assert.That(response.WarningMessage, Is.Empty);
                 Assert.That(response.ErrorMessage, Is.EqualTo("Invalid xml: Object reference not set to an instance of an object."));
