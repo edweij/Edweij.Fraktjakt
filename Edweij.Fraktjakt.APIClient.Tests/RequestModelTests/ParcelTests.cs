@@ -1,7 +1,7 @@
 using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class ParcelTests
@@ -34,7 +34,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 // XDocument assertions
                 var xDocument = XDocument.Parse(generatedXml);
                 Assert.That(xDocument.Root!.Name.LocalName, Is.EqualTo("parcel"));
-                Assert.That(xDocument.Root.Elements().Count() , Is.EqualTo(4));
+                Assert.That(xDocument.Root.Elements().Count(), Is.EqualTo(4));
                 Assert.That(xDocument.Descendants("weight").Single().Value, Is.EqualTo("1.5"));
                 Assert.That(xDocument.Descendants("length").Single().Value, Is.EqualTo("10"));
                 Assert.That(xDocument.Descendants("width").Single().Value, Is.EqualTo("5"));
@@ -46,7 +46,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         public void ToXml_WithInvalidParcel_ShouldThrowException()
         {
             // Arrange
-            var invalidParcel = new Parcel(1.5f) { Length = 0}; // invalid length
+            var invalidParcel = new Parcel(1.5f) { Length = 0 }; // invalid length
 
             // Act & Assert
             Assert.That(invalidParcel.ToXml, Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Parcel element is not valid"));

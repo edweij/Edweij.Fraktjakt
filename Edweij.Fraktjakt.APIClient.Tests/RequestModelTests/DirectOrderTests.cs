@@ -2,7 +2,7 @@
 using NUnit.Framework.Internal;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
 
     [TestFixture]
@@ -44,7 +44,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Act & Assert
             // Invalid sender
             Assert.That(() => new DirectOrder(null, validToAddress, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("sender"));
-            
+
 
             // Invalid toAddress
             Assert.That(() => new DirectOrder(validSender, null, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("toAddress"));
@@ -61,7 +61,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Invalid parcels
             var invalidParcels = new List<Parcel> { new Parcel(0.5f) { Length = 0 } }; // Invalid parcel
             Assert.That(() => new DirectOrder(validSender, validToAddress, 1, validItems, validFromAddress, invalidParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("parcels not valid"));
-        }        
+        }
 
         [Test]
         public void ToXml_WithValidOrder_ShouldGenerateValidXml()
@@ -118,7 +118,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Assert.Multiple(() =>
             {
                 Assert.That(ruleViolations.Count(), Is.EqualTo(1));
-                Assert.That(ruleViolations, Has.Some.Matches<RuleViolation>(v => v.PropertyName == "StreetAddress1" && v.Error == "Max length 35"));                
+                Assert.That(ruleViolations, Has.Some.Matches<RuleViolation>(v => v.PropertyName == "StreetAddress1" && v.Error == "Max length 35"));
             });
         }
 

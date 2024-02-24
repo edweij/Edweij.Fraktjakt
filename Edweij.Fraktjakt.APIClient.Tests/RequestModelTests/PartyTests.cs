@@ -1,7 +1,7 @@
 using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class PartyTests
@@ -49,7 +49,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                                            .And.Some.Property("PropertyName").EqualTo("Email")
                                            .And.Some.Property("PropertyName").EqualTo("Eori")
                                            .And.Some.Property("PropertyName").EqualTo("Tin"));
-        }       
+        }
 
         [Test]
         public void RuleViolations_WithInvalidEmailFormat_ShouldReturnViolation()
@@ -69,7 +69,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         }
 
         // Add more test cases for other properties as needed
-    }    
+    }
 
     public class MockParty : Party
     {

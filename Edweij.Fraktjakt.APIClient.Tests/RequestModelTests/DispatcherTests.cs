@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class DispatcherTests
-    {       
+    {
 
         [Test]
         public void RuleViolations_ShouldBeValid_WithAllValidData()
@@ -114,7 +114,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Assert.That(() => dispatcher.ToXml(), Throws.ArgumentException.With.Message.EqualTo("Dispatcher element is not valid"));
         }
 
-        
+
 
 
     }

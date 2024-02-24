@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
 {
     [TestFixture]
     public class ShippingDocumentsResponseTests
@@ -149,14 +149,14 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(response, Is.TypeOf<Response>());
                 Assert.That(response.ErrorMessage, Is.EqualTo("HttpResponseMessage was null"));
             });
-                
+
         }
 
         [Test]
         public async Task FromHttpResponse_NonSuccessStatusCode_ReturnsUnbindableResponse()
         {
             // Arrange
-            HttpResponseMessage httpResponseMessage = new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest)
+            HttpResponseMessage httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
             {
                 Content = new StringContent("Error Content"),
             };

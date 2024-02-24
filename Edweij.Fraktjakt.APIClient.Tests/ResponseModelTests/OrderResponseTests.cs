@@ -7,7 +7,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
 {
     [TestFixture]
     public class OrderResponseTests
@@ -22,13 +22,14 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Response response = await OrderResponse.FromHttpResponse(httpResponseMessage);
 
             // Assert
-            Assert.Multiple(() => {
+            Assert.Multiple(() =>
+            {
                 Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
                 Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
                 Assert.That(response.WarningMessage, Is.Empty);
                 Assert.That(response.ErrorMessage, Is.EqualTo("HttpResponseMessage was null"));
             });
-           
+
         }
 
         [Test]
@@ -44,13 +45,14 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Response response = await OrderResponse.FromHttpResponse(httpResponseMessage);
 
             // Assert
-            Assert.Multiple(() => {
+            Assert.Multiple(() =>
+            {
                 Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
                 Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
                 Assert.That(response.WarningMessage, Is.Empty);
                 Assert.That(response.ErrorMessage, Is.EqualTo("Not successful response (BadRequest). Response Content: 'Error Content'."));
             });
-            
+
         }
 
         [Test]
@@ -63,7 +65,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             OrderResponse orderResponse = OrderResponse.FromXml(validXml) as OrderResponse;
 
             // Assert
-            Assert.Multiple(() => {
+            Assert.Multiple(() =>
+            {
                 Assert.That(orderResponse, Is.Not.Null);
                 Assert.That(orderResponse.ServerStatus, Is.EqualTo("OK"));
                 Assert.That(orderResponse.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
@@ -84,8 +87,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(orderResponse.SenderEmailLink, Is.Null);
                 Assert.That(orderResponse.ServicePointLocatorApi, Is.Null);
             });
-            
+
         }
-        
+
     }
 }

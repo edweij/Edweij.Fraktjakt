@@ -1,7 +1,7 @@
 ﻿using Edweij.Fraktjakt.APIClient.Enums;
 using Edweij.Fraktjakt.APIClient.ResponseModels;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
 {
     [TestFixture]
     public class ResponseTests
@@ -27,9 +27,9 @@ namespace Edweij.Fraktjakt.APIClient.Tests
     {
         public MockResponse(string ServerStatus, ResponseStatus ResponseStatus, string WarningMessage, string ErrorMessage) : base(ServerStatus, ResponseStatus, WarningMessage, ErrorMessage)
         {
-            
+
         }
 
-        public static Response Exposed(string message) => Response.CreateErrorResponse(message);
+        public static Response Exposed(string message) => CreateErrorResponse(message);
     }
 }

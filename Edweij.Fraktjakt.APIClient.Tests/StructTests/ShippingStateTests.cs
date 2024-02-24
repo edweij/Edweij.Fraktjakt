@@ -1,7 +1,7 @@
 ﻿using Edweij.Fraktjakt.APIClient.ResponseModels;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.StructTests
 {
     [TestFixture]
     public class ShippingStateTests
@@ -36,7 +36,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             XElement invalidXmlElement = new("invalidElement");
 
             // Act & Assert
-            Assert.Throws<System.NullReferenceException>(() => ShippingState.FromXml(invalidXmlElement));
+            Assert.Throws<NullReferenceException>(() => ShippingState.FromXml(invalidXmlElement));
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 new XElement("id", "0"));
 
             // Act & Assert
-            Assert.Throws<System.NullReferenceException>(() => ShippingState.FromXml(invalidXmlElement));
+            Assert.Throws<NullReferenceException>(() => ShippingState.FromXml(invalidXmlElement));
         }
 
         [Test]
@@ -62,7 +62,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 new XElement("fraktjakt_id", "1"));
 
             // Act & Assert
-            Assert.Throws<System.FormatException>(() => ShippingState.FromXml(invalidXmlElement));
+            Assert.Throws<FormatException>(() => ShippingState.FromXml(invalidXmlElement));
         }
 
     }

@@ -20,7 +20,18 @@ public class FraktjaktClientTests
         _mockHttpMessageHandler = new Mock<HttpMessageHandler>();
         var mockHttpClient = new HttpClient(_mockHttpMessageHandler.Object);
         _fraktjaktClient = new FraktjaktClient(123, "key", mockHttpClient, false);
-    }    
+    }
+
+    [Test]
+    public void InvalidConstructorShouldThrow()
+    {
+        Assert.Multiple(() => {
+            Assert.That(() => { new FraktjaktClient(0, null); }, Throws.ArgumentException);
+            Assert.That(() => { new FraktjaktClient(0, "key"); }, Throws.ArgumentException);
+            Assert.That(() => { new FraktjaktClient(123, null); }, Throws.ArgumentException);
+            Assert.That(() => { new FraktjaktClient(123, "    "); }, Throws.ArgumentException);            
+        });
+    }
 
     [Test]
     public void UrlEncode_ValidInput_EncodesCorrectly()
@@ -106,7 +117,7 @@ public class FraktjaktClientTests
         Assert.Multiple(() => {
             Assert.IsNotNull(response);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
-            Assert.That(response.ErrorMessage, Does.StartWith("Not successfull response"));
+            Assert.That(response.ErrorMessage, Does.StartWith("Not successful response"));
         });
     }
 

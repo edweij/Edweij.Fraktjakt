@@ -2,7 +2,7 @@ using Edweij.Fraktjakt.APIClient.Enums;
 using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests;
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests;
 
 
 
@@ -52,13 +52,14 @@ public class ShipmentItemTests
         string xml = shipmentItem.ToXml();
 
         // Assert
-        Assert.Multiple(() => {
+        Assert.Multiple(() =>
+        {
             Assert.That(xml, Is.Not.Null.And.Not.Empty);
             Assert.That(xml, Does.Contain("<name>ItemName</name>"));
             Assert.That(xml, Does.Contain("<quantity>2</quantity>"));
         });
-        
-        
+
+
     }
 
     [TestCase("12345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901", 2, 10.5f, 5.5f)]
@@ -84,11 +85,12 @@ public class ShipmentItemTests
         var ruleViolations = shipmentItem.GetRuleViolations();
 
         // Assert
-        Assert.Multiple(() => {
+        Assert.Multiple(() =>
+        {
             Assert.That(ruleViolations, Has.Exactly(1).Items);
             Assert.That(ruleViolations, Has.Some.Property("PropertyName").EqualTo("Description"));
             Assert.That(ruleViolations, Has.Some.Property("Error").Contains("too short or too long"));
-        });        
+        });
     }
 
     [Test]
@@ -104,12 +106,13 @@ public class ShipmentItemTests
         var ruleViolations = shipmentItem.GetRuleViolations();
 
         // Assert
-        Assert.Multiple(() => {
+        Assert.Multiple(() =>
+        {
             Assert.That(ruleViolations, Has.Exactly(1).Items);
             Assert.That(ruleViolations, Has.Some.Property("PropertyName").EqualTo("ArticleNumber"));
             Assert.That(ruleViolations, Has.Some.Property("Error").Contains("too long"));
         });
-        
+
     }
 
     [Test]

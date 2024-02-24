@@ -1,7 +1,7 @@
 ﻿using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class RecipientTests

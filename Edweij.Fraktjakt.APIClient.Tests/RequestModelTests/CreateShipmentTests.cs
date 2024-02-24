@@ -1,7 +1,7 @@
 ﻿using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class CreateShipmentTests
@@ -56,8 +56,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Arrange
             var invalidShipment = new CreateShipment(
                 new Sender(1, "key"),
-                new ToAddress("12345") 
-                /* no items == invalid */
+                new ToAddress("12345")
+            /* no items == invalid */
             );
 
             // Act & Assert
@@ -79,7 +79,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
 
             // Assert
             var element = XElement.Parse(xmlResult);
-            Assert.Multiple(() => {
+            Assert.Multiple(() =>
+            {
                 Assert.That(xmlResult, Is.Not.Empty);
                 Assert.That(element.Name.LocalName, Is.EqualTo("CreateShipment"));
                 Assert.That(element.Elements().Count, Is.EqualTo(6));
@@ -90,7 +91,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(element.Element("export_reason"), Is.Not.Null);
                 Assert.That(element.Element("commodities"), Is.Not.Null);
             });
-            
+
         }
 
         [Test]
@@ -99,8 +100,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             // Arrange
             var invalidShipment = new CreateShipment(
                 new Sender(1, "key"),
-                new ToAddress("12345")            
-                /* no items or parcels == invalid */
+                new ToAddress("12345")
+            /* no items or parcels == invalid */
             );
 
             // Act & Assert

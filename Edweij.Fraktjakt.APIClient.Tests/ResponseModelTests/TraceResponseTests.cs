@@ -2,7 +2,7 @@
 using Edweij.Fraktjakt.APIClient.ResponseModels;
 using System.Net;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
 {
     [TestFixture]
     public class TraceResponseTests

@@ -2,7 +2,7 @@ using Edweij.Fraktjakt.APIClient.Enums;
 using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     public class AddressTests
     {
@@ -27,7 +27,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(element.Element("residental"), Is.Not.Null);
                 Assert.That(element.Element("residental").Value, Is.EqualTo("1"));
             });
-            
+
         }
 
         [Test]
@@ -48,13 +48,14 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(element.Element("language"), Is.Not.Null);
                 Assert.That(element.Element("language").Value, Is.EqualTo("sv"));
             });
-            
+
         }
 
         [Test]
         public void MaximumFromAdressGeneratesCorrectXml()
         {
-            var address = new FromAddress("62141") { 
+            var address = new FromAddress("62141")
+            {
                 CityName = "city",
                 CountryCode = "SE",
                 EntryCode = "1234",
@@ -88,7 +89,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(element.Element("street_address_3"), Is.Not.Null);
                 Assert.That(element.Element("street_address_3").Value, Is.EqualTo("street3"));
             });
-            
+
         }
 
         [Test]
@@ -132,7 +133,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(element.Element("language"), Is.Not.Null);
                 Assert.That(element.Element("language").Value, Is.EqualTo("en"));
             });
-            
+
         }
 
         [Test]

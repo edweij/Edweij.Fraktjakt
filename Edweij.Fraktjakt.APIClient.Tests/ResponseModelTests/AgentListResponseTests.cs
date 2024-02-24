@@ -1,12 +1,11 @@
 using Edweij.Fraktjakt.APIClient.Enums;
 using Edweij.Fraktjakt.APIClient.ResponseModels;
-using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
 {
     public class AgentListResponseTests
     {
-        
+
 
         [Test]
         public void BindsFomJson()
@@ -26,7 +25,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(result.ServerStatus, Is.EqualTo("ok"));
                 Assert.That(result.Agents.First().Distance, Is.EqualTo(2.05f));
             });
-                
+
         }
 
 

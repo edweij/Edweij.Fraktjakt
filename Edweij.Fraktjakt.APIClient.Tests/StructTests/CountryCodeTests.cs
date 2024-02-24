@@ -1,6 +1,6 @@
 using Edweij.Fraktjakt.APIClient.Structs;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.StructTests
 {
     public class CountryCodeTests
     {
@@ -43,9 +43,10 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         public void InvalidCountryShouldThrow()
         {
             Assert.Throws<ArgumentOutOfRangeException>(() => new CountryCode("xxx"));
-            Assert.Throws<ArgumentOutOfRangeException>(() => {
+            Assert.Throws<ArgumentOutOfRangeException>(() =>
+            {
                 CountryCode cc = "xxx";
-                });
+            });
         }
 
 

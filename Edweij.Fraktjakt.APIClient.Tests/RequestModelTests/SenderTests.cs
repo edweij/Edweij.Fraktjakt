@@ -2,7 +2,7 @@ using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Net;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     public class SenderTests
     {
@@ -14,7 +14,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         [Test]
         public void SenderIdZeroShouldThrow()
         {
-            Assert.Throws<ArgumentException>(() => new Sender(0, "my key"));            
+            Assert.Throws<ArgumentException>(() => new Sender(0, "my key"));
         }
 
         [Test]
@@ -57,8 +57,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(element.Element("api_version"), Is.Not.Null);
                 Assert.That(element.Element("api_version").Value, Is.EqualTo("4.5"));
             });
-            
-            
+
+
             sender.SystemName = "My System";
             sender.SystemVersion = "1.0";
             sender.ModuleVersion = "1.0";
@@ -73,7 +73,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(element.Element("module_version"), Is.Not.Null);
                 Assert.That(element.Element("module_version").Value, Is.EqualTo("1.0"));
             });
-            
+
         }
 
         [Test]
@@ -92,7 +92,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(result, Contains.Substring("<system_version>&lt;&gt;&amp;'\"</system_version>"));
                 Assert.That(result, Contains.Substring("<module_version>&lt;&gt;&amp;'\"</module_version>"));
             });
-                
+
         }
 
     }

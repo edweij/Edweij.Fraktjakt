@@ -1,7 +1,7 @@
 ﻿using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Text;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class XmlRequestObjectExtensionsTests
@@ -37,12 +37,12 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             Assert.That(emailAddress.IsValidEmailAddress(), Is.False);
         }
 
-        
+
         [TestCase(1, "1")]
         [TestCase(1.0f, "1")]
         [TestCase(1.5f, "1.5")]
         [TestCase(1.555f, "1.555")]
-        [TestCase(1.0001f, "1.0001")]        
+        [TestCase(1.0001f, "1.0001")]
         public void FloatToString(float val, string expected)
         {
             // Arrange & Act

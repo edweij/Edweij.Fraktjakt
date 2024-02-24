@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class ShipmentReQueryTests
@@ -78,6 +78,6 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(xml, Does.Contain($"<shipper_info>{(shipperInfo ? "1" : "0")}</shipper_info>"));
                 Assert.That(xml, Does.Contain(sender.ToXml()));
             });
-        }        
+        }
     }
 }

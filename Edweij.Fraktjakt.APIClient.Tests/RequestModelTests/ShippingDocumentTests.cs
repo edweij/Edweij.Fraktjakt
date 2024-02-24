@@ -2,7 +2,7 @@
 using Edweij.Fraktjakt.APIClient.Structs;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class ShippingDocumentTests

@@ -1,11 +1,11 @@
 ﻿using Edweij.Fraktjakt.APIClient.RequestModels;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class XmlRequestObjectTests
     {
-        
+
 
         [Test]
         public void ToXml_ShouldGenerateValidXml()
@@ -18,7 +18,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
 
             // Assert
             Assert.Multiple(() =>
-            {                
+            {
                 Assert.That(generatedXml, Is.Not.Null);
                 Assert.That(xmlRequestObject.IsValidXml(generatedXml), Is.True);
             });
@@ -48,7 +48,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
     }
 
     public class MockXmlRequestObject : XmlRequestObject
-    {        
+    {
         public override IEnumerable<RuleViolation> GetRuleViolations()
         {
             throw new NotImplementedException();

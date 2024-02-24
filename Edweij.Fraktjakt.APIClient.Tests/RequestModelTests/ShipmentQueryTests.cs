@@ -1,7 +1,7 @@
 using Edweij.Fraktjakt.APIClient.RequestModels;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     public class ShipmentQueryTests
     {
@@ -13,7 +13,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         [Test]
         public void ShipmentQueryConstructorShouldThrowOnNullOrInvalidparameters()
         {
-            Assert.Multiple(() => {
+            Assert.Multiple(() =>
+            {
                 Assert.Throws<ArgumentNullException>(() => new ShipmentQuery(null, null));
                 Assert.Throws<ArgumentNullException>(() => new ShipmentQuery(new Sender(1, "key"), null)); // to address is null
                 Assert.Throws<ArgumentNullException>(() => new ShipmentQuery(null, new ToAddress("62141"))); // sender is null
@@ -23,22 +24,23 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.Throws<ArgumentException>(() => new ShipmentQuery(new Sender(1, "key"), new ToAddress("12345"), items: new List<ShipmentItem>() { new ShipmentItem("TestItem", 0, 1.5f, 10.0f) })); // invalid items
                 Assert.Throws<ArgumentException>(() => new ShipmentQuery(new Sender(1, "key"), new ToAddress("12345"), parcels: new List<Parcel>() { new Parcel(1.5f) { Length = 0 } })); // invalid parcels
             });
-           
+
         }
 
         [Test]
         public void ShipmentQuerySetPropertyWithInvalidValueShouldThrow()
         {
             var query = new ShipmentQuery(new Sender(1, "key"), new ToAddress("62141"));
-            Assert.Multiple(() => {
+            Assert.Multiple(() =>
+            {
                 Assert.Throws<ArgumentNullException>(() => query.FromAddress = null); // Set fromadress to null
                 Assert.Throws<ArgumentException>(() => query.FromAddress = new FromAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }); // Set fromadress to invalid address
                 Assert.Throws<ArgumentNullException>(() => query.Items = null); // Set items to null
                 Assert.Throws<ArgumentException>(() => query.Items = new List<ShipmentItem>() { new ShipmentItem("TestItem", 0, 1.5f, 10.0f) }); // Set items with invalid item
                 Assert.Throws<ArgumentNullException>(() => query.Parcels = null); // Set parcels to null
-                Assert.Throws<ArgumentException>(() => query.Parcels = new List<Parcel>() { new Parcel(1.5f) { Length = 0} }); // Set parcels with invalid item
+                Assert.Throws<ArgumentException>(() => query.Parcels = new List<Parcel>() { new Parcel(1.5f) { Length = 0 } }); // Set parcels with invalid item
             });
-            
+
         }
 
         [Test]
@@ -46,7 +48,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         {
             var query = new ShipmentQuery(new Sender(1, "key"), new ToAddress("62141"));
             var errors = query.GetRuleViolations();
-            Assert.Multiple(() => {
+            Assert.Multiple(() =>
+            {
                 Assert.That(errors.Count(), Is.EqualTo(2));
                 Assert.That(errors.Any(v => v.PropertyName == "Items"), Is.True);
                 Assert.That(errors.Any(v => v.PropertyName == "Parcels"), Is.True);
@@ -63,7 +66,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 query.ToAddress.StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam";
                 Assert.That(errors.Count(), Is.EqualTo(5));
             });
-            
+
         }
 
 
@@ -75,7 +78,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests
         {
             var query = new ShipmentQuery(new Sender(1, "key"), new ToAddress("62141"), items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) });
             var element = XElement.Parse(query.ToXml());
-            Assert.Multiple(() => {
+            Assert.Multiple(() =>
+            {
                 Assert.That(element.Elements().Count(), Is.EqualTo(17));
                 Assert.That(element.Name.LocalName, Is.EqualTo("shipment"));
                 Assert.That(element.Element("consignor"), Is.Not.Null);
@@ -110,14 +114,14 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 Assert.That(element.Element("commodities"), Is.Not.Null);
                 Assert.That(element.Element("address_to"), Is.Not.Null);
             });
-            
-            
+
+
         }
 
         [Test]
         public void ShipmentQueryXmlReplacesEntities()
         {
-            var query = new ShipmentQuery(new Sender(1, "key"), new ToAddress ("62141"), items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) })
+            var query = new ShipmentQuery(new Sender(1, "key"), new ToAddress("62141"), items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) })
             {
                 CallbackUrl = "<&'\">"
             };

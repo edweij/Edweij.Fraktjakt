@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace Edweij.Fraktjakt.APIClient.Tests
+namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
     [TestFixture]
     public class OrderTests
@@ -29,7 +29,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
             invalidMockOrder = new MockOrder(validSender, 1, validItems)
             {
                 Reference = "Lorem ipsum dolor sit amet, consectetur adipiscing dui...",
-                Dispatcher = new Dispatcher { Email = "invalid-email"},
+                Dispatcher = new Dispatcher { Email = "invalid-email" },
                 Recipient = new Recipient { Email = "invalid-email" },
                 PickupInfo = new PickupInfo { PickupDate = DateTime.Now.AddDays(-1) }
 
@@ -56,7 +56,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests
                 var invalidItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 1, 1.5f, 10.0f) { Description = "description" } }; // Invalid item
                 Assert.That(() => new MockOrder(validSender, 1, invalidItems), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Items contain invalid item"));
             });
-             
+
         }
 
         [Test]
