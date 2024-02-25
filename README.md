@@ -10,20 +10,26 @@ Currently supporting the following endpoints:
 - Track & Trace API to track created shipments
 - Shipping Documents API to get hold of shipping documents associated with created shipments
 
-Download latest manuals from faktjakt to read about theie API
-https://www.fraktjakt.se/om_fraktjakt/documentation?locale=en
+Download latest manuals from faktjakt to read about their API
+[Visit fraktjakt.se](https://www.fraktjakt.se/om_fraktjakt/documentation?locale=en)
  
 ## Installation
 
 .NET CLI
-	> dotnet add package Edweij.Fraktjakt.APIClient
+```
+> dotnet add package Edweij.Fraktjakt.APIClient
+```
 
 Package Manager
-	PM> NuGet\Install-Package Edweij.Fraktjakt.APIClient
+```
+PM> NuGet\Install-Package Edweij.Fraktjakt.APIClient
+```
 
 PackageReference
-	&lt;PackageReference Include="Edweij.Fraktjakt.APIClient" Version="*{latest version}*" /&gt;
- 
+```
+&lt;PackageReference Include="Edweij.Fraktjakt.APIClient" Version="*{latest version}*" /&gt;
+```
+
 ## Usage
  
 To use this API client you need an integration configured for your/your companys account on fraktjakt.se, please read their manuals for instructions.
@@ -31,7 +37,9 @@ To use this API client you need an integration configured for your/your companys
 Add your integrations Consignor ID and Consignor key to your project in a way that fits you best.
 
 In your program.cs file setup DI with the clients helper method
-	builder.Services.AddFraktjaktClient(*{your id}*, *{your key}*);
+```C#
+builder.Services.AddFraktjaktClient(*{your id}*, *{your key}*);
+```
 
 Inject IFraktjaktClient where needed
 
