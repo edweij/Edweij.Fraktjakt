@@ -22,7 +22,7 @@ Package Manager
 	PM> NuGet\Install-Package Edweij.Fraktjakt.APIClient
 
 PackageReference
-	&lt;PackageReference Include="Edweij.Fraktjakt.APIClient" Version="**latest version**" /&gt;
+	&lt;PackageReference Include="Edweij.Fraktjakt.APIClient" Version="*{latest version}*" /&gt;
  
 ## Usage
  
@@ -31,7 +31,7 @@ To use this API client you need an integration configured for your/your companys
 Add your integrations Consignor ID and Consignor key to your project in a way that fits you best.
 
 In your program.cs file setup DI with the clients helper method
-	builder.Services.AddFraktjaktClient(**your id**, **your key**);
+	builder.Services.AddFraktjaktClient(*{your id}*, *{your key}*);
 
 Inject IFraktjaktClient where needed
 
