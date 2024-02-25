@@ -1,7 +1,6 @@
 ﻿using Edweij.Fraktjakt.APIClient.Enums;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 

@@ -21,8 +21,8 @@ public record CreateShipmentResponse(string ServerStatus, ResponseStatus Respons
             XElement element = XElement.Parse(xml);
             var result = new CreateShipmentResponse(element.Element("server_status")!.Value,
                 (ResponseStatus)int.Parse(element.Element("code")!.Value),
-                element.Element("warning_message")!.Value,
-                element.Element("error_message")!.Value,
+                element.Element("warning_message") != null ? element.Element("warning_message")!.Value : string.Empty,
+                element.Element("error_message") != null ? element.Element("error_message")!.Value : string.Empty,
                 int.Parse(element.Element("shipment_id")!.Value),
                 element.Element("access_code")!.Value,
                 element.Element("access_link")!.Value,

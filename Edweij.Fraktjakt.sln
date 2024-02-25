@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edweij.Fraktjakt.APIClient"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edweij.Fraktjakt.APIClient.Tests", "Edweij.Fraktjakt.APIClient.Tests\Edweij.Fraktjakt.APIClient.Tests.csproj", "{6DCA3E8D-63C2-4CFB-AEEA-4E2EE29FDA67}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Edweij.Fraktjakt.TestConsole", "Edweij.Fraktjakt.TestConsole\Edweij.Fraktjakt.TestConsole.csproj", "{02E3FE1E-F93F-4BFC-9511-7DB577348BB1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Edweij.Fraktjakt.TestConsole", "Edweij.Fraktjakt.TestConsole\Edweij.Fraktjakt.TestConsole.csproj", "{02E3FE1E-F93F-4BFC-9511-7DB577348BB1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

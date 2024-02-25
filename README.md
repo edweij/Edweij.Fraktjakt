@@ -27,7 +27,7 @@ PM> NuGet\Install-Package Edweij.Fraktjakt.APIClient
 
 PackageReference
 ```
-<PackageReference Include="Edweij.Fraktjakt.APIClient" Version="*{latest version}*" />
+<PackageReference Include="Edweij.Fraktjakt.APIClient" Version="{latest version}" />
 ```
 
 ## Usage
@@ -38,13 +38,13 @@ Add your integrations Consignor ID and Consignor key to your project in a way th
 
 In your program.cs file setup DI with the clients helper method
 ```C#
-builder.Services.AddFraktjaktClient(*{your id}*, *{your key}*);
+builder.Services.AddFraktjaktClient({your id}, {your key});
 ```
 
 Inject IFraktjaktClient where needed
 
  
-## Credits
+## Authors
  
 Edvin Weijmers (@edweij)
  

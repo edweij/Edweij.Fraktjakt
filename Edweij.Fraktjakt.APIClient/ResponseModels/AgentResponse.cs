@@ -1,5 +1,4 @@
-﻿using Edweij.Fraktjakt.APIClient.responseModels;
-using System.Text.Json;
+﻿using System.Text.Json;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
