@@ -1,12 +1,19 @@
 ﻿using Edweij.Fraktjakt.APIClient.Enums;
 using Edweij.Fraktjakt.APIClient.Structs;
 using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public class ShipmentItem : XmlRequestObject
 {
+    /// <summary>
+    /// Create a shipmentitem with required properties as parameters
+    /// </summary>
+    /// <param name="name">The name of the goods</param>
+    /// <param name="quantity">The quantity of the item in the unit specified in QuantityUnit property, defaults to EA (each)</param>
+    /// <param name="unitPrice">The item value per unit of this item type. The value the item was sold for. If you sell with VAT, the VAT must be included in the value, and if you sell without VAT, it must not be included.</param>
+    /// <param name="totalWeight">Total weight in kg of the type of goods in the shipment.</param>
+    /// <exception cref="ArgumentException">For invalid parameters</exception>
     public ShipmentItem(string name, int quantity, float unitPrice, float totalWeight) 
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name can not be null or whitespace only");
@@ -23,18 +30,52 @@ public class ShipmentItem : XmlRequestObject
         TotalWeight = totalWeight;
     }
 
-    public string Name { get; init; }
-    public int Quantity { get; init; }
-    public float UnitPrice { get; init; }
     /// <summary>
-    /// Total weight of this items units in kilograms
+    /// The name of the goods
+    /// </summary>
+    public string Name { get; init; }
+
+    /// <summary>
+    /// The quantity of the item in the unit specified in QuantityUnit property, defaults to EA (each)
+    /// </summary>
+    public int Quantity { get; init; }
+
+    /// <summary>
+    /// The item value per unit of this item type. The value the item was sold for. If you sell with VAT, the VAT must be included in the value, and if you sell without VAT, it must not be included.
+    /// </summary>
+    public float UnitPrice { get; init; }
+
+    /// <summary>
+    /// Total weight in kg of the type of goods in the shipment.
     /// </summary>
     public float TotalWeight { get; init; }
 
+    /// <summary>
+    /// Indicates whether the item should be included in the shipping at all. If not, it is only used to calculate possible free shipping and the like.
+    /// Default value is true
+    /// </summary>
     public bool Shipped { get; set; } = true;
+
+    /// <summary>
+    /// Code of the goods category in customs.
+    /// </summary>
     public int? Taric { get; set; }
+
+    /// <summary>
+    /// The unit by which the item is counted or measured.
+    /// Default value is EA (each)
+    /// </summary>
     public QuantityUnit QuantityUnit { get; set; } = QuantityUnit.EA;
+
+    /// <summary>
+    /// Description of the product type (minimum 15 and maximum 128 characters). Mandatory for shipping to countries other than Sweden.
+    /// </summary>
     public string? Description { get; set; }
+
+    /// <summary>
+    /// Country code
+    /// Default value is SE.
+    /// </summary>
     public CountryCode CountryOfManufacture { get; set; } = "SE";
    
     /// <summary>
@@ -49,10 +90,27 @@ public class ShipmentItem : XmlRequestObject
     /// Unit height in centimeters
     /// </summary>
     public float? UnitHeight { get; set; }
-    
+
+    /// <summary>
+    /// Currency for value (SEK is default)
+    /// Default value is SEK
+    /// </summary>
     public CurrencyCode Currency { get; set; } = "SEK";
+    
+    /// <summary>
+    /// Indicates whether the item has its own package and should not be placed in another package.
+    /// Default value is false.
+    /// </summary>
     public bool InOwnParcel { get; set; } = false;
+
+    /// <summary>
+    /// Item number, used in the packing list. Conveniently, the SKU (Stock Keeping Unit) is entered here if used.
+    /// </summary>
     public string? ArticleNumber { get; set; }
+
+    /// <summary>
+    /// Where the item can be found when packing it.
+    /// </summary>
     public string? ShelfPosition { get; set; }
 
     public override string ToXml()
