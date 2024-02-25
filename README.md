@@ -22,7 +22,7 @@ Package Manager
 	PM> NuGet\Install-Package Edweij.Fraktjakt.APIClient
 
 PackageReference
-	<PackageReference Include="Edweij.Fraktjakt.APIClient" Version="**latest version**" />
+	&lt;PackageReference Include="Edweij.Fraktjakt.APIClient" Version="**latest version**" /&gt;
  
 ## Usage
  
