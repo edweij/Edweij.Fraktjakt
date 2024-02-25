@@ -10,7 +10,7 @@ Currently supporting the following endpoints:
 - Track & Trace API to track created shipments
 - Shipping Documents API to get hold of shipping documents associated with created shipments
 
-Download latest manuals from faktjakt to read about their API
+Download latest manuals from faktjakt to read about their API  
 [Visit fraktjakt.se](https://www.fraktjakt.se/om_fraktjakt/documentation?locale=en)
  
 ## Installation
@@ -27,7 +27,7 @@ PM> NuGet\Install-Package Edweij.Fraktjakt.APIClient
 
 PackageReference
 ```
-&lt;PackageReference Include="Edweij.Fraktjakt.APIClient" Version="*{latest version}*" /&gt;
+<PackageReference Include="Edweij.Fraktjakt.APIClient" Version="*{latest version}*" />
 ```
 
 ## Usage
