@@ -5,7 +5,6 @@ using Edweij.Fraktjakt.APIClient.Structs;
 using Moq;
 using Moq.Protected;
 using System.Net;
-using System.Reflection;
 using System.Text;
 
 namespace Edweij.Fraktjakt.APIClient.Tests;
@@ -78,7 +77,7 @@ public class FraktjaktClientTests
         
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response as TraceResponse);
+            Assert.That(response as TraceResponse, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
             Assert.That(((TraceResponse)response).ShippingStates.ToList(), Has.Count.EqualTo(1));
             Assert.That(((TraceResponse)response).TrackingCode, Is.EqualTo("b6dfc12fc04ec98132da2eb1c1739272cc646ed9"));
@@ -102,7 +101,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
             Assert.That(response.ErrorMessage, Does.StartWith("Not successful response"));
         });
@@ -127,7 +126,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response as ShippingDocumentsResponse);
+            Assert.That(response as ShippingDocumentsResponse, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
             Assert.That(((ShippingDocumentsResponse)response).Documents.ToList(), Has.Count.EqualTo(1));
             Assert.That(((ShippingDocumentsResponse)response).Documents.First().File, Is.EqualTo(pdfBase64));
@@ -149,7 +148,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
             Assert.That(response.ErrorMessage, Does.StartWith("Not successful response"));
         });
@@ -173,7 +172,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response as ShipmentResponse);
+            Assert.That(response as ShipmentResponse, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
             Assert.That(((ShipmentResponse)response).Products.ToList(), Has.Count.EqualTo(1));
         });
@@ -192,7 +191,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
             Assert.That(response.ErrorMessage, Does.StartWith("Not successful response"));
         });
@@ -217,7 +216,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response as ShipmentResponse);
+            Assert.That(response as ShipmentResponse, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
             Assert.That(((ShipmentResponse)response).Products.ToList(), Has.Count.EqualTo(1));
         });
@@ -236,7 +235,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
             Assert.That(response.ErrorMessage, Does.StartWith("Not successful response"));
         });
@@ -259,7 +258,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response as OrderResponse);
+            Assert.That(response as OrderResponse, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
             //Binding from xml should be tested in the OrderResponseTests
         });
@@ -278,7 +277,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
             Assert.That(response.ErrorMessage, Does.StartWith("Not successful response"));
         });
@@ -299,7 +298,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response as CreateShipmentResponse);
+            Assert.That(response as CreateShipmentResponse, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
             //Binding from xml should be tested in the OrderResponseTests
         });
@@ -318,7 +317,7 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.IsNotNull(response);
+            Assert.That(response, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
             Assert.That(response.ErrorMessage, Does.StartWith("Not successful response"));
         });

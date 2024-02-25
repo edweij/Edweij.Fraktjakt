@@ -2,6 +2,7 @@
 using Edweij.Fraktjakt.APIClient.ResponseModels;
 using Edweij.Fraktjakt.APIClient.Structs;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 using System.Web;
 
 namespace Edweij.Fraktjakt.APIClient;
@@ -171,7 +172,11 @@ public static class FraktjaktClientExtensions
 {
     public static IServiceCollection AddFraktjaktClient(this IServiceCollection services, int senderId, string senderKey, bool useMD5Checksum = true)
     {
-        services.AddSingleton<IFraktjaktClient>(new FraktjaktClient(senderId, senderKey, useMD5Checksum));
+        var sender = new Sender(senderId, senderKey);
+        var assemblyName = Assembly.GetExecutingAssembly().GetName();
+        sender.SystemName = assemblyName.Name;
+        sender.SystemVersion = assemblyName.Version?.ToString();
+        services.AddSingleton<IFraktjaktClient>(new FraktjaktClient(sender, useMD5Checksum));
         return services;
     }
 

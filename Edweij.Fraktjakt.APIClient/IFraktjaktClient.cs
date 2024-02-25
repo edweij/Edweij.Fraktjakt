@@ -14,4 +14,5 @@ public interface IFraktjaktClient
     Task<Response> Order(Order order);
     Task<Response> CreateShipment(CreateShipment createShipment);
     Task<Response> GetServicePoints(string url);
+    Sender Sender { get; }
 }

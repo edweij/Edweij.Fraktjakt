@@ -25,7 +25,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             Response response = await ShippingDocumentsResponse.FromHttpResponse(httpResponse);
 
             // Assert
-            Assert.IsInstanceOf<ShippingDocumentsResponse>(response);
+            Assert.That(response, Is.InstanceOf<ShippingDocumentsResponse>());
             ShippingDocumentsResponse shippingDocumentsResponse = (ShippingDocumentsResponse)response;
 
             Assert.Multiple(() =>
@@ -99,7 +99,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             Response response = ShippingDocumentsResponse.FromXml(validXml);
 
             // Assert
-            Assert.IsInstanceOf<ShippingDocumentsResponse>(response);
+            Assert.That(response, Is.InstanceOf<ShippingDocumentsResponse>());
             ShippingDocumentsResponse shippingDocumentsResponse = (ShippingDocumentsResponse)response;
 
             Assert.Multiple(() =>
