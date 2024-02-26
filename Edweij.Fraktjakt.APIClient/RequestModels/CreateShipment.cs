@@ -103,21 +103,37 @@ public class CreateShipment : XmlRequestObject
     /// URL to your own webhook, if used replaces the webhook url in the integation settings
     /// </summary>
     public string? CallbackUrl { get; set; }
+
     /// <summary>
-    /// Should the shipping be insured, if used replaces the integration settings
+    /// Should the shipping be insured
+    /// Default is false
     /// </summary>
     public bool InsureDefault { get; set; } = false;
     /// <summary>
-    /// String to identify shipment, e.g. your own order id
+    /// Max length 50 characters, string to identify this shipment, e.g. your own order id
+    /// May only contain space, 0-9 and a-z or A-Z
     /// </summary>
     public string? Reference { get; set; } = null;
     /// <summary>
     /// Use if specify sorting instead of the integration setting
     /// </summary>
     public bool PriceSort { get; set; } = true;
+
+    /// <summary>
+    /// Reason for export tells the purpose of the shipment.
+    /// Default is SALE
+    /// </summary>
     public ExportReason ExportReason { get; set; } = ExportReason.SALE;
 
+    /// <summary>
+    /// The senders contact information for this shipment, if not specified uses your fraktjakt account settings
+    /// </summary>
     public Dispatcher? Dispatcher { get; set; } = null;
+
+    /// <summary>
+    /// The recipients contact information for this shipment
+    /// Required
+    /// </summary>
     public Recipient? Recipient { get; set; } = null;
     public string? SenderEmail { get; set; } = null;
 
@@ -141,7 +157,11 @@ public class CreateShipment : XmlRequestObject
             }
         }
 
-        if (Recipient != null && !Recipient.IsValid)
+        if (Recipient == null)
+        {
+            yield return new RuleViolation("Recipient", "Required");
+        }
+        else if (!Recipient.IsValid)
         {
             foreach (var err in Recipient.GetRuleViolations())
             {

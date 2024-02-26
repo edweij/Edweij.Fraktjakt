@@ -6,6 +6,11 @@ namespace Edweij.Fraktjakt.APIClient.RequestModels;
 public class ToAddress : Address
 {
     public ToAddress(string postalCode) : base(postalCode) { }
+
+    /// <summary>
+    /// Language code in ISO 639-1
+    /// Specifies which language Fraktjakt should use in email and communication with the receiver.
+    /// </summary>
     public Language6391 Language { get; set; } = Language6391.sv;
 
     public override string ToXml()

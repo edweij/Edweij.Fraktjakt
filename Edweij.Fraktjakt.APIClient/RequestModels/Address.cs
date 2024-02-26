@@ -1,4 +1,6 @@
 ﻿using Edweij.Fraktjakt.APIClient.Structs;
+using System.ComponentModel;
+using System.Net;
 using System.Text;
 using System.Xml;
 
@@ -13,14 +15,50 @@ public abstract class Address : XmlRequestObject
         PostalCode = postalCode;
     }
 
+    /// <summary>
+    /// Max length 35 characters, If the shipment is to a 'C/O' address should be in this element.
+    /// </summary>
     public string? StreetAddress1 { get; set; } = null;
+    
+    /// <summary>
+    /// Max length 35 characters, Supplementary/further shippinginformation can be given within parentheses in this element. E.g. (Has unloading agreements)
+    /// </summary>
     public string? StreetAddress2 { get; set; } = null;
+    
+    /// <summary>
+    /// Max length 35 characters, For countries that require three address lines, such as Saudi Arabia, there is a third address line.
+    /// </summary>
     public string? StreetAddress3 { get; set; } = null;
+    
+    /// <summary>
+    /// Max length 16 characters
+    /// </summary>
     public string PostalCode { get; init; }
+
+    /// <summary>
+    /// Max length 32 characters, required if not the PostalCode line contains a unique postal code for that city.
+    /// </summary>
     public string? CityName { get; set; } = null;
+
+    /// <summary>
+    /// Specifies whether the address is residential or not (private/residential or commercial)
+    /// Default is true (residental)
+    /// </summary>
     public bool IsResidental { get; set; } = true;
+
+    /// <summary>
+    /// Default SE
+    /// </summary>
     public CountryCode CountryCode { get; set; } = new();
+
+    /// <summary>
+    /// Directions to the driver
+    /// </summary>
     public string? Instructions { get; set; } = null;
+
+    /// <summary>
+    /// Entry code / Door Code
+    /// </summary>
     public string? EntryCode { get; set; } = null;
 
     public override IEnumerable<RuleViolation> GetRuleViolations()
