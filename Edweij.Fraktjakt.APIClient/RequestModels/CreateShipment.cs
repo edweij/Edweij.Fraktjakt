@@ -33,6 +33,9 @@ public class CreateShipment : XmlRequestObject
     }
 
     private ReferredSender? referredSender = null;
+    /// <summary>
+    /// Use this element if the shipment order will be finished and paid for by someone other than specified in the API clients Sender
+    /// </summary>
     public ReferredSender? ReferredSender
     {
         get { return referredSender; }

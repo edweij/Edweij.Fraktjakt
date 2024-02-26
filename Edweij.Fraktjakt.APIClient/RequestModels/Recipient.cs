@@ -1,11 +1,18 @@
 ﻿using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public class Recipient : Party
 {
+    /// <summary>
+    /// The recipient's cell phone number. Must be from the same country as the recipient.Otherwise it will not work.
+    /// Max length 32 characters
+    /// </summary>
     public string? Mobile { get; set; } = null;
+
+    /// <summary>
+    /// A message to the receiver
+    /// </summary>
     public string? Message { get; set; } = null;
     public override IEnumerable<RuleViolation> GetRuleViolations()
     {

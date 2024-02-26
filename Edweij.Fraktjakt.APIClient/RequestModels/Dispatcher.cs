@@ -1,13 +1,31 @@
 ﻿using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public class Dispatcher : Party
 {
+    /// <summary>
+    /// Sender's REX number for country of origin declaration.
+    /// Max 32 characters.
+    /// </summary>
     public string? Rex { get; set; } = null;
+
+    /// <summary>
+    /// Sender's VOEC number for export to Norway.
+    /// Max 32 characters
+    /// </summary>
     public string? Voec { get; set; } = null;
+
+    /// <summary>
+    /// Sender's UK VAT number for export to Great Britain.
+    /// Max 10 characters
+    /// </summary>
     public string? GbVat { get; set; } = null;
+
+    /// <summary>
+    /// Senders IOSS nummer for import to EU.
+    /// Max 32 characters
+    /// </summary>
     public string? Ioss { get; set; } = null;
 
 

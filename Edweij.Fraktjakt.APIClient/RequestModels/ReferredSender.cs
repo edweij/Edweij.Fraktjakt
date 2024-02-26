@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
@@ -14,12 +13,20 @@ public class ReferredSender : XmlRequestObject
         Key = key;
     }
 
+    /// <summary>
+    /// Integrations id in Fraktjakt.
+    /// Required
+    /// </summary>
     public int Id { get; private set; }
-    public string? Key { get; private set; } = null;
+
+    /// <summary>
+    /// The consignor's login key in Fraktjakt.
+    /// Required
+    /// </summary>
+    public string Key { get; private set; }
 
     public override IEnumerable<RuleViolation> GetRuleViolations()
     {
-        if (string.IsNullOrWhiteSpace(Key)) yield return new RuleViolation("Key", "Key is required");
         yield break;
     }
 

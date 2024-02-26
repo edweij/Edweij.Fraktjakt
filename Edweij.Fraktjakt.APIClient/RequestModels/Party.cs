@@ -2,12 +2,35 @@
 
 public abstract class Party : XmlRequestObject
 {        
-
+    /// <summary>
+    /// Max 32 characters
+    /// </summary>
     public string? CompanyName { get; set; } = null;
+
+    /// <summary>
+    /// max 32 characters
+    /// </summary>
     public string? PersonName { get; set; } = null;
+
+    /// <summary>
+    /// Max 32 characters
+    /// </summary>
     public string? Phone { get; set; } = null;
+
+    /// <summary>
+    /// A valid email address, max 64 characters
+    /// </summary>
     public string? Email { get; set; } = null;
+
+    /// <summary>
+    /// EORI-nummer for export out off EU, max 32 characters
+    /// </summary>
     public string? Eori { get; set; } = null;
+
+    /// <summary>
+    /// Tax identification number (TIN), used in shipments from or to EU.
+    /// Max 18 characters
+    /// </summary>
     public string? Tin { get; set; } = null;
 
     public override IEnumerable<RuleViolation> GetRuleViolations()

@@ -2,6 +2,7 @@
 using Edweij.Fraktjakt.APIClient.Structs;
 using System.Text;
 using System.Xml;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
@@ -11,12 +12,35 @@ public class Sender : ReferredSender
     {
          
     }
-    
-    public CurrencyCode Currency { get; set; } = "SEK";
-    public Language6391 Language { get; set; } = Language6391.sv;
 
+    /// <summary>
+    /// Selected currency, Fraktjakt will return the price results in the specified currency. 
+    /// Used when an integration wants to show prices in other than SEK (however, the freight will be paid in SEK in Fraktjakt).
+    /// Default is SEK
+    /// </summary>
+    public CurrencyCode Currency { get; set; } = "SEK";
+
+    /// <summary>
+    /// Sets language for the web store's administrator / user.Warnings and Errors are returned in that language.
+    /// Default is sv (swedish)
+    /// </summary>
+    public SwedishOrEnglish Language { get; set; } = "sv";
+
+    /// <summary>
+    /// Name of system calling the API.
+    /// If the using DI helper AddFraktjaktClient with SenderId and SenderKey is used, this will insert this assemlys name and version
+    /// </summary>
     public string? SystemName { get; set; } = null;
+
+    /// <summary>
+    /// Version number of SystemName.
+    /// If the using DI helper AddFraktjaktClient with SenderId and SenderKey is used, this will insert this assemlys name and version
+    /// </summary>
     public string? SystemVersion { get; set; } = null;
+
+    /// <summary>
+    /// Version number of the Fraktjakt shipping module in use.
+    /// </summary>
     public string? ModuleVersion { get; set; } = null;
     public float ApiVersion { get; private set; } = 4.5f; // Current version 2024-01-25, implement version handling later
     

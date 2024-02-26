@@ -1,11 +1,19 @@
 ﻿using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public class PickupInfo : XmlRequestObject
 {
+    /// <summary>
+    /// Instructions on how to find the place where the shipment is to be picked up for delivery.
+    /// Max length 50 characters
+    /// </summary>
     public string? DrivingInstructions { get; set; } = null;
+
+    /// <summary>
+    /// The date when the shipment is to be picked up.
+    /// This must be a date in the future.
+    /// </summary>
     public DateTime? PickupDate { get; set; } = null;
 
     public override IEnumerable<RuleViolation> GetRuleViolations()
