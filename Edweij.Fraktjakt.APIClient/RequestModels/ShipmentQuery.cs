@@ -1,4 +1,5 @@
 ﻿using Edweij.Fraktjakt.APIClient.Structs;
+using Microsoft.VisualBasic;
 using System.Text;
 using System.Xml;
 
@@ -45,6 +46,11 @@ public class ShipmentQuery : XmlRequestObject
         }
     }
     private List<ShipmentItem> items = new();
+
+    /// <summary>
+    /// What is to be transported. If not specified, but there are parcel tags, and the integration has a default Commodity Template in Fraktjakt and it specified to be used in searches, the default Commodity Template is used to create content.
+    /// A valid ShipmentQuery requires at least one parcel or one ShipmentItem
+    /// </summary>
     public IEnumerable<ShipmentItem> Items
     {
         get { return items; }
@@ -56,6 +62,11 @@ public class ShipmentQuery : XmlRequestObject
         }
     }
     private List<Parcel> parcels = new();
+
+    /// <summary>
+    /// The parcels that will be sent. Can be specified if commodities are not known, or if you already have decided how big the packages should be and do not want to use Fraktjakt’s package calculations.
+    /// A valid ShipmentQuery requires at least one parcel or one ShipmentItem
+    /// </summary>
     public IEnumerable<Parcel> Parcels 
     {
         get { return parcels; } 
@@ -67,11 +78,19 @@ public class ShipmentQuery : XmlRequestObject
         }
     }
 
+    /// <summary>
+    /// Add a ShipmentItem to this ShipmentQuey, an invalid ShipmentItem will not be added
+    /// </summary>
+    /// <param name="item">The ShipmentItem to add</param>
     public void AddShipmentItem(ShipmentItem item)
     {
         if (item != null && item.IsValid) items.Add(item);
     }
 
+    /// <summary>
+    /// Add a Parcel to this ShipmentQuey, an invalid parcel will not be added
+    /// </summary>
+    /// <param name="item">The ShipmentItem to add</param>
     public void AddParcel(Parcel parcel)
     {
         if (parcel != null && parcel.IsValid) parcels.Add(parcel);
@@ -79,11 +98,12 @@ public class ShipmentQuery : XmlRequestObject
 
 
     /// <summary>
-    /// URL to your own webhook, if used replaces the webhook url in the integation settings
+    /// The URL of the server that will receive the call from Fraktjakt's webhook.
     /// </summary>
     public string? CallbackUrl { get; set; }
     /// <summary>
-    /// Should the shipping be insured, if used replaces the integration settings
+    /// Should the shipping be insured
+    /// Default is false
     /// </summary>
     public bool InsureDefault { get; set; } = false;
     /// <summary>
@@ -92,42 +112,52 @@ public class ShipmentQuery : XmlRequestObject
     public float? Value { get; set; }
     /// <summary>
     /// ISO 4217, the currency for the value tag
+    /// Default is SEK
     /// </summary>
     public CurrencyCode Currency { get; set; } = "SEK";
     /// <summary>
-    /// Use if specify sorting instead of the integration setting
+    /// Use if specify sorting instead of the integration setting    
+    /// Default is true
     /// </summary>
     public bool PriceSort { get; set; } = true;
     /// <summary>
     /// Set to true if the result should only return express options
+    /// Default is false
     /// </summary>
     public bool Express { get; set; } = false;
     /// <summary>
     /// Set to true if the result should only return freights with pickup
+    /// Default is false
     /// </summary>
     public bool Pickup { get; set; } = false;
     /// <summary>
     /// Set to true if the result should only return freights with dropoff/home delivery
+    /// Default is false
     /// </summary>
     public bool Dropoff { get; set; } = false;
     /// <summary>
     /// Set to true if the result should only return freights with environmental labelling
+    /// Default is false
     /// </summary>
     public bool Green { get; set; } = false;
     /// <summary>
     /// Set to true if the result should only return freights with quality label
+    /// Default is false
     /// </summary>
     public bool Quality { get; set; } = false;
     /// <summary>
     /// Set to true if the result should only return freights with delivery time guarantee
+    /// Default is false
     /// </summary>
     public bool TimeGuarantee { get; set; } = false;
     /// <summary>
     /// Does the freight contains refrigerated goods
+    /// Default is false
     /// </summary>
     public bool ColdContent { get; set; } = false;
     /// <summary>
     /// Does the freight contains frozen goods
+    /// Default is false
     /// </summary>
     public bool FrozenContent { get; set; } = false;
     /// <summary>
@@ -136,18 +166,22 @@ public class ShipmentQuery : XmlRequestObject
     public int? ShippingProductId { get; set; } = null;
     /// <summary>
     /// Set to true to exclude postal agents from the result, use for faster queries
+    /// Default is false
     /// </summary>
     public bool NoAgents { get; set; } = false;
     /// <summary>
     /// Set to true to exclude freight price from the result, use for faster queries
+    /// Default is false
     /// </summary>
     public bool NoPrices { get; set; } = false;
     /// <summary>
     /// Set to true to include information about closest agent for submission, will result in slower queries
+    /// Default is false
     /// </summary>
     public bool AgentsIn { get; set; } = false;
     /// <summary>
     /// Set to true to include id, name and logourl for shipping options in the result
+    /// Default is false
     /// </summary>
     public bool ShipperInfo { get; set; } = false;
             

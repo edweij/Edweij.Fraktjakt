@@ -4,7 +4,7 @@ using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
-public record ShipmentResponse(string ServerStatus, ResponseStatus ResponseStatus, string WarningMessage, string ErrorMessage, CurrencyCode Currency,
+public record QueryResponse(string ServerStatus, ResponseStatus ResponseStatus, string WarningMessage, string ErrorMessage, CurrencyCode Currency,
         int Id, string AccessCode, string AccessLink, string TrackingCode, string TrackingLink) : Response(ServerStatus, ResponseStatus, WarningMessage, ErrorMessage)
 {
     public static async Task<Response> FromHttpResponse(HttpResponseMessage httpResponseMessage)
@@ -20,7 +20,7 @@ public record ShipmentResponse(string ServerStatus, ResponseStatus ResponseStatu
         try
         {
             XElement element = XElement.Parse(xml);
-            var result = new ShipmentResponse(element.Element("server_status")!.Value,
+            var result = new QueryResponse(element.Element("server_status")!.Value,
                 (ResponseStatus)int.Parse(element.Element("code")!.Value),
                 element.Element("warning_message")!.Value,
                 element.Element("error_message")!.Value,

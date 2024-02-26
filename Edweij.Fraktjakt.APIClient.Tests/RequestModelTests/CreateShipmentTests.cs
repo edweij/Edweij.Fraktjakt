@@ -13,9 +13,10 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             var sender = new Sender(1, "key");
             var toAddress = new ToAddress("12345");
             var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
+            var validRecipient = new Recipient() { CompanyName = "company" };
 
             // Act
-            var shipment = new CreateShipment(sender, toAddress, items: validItems);
+            var shipment = new CreateShipment(sender, toAddress, validRecipient, items: validItems);
 
             // Assert
             Assert.Multiple(() =>
@@ -32,9 +33,9 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             // Arrange
             var sender = new Sender(1, "key");
             var invalidToAddress = new ToAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }; // Invalid to address details
-
+            var validRecipient = new Recipient() { CompanyName = "company" };
             // Act & Assert
-            Assert.That(() => new CreateShipment(sender, invalidToAddress), Throws.ArgumentException.With.Message.EqualTo("Provided toAddress not valid"));
+            Assert.That(() => new CreateShipment(sender, invalidToAddress, validRecipient), Throws.ArgumentException.With.Message.EqualTo("Provided toAddress not valid"));
         }
 
         [Test]
@@ -44,7 +45,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             var validShipment = new CreateShipment(
                 new Sender(1, "key"),
                 new ToAddress("12345"),
-            items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) });
+                new Recipient() { CompanyName = "company" },
+        items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) });
 
             // Act & Assert
             Assert.That(validShipment.IsValid, Is.True);
@@ -56,7 +58,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             // Arrange
             var invalidShipment = new CreateShipment(
                 new Sender(1, "key"),
-                new ToAddress("12345")
+                new ToAddress("12345"),
+                new Recipient() { CompanyName = "company" }
             /* no items == invalid */
             );
 
@@ -71,6 +74,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             var validShipment = new CreateShipment(
                 new Sender(1, "key"),
                 new ToAddress("12345"),
+                new Recipient() { CompanyName = "company" },
             items: new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) }
             );
 
@@ -83,13 +87,14 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             {
                 Assert.That(xmlResult, Is.Not.Empty);
                 Assert.That(element.Name.LocalName, Is.EqualTo("CreateShipment"));
-                Assert.That(element.Elements().Count, Is.EqualTo(6));
+                Assert.That(element.Elements().Count, Is.EqualTo(7));
                 Assert.That(element.Element("consignor"), Is.Not.Null);
                 Assert.That(element.Element("insure_default"), Is.Not.Null);
                 Assert.That(element.Element("price_sort"), Is.Not.Null);
                 Assert.That(element.Element("address_to"), Is.Not.Null);
                 Assert.That(element.Element("export_reason"), Is.Not.Null);
                 Assert.That(element.Element("commodities"), Is.Not.Null);
+                Assert.That(element.Element("recipient"), Is.Not.Null);
             });
 
         }
@@ -100,7 +105,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             // Arrange
             var invalidShipment = new CreateShipment(
                 new Sender(1, "key"),
-                new ToAddress("12345")
+                new ToAddress("12345"),
+                new Recipient() { CompanyName = "company" }
             /* no items or parcels == invalid */
             );
 

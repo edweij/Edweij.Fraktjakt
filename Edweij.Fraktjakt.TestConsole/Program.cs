@@ -18,7 +18,7 @@ namespace Edweij.Fraktjakt.TestConsole
             var sender = new Sender(id, key)
             {
                 Currency = "SEK",
-                Language = Language6391.sv,
+                Language = "sv",
                 SystemName = "Edweij.Fraktjakt"
             };
             var client = new FraktjaktClient(sender);
@@ -47,7 +47,7 @@ namespace Edweij.Fraktjakt.TestConsole
             Console.WriteLine($"Before query: {DateTime.Now}");
             var response = await client.Query(shipment);
             Console.WriteLine($"After query: {DateTime.Now}");
-            if (response.ResponseStatus == ResponseStatus.Ok &&  response is ShipmentResponse shipmentResponse)
+            if (response.ResponseStatus == ResponseStatus.Ok &&  response is QueryResponse shipmentResponse)
             {                
                 var product = shipmentResponse.Products.FirstOrDefault(p => !string.IsNullOrEmpty(p.ServicePointLocatorApi));
                 if (product != null)

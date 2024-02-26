@@ -27,10 +27,10 @@ public class FraktjaktClientTests
     public void InvalidConstructorShouldThrow()
     {
         Assert.Multiple(() => {
-            Assert.That(() => { new FraktjaktClient(0, null); }, Throws.ArgumentException);
-            Assert.That(() => { new FraktjaktClient(0, "key"); }, Throws.ArgumentException);
-            Assert.That(() => { new FraktjaktClient(123, null); }, Throws.ArgumentException);
-            Assert.That(() => { new FraktjaktClient(123, "    "); }, Throws.ArgumentException);            
+            Assert.That(() => { var client = new FraktjaktClient(0, null); }, Throws.ArgumentException);
+            Assert.That(() => { var client = new FraktjaktClient(0, "key"); }, Throws.ArgumentException);
+            Assert.That(() => { var client = new FraktjaktClient(123, null); }, Throws.ArgumentException);
+            Assert.That(() => { var client = new FraktjaktClient(123, "    "); }, Throws.ArgumentException);            
         });
     }
 
@@ -154,6 +154,7 @@ public class FraktjaktClientTests
         });
     }
 
+    [Test]
     public async Task Query_ValidInput_ReturnsResponse()
     {
         // Arrange
@@ -161,9 +162,9 @@ public class FraktjaktClientTests
         SetupMessageHandlerForSuccessResponse(new StringContent(@$"<?xml version=""1.0"" encoding=""UTF-8""?><shipment><server_status>ok</server_status><code>0</code><warning_message></warning_message><error_message></error_message>
 <currency>SEK</currency><id>67887</id><access_code>ABC12345</access_code><access_link>https://www.fraktjakt.se/shipments/show/163221?access_code=b6dfc12fc04ec98132da2eb1c1739272cc646ed9</access_link>
 <tracking_code>ABC12345</tracking_code><tracking_link>https://www.fraktjakt.se/trace/shipment/b6dfc12fc04</tracking_link><agent_selection_link>https://www.fraktjakt.se/agents/search_closest</agent_selection_link>
-<shipping_products><shipping_product><id>15</id><name>Privat</name><description>Bussgods - Privat</description><arrival_time>1-2 dagar</arrival_time><price>159.50</price><tax_class>25.00</tax_class><insurance_fee>75.00/insurance_fee>
+<shipping_products><shipping_product><id>15</id><name>Privat</name><description>Bussgods - Privat</description><arrival_time>1-2 dagar</arrival_time><price>159.50</price><tax_class>25.00</tax_class><insurance_fee>75.00</insurance_fee>
 <insurance_tax_class>0</insurance_tax_class><to_agent>1</to_agent><agent_info>Cityterminalen Stockholm ca 2 km i Stockholm</agent_info><agent_link>https://www.fraktjakt.se/agents/search_closest</agent_link>
-<agent_in_info>Jönköping Bussgods ca 1 km i Jönköping</agent_info><agent_in_link>https://www.fraktjakt.se/agents/search_closest/377482?type=8&amp;shipper=4</agent_in_link>
+<agent_in_info>Jönköping Bussgods ca 1 km i Jönköping</agent_in_info><agent_in_link>https://www.fraktjakt.se/agents/search_closest/377482?type=8&amp;shipper=4</agent_in_link>
 <service_point_locator_api>https://www.fraktjakt.se/agents/service_point_locator</service_point_locator_api><shipper><id>4</id><name>Bussgods</name><logo_url>https://www.fraktjakt.se/images/shippers/4.png</logo_url></shipper></shipping_product>
 </shipping_products></shipment>"));        
 
@@ -172,9 +173,9 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.That(response as ShipmentResponse, Is.Not.Null);
+            Assert.That(response as QueryResponse, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-            Assert.That(((ShipmentResponse)response).Products.ToList(), Has.Count.EqualTo(1));
+            Assert.That(((QueryResponse)response).Products.ToList(), Has.Count.EqualTo(1));
         });
     }
 
@@ -197,6 +198,7 @@ public class FraktjaktClientTests
         });
     }
 
+    [Test]
     public async Task ReQuery_ValidInput_ReturnsResponse()
     {
         // Arrange
@@ -204,9 +206,9 @@ public class FraktjaktClientTests
         SetupMessageHandlerForSuccessResponse(new StringContent(@$"<?xml version=""1.0"" encoding=""UTF-8""?><shipment><server_status>ok</server_status><code>0</code><warning_message></warning_message><error_message></error_message>
 <currency>SEK</currency><id>123</id><access_code>ABC12345</access_code><access_link>https://www.fraktjakt.se/shipments/show/163221?access_code=b6dfc12fc04ec98132da2eb1c1739272cc646ed9</access_link>
 <tracking_code>ABC12345</tracking_code><tracking_link>https://www.fraktjakt.se/trace/shipment/b6dfc12fc04</tracking_link><agent_selection_link>https://www.fraktjakt.se/agents/search_closest</agent_selection_link>
-<shipping_products><shipping_product><id>15</id><name>Privat</name><description>Bussgods - Privat</description><arrival_time>1-2 dagar</arrival_time><price>159.50</price><tax_class>25.00</tax_class><insurance_fee>75.00/insurance_fee>
+<shipping_products><shipping_product><id>15</id><name>Privat</name><description>Bussgods - Privat</description><arrival_time>1-2 dagar</arrival_time><price>159.50</price><tax_class>25.00</tax_class><insurance_fee>75.00</insurance_fee>
 <insurance_tax_class>0</insurance_tax_class><to_agent>1</to_agent><agent_info>Cityterminalen Stockholm ca 2 km i Stockholm</agent_info><agent_link>https://www.fraktjakt.se/agents/search_closest</agent_link>
-<agent_in_info>Jönköping Bussgods ca 1 km i Jönköping</agent_info><agent_in_link>https://www.fraktjakt.se/agents/search_closest/377482?type=8&amp;shipper=4</agent_in_link>
+<agent_in_info>Jönköping Bussgods ca 1 km i Jönköping</agent_in_info><agent_in_link>https://www.fraktjakt.se/agents/search_closest/377482?type=8&amp;shipper=4</agent_in_link>
 <service_point_locator_api>https://www.fraktjakt.se/agents/service_point_locator</service_point_locator_api><shipper><id>4</id><name>Bussgods</name><logo_url>https://www.fraktjakt.se/images/shippers/4.png</logo_url></shipper></shipping_product>
 </shipping_products></shipment>"));
         
@@ -216,9 +218,9 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.That(response as ShipmentResponse, Is.Not.Null);
+            Assert.That(response as QueryResponse, Is.Not.Null);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-            Assert.That(((ShipmentResponse)response).Products.ToList(), Has.Count.EqualTo(1));
+            Assert.That(((QueryResponse)response).Products.ToList(), Has.Count.EqualTo(1));
         });
     }
 
@@ -241,6 +243,7 @@ public class FraktjaktClientTests
         });
     }
 
+    [Test]
     public async Task Order_ValidInput_ReturnsResponse()
     {
         // Arrange
@@ -283,10 +286,11 @@ public class FraktjaktClientTests
         });
     }
 
+    [Test]
     public async Task CreateShipment_ValidInput_ReturnsResponse()
     {
         // Arrange
-        var createShipment = new CreateShipment(_fraktjaktClient.Sender, new ToAddress("12345"), items: new[] { new ShipmentItem("Item", 1, 10.0f, 1.0f) });
+        var createShipment = new CreateShipment(_fraktjaktClient.Sender, new ToAddress("12345"), new Recipient() { CompanyName = "company"}, items: new[] { new ShipmentItem("Item", 1, 10.0f, 1.0f) });
         SetupMessageHandlerForSuccessResponse(new StringContent(@$"<?xml version=""1.0"" encoding=""UTF-8""?><result><server_status>ok</server_status><status>ok</status><code>0</code><warning_message></warning_message><error_message></error_message>
 <shipment_id>45654</shipment_id><access_code>ABC12345</access_code><access_link>https://www.fraktjakt.se/shipments/show/163221?access_code=b6dfc12fc04ec98132da2eb1c1739272cc646ed9</access_link>
 <return_link>https://www.fraktjakt.se/shipments/xml_create_return/163221?access_code=b6dfc12fc04ec98132da2eb1c1739272cc646ed9</return_link>
@@ -308,7 +312,7 @@ public class FraktjaktClientTests
     public async Task CreateShipment_Returns_ErrorResponse_On_NonSuccessfullStatus()
     {
         // Arrange
-        var createShipment = new CreateShipment(_fraktjaktClient.Sender, new ToAddress("12345"), items: new[] { new ShipmentItem("Item", 1, 10.0f, 1.0f) });
+        var createShipment = new CreateShipment(_fraktjaktClient.Sender, new ToAddress("12345"), new Recipient() { CompanyName = "company" }, items: new[] { new ShipmentItem("Item", 1, 10.0f, 1.0f) });
         SetupMessageHandlerForBadRequestResponse();
 
         // Act

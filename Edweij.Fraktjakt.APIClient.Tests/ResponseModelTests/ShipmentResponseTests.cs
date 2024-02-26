@@ -14,7 +14,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             HttpResponseMessage httpResponseMessage = null;
 
             // Act
-            Response response = await ShipmentResponse.FromHttpResponse(httpResponseMessage!);
+            Response response = await QueryResponse.FromHttpResponse(httpResponseMessage!);
 
             // Assert
             Assert.Multiple(() =>
@@ -37,7 +37,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             };
 
             // Act
-            Response response = await ShipmentResponse.FromHttpResponse(httpResponseMessage);
+            Response response = await QueryResponse.FromHttpResponse(httpResponseMessage);
 
             // Assert
             Assert.Multiple(() =>
@@ -57,7 +57,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             string validXml = "<shipmentResponse><server_status>OK</server_status><code>0</code><warning_message>Warning</warning_message><error_message>Error</error_message><currency>USD</currency><id>123</id><access_code>ABC</access_code><access_link>http://example.com</access_link><tracking_code>123456</tracking_code><tracking_link>http://tracking.com</tracking_link><shipping_products></shipping_products></shipmentResponse>";
 
             // Act
-            ShipmentResponse shipmentResponse = ShipmentResponse.FromXml(validXml) as ShipmentResponse;
+            QueryResponse shipmentResponse = QueryResponse.FromXml(validXml) as QueryResponse;
 
             // Assert
             Assert.Multiple(() =>

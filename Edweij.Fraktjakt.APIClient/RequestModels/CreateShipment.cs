@@ -7,7 +7,8 @@ namespace Edweij.Fraktjakt.APIClient.RequestModels;
 public class CreateShipment : XmlRequestObject
 {
     public Sender Sender { get; init; }
-    public ToAddress ToAddress { get; init; }
+    public ToAddress ToAddress { get; init; }    
+    public Recipient? Recipient { get; set; } = null;
 
 
     /// <summary>
@@ -19,10 +20,11 @@ public class CreateShipment : XmlRequestObject
     /// <param name="items">Optional parameter with shipment items. A shipment should contain at least one shipment item or parcel</param>
     /// <param name="parcels">Optional parameter with parcels. A shipment should contain at least one parcel or shipment item</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public CreateShipment(Sender sender, ToAddress toAddress, FromAddress? fromAddress = null, IEnumerable<ShipmentItem>? items = null, IEnumerable<Parcel>? parcels = null)
+    public CreateShipment(Sender sender, ToAddress toAddress, Recipient recipient, FromAddress? fromAddress = null, IEnumerable<ShipmentItem>? items = null, IEnumerable<Parcel>? parcels = null)
     {
         Sender = sender ?? throw new ArgumentNullException(nameof(sender));
         ToAddress = toAddress ?? throw new ArgumentNullException(nameof(toAddress));
+        Recipient = recipient ?? throw new ArgumentNullException(nameof(recipient));
 
         if (!Sender.IsValid) throw new ArgumentException("Provided sender not valid");
         if (!ToAddress.IsValid) throw new ArgumentException("Provided toAddress not valid");
@@ -132,12 +134,7 @@ public class CreateShipment : XmlRequestObject
     /// The senders contact information for this shipment, if not specified uses your fraktjakt account settings
     /// </summary>
     public Dispatcher? Dispatcher { get; set; } = null;
-
-    /// <summary>
-    /// The recipients contact information for this shipment
-    /// Required
-    /// </summary>
-    public Recipient? Recipient { get; set; } = null;
+    
     public string? SenderEmail { get; set; } = null;
 
 
@@ -148,7 +145,7 @@ public class CreateShipment : XmlRequestObject
         if (!string.IsNullOrEmpty(Reference))
         {
             if (Reference.Length > 50) yield return new RuleViolation("Reference", "Max length 50");
-            Regex r = new Regex("^[ a-zA-Z0-9]*$");
+            Regex r = new("^[ a-zA-Z0-9]*$");
             if (!r.IsMatch(Reference)) yield return new RuleViolation("Reference", "May only contain space, 0-9 and a-z or A-Z");
         }
 

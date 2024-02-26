@@ -82,7 +82,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
             url += $"&md5_checksum={MD5(xml)}";
         }
         var response = await _httpClient.GetAsync(url);
-        return await ShipmentResponse.FromHttpResponse(response);
+        return await QueryResponse.FromHttpResponse(response);
     }
 
     public async Task<Response> ReQuery(ShipmentReQuery shipment)
@@ -97,7 +97,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
             url += $"&md5_checksum={MD5(xml)}";
         }
         var response = await _httpClient.GetAsync(url);
-        return await ShipmentResponse.FromHttpResponse(response);
+        return await QueryResponse.FromHttpResponse(response);
     }
 
     public async Task<Response> ReQuery(int shipmentId, bool shipperInfo, float? value)

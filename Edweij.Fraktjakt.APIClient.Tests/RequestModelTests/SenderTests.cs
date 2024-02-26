@@ -51,7 +51,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
                 Assert.That(element.Element("currency"), Is.Not.Null);
                 Assert.That(element.Element("currency").Value, Is.EqualTo("SEK"));
                 Assert.That(element.Element("language"), Is.Not.Null);
-                Assert.That(element.Element("language").Value, Is.EqualTo("sv"));
+                Assert.That(element.Element("language").Value, Is.EqualTo("SV"));
                 Assert.That(element.Element("encoding"), Is.Not.Null);
                 Assert.That(element.Element("encoding").Value, Is.EqualTo("UTF-8"));
                 Assert.That(element.Element("api_version"), Is.Not.Null);

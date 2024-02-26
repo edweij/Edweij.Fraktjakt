@@ -1,13 +1,18 @@
-﻿using Edweij.Fraktjakt.APIClient.Enums;
-using Edweij.Fraktjakt.APIClient.Structs;
+﻿using Edweij.Fraktjakt.APIClient.Structs;
 using System.Text;
-using System.Xml;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
+/// <summary>
+/// Information about the sender, i.e. the integration that is sending the order
+/// </summary>
 public class Sender : ReferredSender
 {
+    /// <summary>
+    /// Information about the sender, i.e. the integration that is sending the order
+    /// </summary>
+    /// <param name="id">The integrations customer id in Fraktjakt.</param>
+    /// <param name="key">The integrations api key in Fraktjakt.</param>
     public Sender(int id, string key) : base(id, key)
     {
          
