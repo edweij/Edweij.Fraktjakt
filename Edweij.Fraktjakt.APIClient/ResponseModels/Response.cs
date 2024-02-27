@@ -2,10 +2,14 @@
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
-public record Response(string ServerStatus, ResponseStatus ResponseStatus, string WarningMessage, string ErrorMessage)
+public record Response<T>(string ServerStatus, ResponseStatus ResponseStatus, string WarningMessage, string ErrorMessage, T? Result)
 {
-    protected static Response CreateErrorResponse(string message)
+    public bool HasResult => Result != null;
+
+
+    public static Response<T> CreateErrorResponse(string message)
     {
-        return new Response("Server status unknown, invalid or no response.", ResponseStatus.Error, string.Empty, message);
+        return new Response<T>("Server status unknown, invalid, or no response.", ResponseStatus.Error, string.Empty, message, default);
     }
 }
+

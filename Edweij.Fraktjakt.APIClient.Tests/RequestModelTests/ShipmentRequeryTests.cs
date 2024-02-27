@@ -19,7 +19,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             int shipmentId = 123;
 
             // Act
-            ShipmentReQuery shipmentReQuery = new ShipmentReQuery(sender, shipmentId);
+            ReQuery shipmentReQuery = new ReQuery(sender, shipmentId);
 
             // Assert
             Assert.Multiple(() =>
@@ -38,7 +38,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             Sender sender = null;
             int shipmentId = 123;
 
-            Assert.Throws<ArgumentNullException>(() => new ShipmentReQuery(sender, shipmentId));
+            Assert.Throws<ArgumentNullException>(() => new ReQuery(sender, shipmentId));
         }
 
         [Test]
@@ -49,7 +49,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             int invalidShipmentId = 0;
 
             // Act and Assert
-            Assert.Throws<ArgumentException>(() => new ShipmentReQuery(sender, invalidShipmentId));
+            Assert.Throws<ArgumentException>(() => new ReQuery(sender, invalidShipmentId));
         }
 
         [Test]
@@ -61,7 +61,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             float value = 45.67f;
             bool shipperInfo = true;
 
-            var shipmentReQuery = new ShipmentReQuery(sender, shipmentId)
+            var shipmentReQuery = new ReQuery(sender, shipmentId)
             {
                 Value = value,
                 ShipperInfo = shipperInfo

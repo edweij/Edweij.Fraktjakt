@@ -1,11 +1,9 @@
 ﻿using Edweij.Fraktjakt.APIClient.Structs;
-using Microsoft.VisualBasic;
 using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
-public class ShipmentQuery : XmlRequestObject
+public class Query : XmlRequestObject
 {
     public Sender Sender { get; init; }
     public ToAddress ToAddress { get; init; }
@@ -20,7 +18,7 @@ public class ShipmentQuery : XmlRequestObject
     /// <param name="items">Optional parameter with shipment items. A shipment should contain at least one shipment item or parcel</param>
     /// <param name="parcels">Optional parameter with parcels. A shipment should contain at least one parcel or shipment item</param>
     /// <exception cref="ArgumentNullException"></exception>
-    public ShipmentQuery(Sender sender, ToAddress toAddress, FromAddress? fromAddress = null, IEnumerable<ShipmentItem>? items = null, IEnumerable<Parcel>? parcels = null) 
+    public Query(Sender sender, ToAddress toAddress, FromAddress? fromAddress = null, IEnumerable<ShipmentItem>? items = null, IEnumerable<Parcel>? parcels = null) 
     { 
         Sender = sender ?? throw new ArgumentNullException(nameof(sender));
         ToAddress = toAddress ?? throw new ArgumentNullException(nameof(toAddress));

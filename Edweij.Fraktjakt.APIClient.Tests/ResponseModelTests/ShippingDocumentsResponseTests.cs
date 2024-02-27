@@ -1,11 +1,6 @@
 ﻿using Edweij.Fraktjakt.APIClient.Enums;
 using Edweij.Fraktjakt.APIClient.ResponseModels;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
 {
@@ -22,24 +17,24 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             };
 
             // Act
-            Response response = await ShippingDocumentsResponse.FromHttpResponse(httpResponse);
+            var response = await ShippingDocumentsResponse.FromHttpResponse(httpResponse);
 
+            
             // Assert
-            Assert.That(response, Is.InstanceOf<ShippingDocumentsResponse>());
-            ShippingDocumentsResponse shippingDocumentsResponse = (ShippingDocumentsResponse)response;
-
             Assert.Multiple(() =>
             {
-                Assert.That(shippingDocumentsResponse.ServerStatus, Is.EqualTo("OK"));
-                Assert.That(shippingDocumentsResponse.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-                Assert.That(shippingDocumentsResponse.WarningMessage, Is.EqualTo("Warning"));
-                Assert.That(shippingDocumentsResponse.ErrorMessage, Is.EqualTo("Error"));
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.HasResult, Is.True);
+                Assert.That(response.ServerStatus, Is.EqualTo("OK"));
+                Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
+                Assert.That(response.WarningMessage, Is.EqualTo("Warning"));
+                Assert.That(response.ErrorMessage, Is.EqualTo("Error"));
 
-                Assert.That(shippingDocumentsResponse.Documents, Is.Not.Null);
-                Assert.That(shippingDocumentsResponse.Documents.ToList(), Has.Count.EqualTo(2));
+                Assert.That(response.Result.Documents, Is.Not.Null);
+                Assert.That(response.Result.Documents.ToList(), Has.Count.EqualTo(2));
 
-                ShippingDocument doc1 = shippingDocumentsResponse.Documents.First();
-                ShippingDocument doc2 = shippingDocumentsResponse.Documents.Skip(1).First();
+                ShippingDocument doc1 = response.Result.Documents.First();
+                ShippingDocument doc2 = response.Result.Documents.Skip(1).First();
 
                 Assert.That(doc1.Name, Is.EqualTo("Doc1"));
                 Assert.That(doc1.TypeId.Id, Is.EqualTo(1));
@@ -96,24 +91,23 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             </shippingDocumentsResponse>";
 
             // Act
-            Response response = ShippingDocumentsResponse.FromXml(validXml);
-
-            // Assert
-            Assert.That(response, Is.InstanceOf<ShippingDocumentsResponse>());
-            ShippingDocumentsResponse shippingDocumentsResponse = (ShippingDocumentsResponse)response;
+            var response = ShippingDocumentsResponse.FromXml(validXml);
+                       
 
             Assert.Multiple(() =>
             {
-                Assert.That(shippingDocumentsResponse.ServerStatus, Is.EqualTo("OK"));
-                Assert.That(shippingDocumentsResponse.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-                Assert.That(shippingDocumentsResponse.WarningMessage, Is.EqualTo("Warning"));
-                Assert.That(shippingDocumentsResponse.ErrorMessage, Is.EqualTo("Error"));
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.HasResult, Is.True);
+                Assert.That(response.ServerStatus, Is.EqualTo("OK"));
+                Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
+                Assert.That(response.WarningMessage, Is.EqualTo("Warning"));
+                Assert.That(response.ErrorMessage, Is.EqualTo("Error"));
 
-                Assert.That(shippingDocumentsResponse.Documents, Is.Not.Null);
-                Assert.That(shippingDocumentsResponse.Documents.ToList(), Has.Count.EqualTo(2));
+                Assert.That(response.Result.Documents, Is.Not.Null);
+                Assert.That(response.Result.Documents.ToList(), Has.Count.EqualTo(2));
 
-                ShippingDocument doc1 = shippingDocumentsResponse.Documents.First();
-                ShippingDocument doc2 = shippingDocumentsResponse.Documents.Skip(1).First();
+                ShippingDocument doc1 = response.Result.Documents.First();
+                ShippingDocument doc2 = response.Result.Documents.Skip(1).First();
 
                 Assert.That(doc1.Name, Is.EqualTo("Doc1"));
                 Assert.That(doc1.TypeId.Id, Is.EqualTo(1));
@@ -146,10 +140,10 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(response, Is.TypeOf<Response>());
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.HasResult, Is.False);
                 Assert.That(response.ErrorMessage, Is.EqualTo("HttpResponseMessage was null"));
             });
-
         }
 
         [Test]
@@ -167,7 +161,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(response, Is.TypeOf<Response>());
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.HasResult, Is.False);
                 Assert.That(response.ErrorMessage, Is.EqualTo("Not successful response (BadRequest). Response Content: 'Error Content'."));
             });
         }
@@ -183,7 +178,8 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(response, Is.TypeOf<Response>());
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.HasResult, Is.False);
                 Assert.That(response.ErrorMessage, Does.StartWith("Invalid xml: "));
             });
         }

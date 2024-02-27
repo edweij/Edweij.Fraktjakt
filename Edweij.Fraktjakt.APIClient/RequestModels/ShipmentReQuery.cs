@@ -5,7 +5,7 @@ namespace Edweij.Fraktjakt.APIClient.RequestModels;
 /// <summary>
 /// If you've previously called Query API and got a response containing a shipmentId you can call the ReQuery API to get a cached response which is much quicker.
 /// </summary>
-public class ShipmentReQuery : XmlRequestObject
+public class ReQuery : XmlRequestObject
 {
     /// <summary>
     /// Information about who's making the call to the API
@@ -26,7 +26,7 @@ public class ShipmentReQuery : XmlRequestObject
     /// <param name="shipmentId">The shipmentId from previous Query</param>
     /// <exception cref="ArgumentNullException">If the sender parameter is null</exception>
     /// <exception cref="ArgumentException">For invalid shipmentId</exception>
-    public ShipmentReQuery(Sender sender, int shipmentId) 
+    public ReQuery(Sender sender, int shipmentId) 
     { 
         Sender = sender ?? throw new ArgumentNullException(nameof(sender));
         if (shipmentId < 1) throw new ArgumentException(nameof(shipmentId));

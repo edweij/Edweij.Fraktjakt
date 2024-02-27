@@ -56,21 +56,21 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         _useMD5Checksum = useMD5Checksum;
     }
 
-    public async Task<Response> Trace(int shipmentId, SwedishOrEnglish lang)
+    public async Task<Response<TraceResponse>> Trace(int shipmentId, SwedishOrEnglish lang)
     {
         var url = $"/trace/xml_trace?consignor_id={Sender.Id}&consignor_key={Sender.Key}&shipment_id={shipmentId}&locale={lang}";
         var response = await _httpClient.GetAsync(url);
         return await TraceResponse.FromHttpResponse(response);
     }
 
-    public async Task<Response> ShippingDocuments(int shipmentId, SwedishOrEnglish lang)
+    public async Task<Response<ShippingDocumentsResponse>> ShippingDocuments(int shipmentId, SwedishOrEnglish lang)
     {
         var url = $"/shipping_documents/xml_get?consignor_id={Sender.Id}&consignor_key={Sender.Key}&shipment_id={shipmentId}&locale={lang}";
         var response = await _httpClient.GetAsync(url);
         return await ShippingDocumentsResponse.FromHttpResponse(response);
     }
 
-    public async Task<Response> Query(ShipmentQuery shipment)
+    public async Task<Response<QueryResponse>> Query(Query shipment)
     {
         if (!shipment.IsValid) throw new ArgumentException("Shipment is not valid");
         if (shipment.Sender != Sender) throw new ArgumentException("Sender in shipment is different from the clients sender");
@@ -85,7 +85,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         return await QueryResponse.FromHttpResponse(response);
     }
 
-    public async Task<Response> ReQuery(ShipmentReQuery shipment)
+    public async Task<Response<QueryResponse>> ReQuery(ReQuery shipment)
     {
         if (!shipment.IsValid) throw new ArgumentException("Shipment is not valid");
         if (shipment.Sender != Sender) throw new ArgumentException("Sender in shipment is different from the clients sender");
@@ -100,9 +100,9 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         return await QueryResponse.FromHttpResponse(response);
     }
 
-    public async Task<Response> ReQuery(int shipmentId, bool shipperInfo, float? value)
+    public async Task<Response<QueryResponse>> ReQuery(int shipmentId, bool shipperInfo, float? value)
     {
-        var query = new ShipmentReQuery(Sender, shipmentId)
+        var query = new ReQuery(Sender, shipmentId)
         {
             ShipperInfo = shipperInfo,
             Value = value
@@ -110,7 +110,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         return await ReQuery(query);
     }
 
-    public async Task<Response> Order(Order order)
+    public async Task<Response<OrderResponse>> Order(Order order)
     {
         if (!order.IsValid) throw new ArgumentException("Order is not valid");
         if (order.Sender != Sender) throw new ArgumentException("Sender in order is different from the clients sender");
@@ -125,7 +125,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         return await OrderResponse.FromHttpResponse(response);
     }
 
-    public async Task<Response> CreateShipment(CreateShipment createShipment)
+    public async Task<Response<CreateShipmentResponse>> CreateShipment(CreateShipment createShipment)
     {
         if (!createShipment.IsValid) throw new ArgumentException("createShipment is not valid");
         if (createShipment.Sender != Sender) throw new ArgumentException("Sender in createShipment is different from the clients sender");
@@ -140,7 +140,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         return await CreateShipmentResponse.FromHttpResponse(response);
     }
 
-    public async Task<Response> GetServicePoints(string url)
+    public async Task<Response<AgentListResponse>> GetServicePoints(string url)
     {
         if (string.IsNullOrEmpty(url)) throw new ArgumentNullException(nameof(url));
         var response = await _httpClient.GetAsync(url);

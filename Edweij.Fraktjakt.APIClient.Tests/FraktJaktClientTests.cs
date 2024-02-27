@@ -77,13 +77,14 @@ public class FraktjaktClientTests
         
         // Assert
         Assert.Multiple(() => {
-            Assert.That(response as TraceResponse, Is.Not.Null);
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.HasResult, Is.True);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-            Assert.That(((TraceResponse)response).ShippingStates.ToList(), Has.Count.EqualTo(1));
-            Assert.That(((TraceResponse)response).TrackingCode, Is.EqualTo("b6dfc12fc04ec98132da2eb1c1739272cc646ed9"));
-            Assert.That(((TraceResponse)response).TrackingLink, Is.EqualTo("https://www.fraktjakt.se/trace/shipment/b6dfc12fc04ec98132da2eb1c1739272cc646ed9&locale=sv"));
-            Assert.That(((TraceResponse)response).TrackingNumber, Is.EqualTo("BG9700003016"));
-            Assert.That(((TraceResponse)response).ShippingCompany, Is.EqualTo("DB Schenker"));
+            Assert.That(response.Result.ShippingStates.ToList(), Has.Count.EqualTo(1));
+            Assert.That(response.Result.TrackingCode, Is.EqualTo("b6dfc12fc04ec98132da2eb1c1739272cc646ed9"));
+            Assert.That(response.Result.TrackingLink, Is.EqualTo("https://www.fraktjakt.se/trace/shipment/b6dfc12fc04ec98132da2eb1c1739272cc646ed9&locale=sv"));
+            Assert.That(response.Result.TrackingNumber, Is.EqualTo("BG9700003016"));
+            Assert.That(response.Result.ShippingCompany, Is.EqualTo("DB Schenker"));
         });        
     }
 
@@ -126,11 +127,12 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.That(response as ShippingDocumentsResponse, Is.Not.Null);
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.HasResult, Is.True);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-            Assert.That(((ShippingDocumentsResponse)response).Documents.ToList(), Has.Count.EqualTo(1));
-            Assert.That(((ShippingDocumentsResponse)response).Documents.First().File, Is.EqualTo(pdfBase64));
-            Assert.That(((ShippingDocumentsResponse)response).Documents.First().PdfFromBase64, Is.EqualTo(pdfBytes));
+            Assert.That(response.Result.Documents.ToList(), Has.Count.EqualTo(1));
+            Assert.That(response.Result.Documents.First().File, Is.EqualTo(pdfBase64));
+            Assert.That(response.Result.Documents.First().PdfFromBase64, Is.EqualTo(pdfBytes));
         });
     }
 
@@ -158,7 +160,7 @@ public class FraktjaktClientTests
     public async Task Query_ValidInput_ReturnsResponse()
     {
         // Arrange
-        var query = new ShipmentQuery(_fraktjaktClient.Sender, new ToAddress("12345"), items: new[] { new ShipmentItem("Item", 1, 10.0f, 1.0f) });
+        var query = new Query(_fraktjaktClient.Sender, new ToAddress("12345"), items: new[] { new ShipmentItem("Item", 1, 10.0f, 1.0f) });
         SetupMessageHandlerForSuccessResponse(new StringContent(@$"<?xml version=""1.0"" encoding=""UTF-8""?><shipment><server_status>ok</server_status><code>0</code><warning_message></warning_message><error_message></error_message>
 <currency>SEK</currency><id>67887</id><access_code>ABC12345</access_code><access_link>https://www.fraktjakt.se/shipments/show/163221?access_code=b6dfc12fc04ec98132da2eb1c1739272cc646ed9</access_link>
 <tracking_code>ABC12345</tracking_code><tracking_link>https://www.fraktjakt.se/trace/shipment/b6dfc12fc04</tracking_link><agent_selection_link>https://www.fraktjakt.se/agents/search_closest</agent_selection_link>
@@ -173,9 +175,10 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.That(response as QueryResponse, Is.Not.Null);
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.HasResult, Is.True);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-            Assert.That(((QueryResponse)response).Products.ToList(), Has.Count.EqualTo(1));
+            Assert.That(response.Result.Products.ToList(), Has.Count.EqualTo(1));
         });
     }
 
@@ -183,7 +186,7 @@ public class FraktjaktClientTests
     public async Task Query_Returns_ErrorResponse_On_NonSuccessfullStatus()
     {
         // Arrange
-        var query = new ShipmentQuery(_fraktjaktClient.Sender, new ToAddress("12345"), items: new[] { new ShipmentItem("Item", 1, 10.0f, 1.0f) });
+        var query = new Query(_fraktjaktClient.Sender, new ToAddress("12345"), items: new[] { new ShipmentItem("Item", 1, 10.0f, 1.0f) });
         SetupMessageHandlerForBadRequestResponse();
 
         // Act
@@ -202,7 +205,7 @@ public class FraktjaktClientTests
     public async Task ReQuery_ValidInput_ReturnsResponse()
     {
         // Arrange
-        var shipment = new ShipmentReQuery(_fraktjaktClient.Sender, 123);
+        var shipment = new ReQuery(_fraktjaktClient.Sender, 123);
         SetupMessageHandlerForSuccessResponse(new StringContent(@$"<?xml version=""1.0"" encoding=""UTF-8""?><shipment><server_status>ok</server_status><code>0</code><warning_message></warning_message><error_message></error_message>
 <currency>SEK</currency><id>123</id><access_code>ABC12345</access_code><access_link>https://www.fraktjakt.se/shipments/show/163221?access_code=b6dfc12fc04ec98132da2eb1c1739272cc646ed9</access_link>
 <tracking_code>ABC12345</tracking_code><tracking_link>https://www.fraktjakt.se/trace/shipment/b6dfc12fc04</tracking_link><agent_selection_link>https://www.fraktjakt.se/agents/search_closest</agent_selection_link>
@@ -218,9 +221,10 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.That(response as QueryResponse, Is.Not.Null);
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.HasResult, Is.True);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-            Assert.That(((QueryResponse)response).Products.ToList(), Has.Count.EqualTo(1));
+            Assert.That(response.Result.Products.ToList(), Has.Count.EqualTo(1));
         });
     }
 
@@ -228,7 +232,7 @@ public class FraktjaktClientTests
     public async Task ReQuery_Returns_ErrorResponse_On_NonSuccessfullStatus()
     {
         // Arrange
-        var shipment = new ShipmentReQuery(_fraktjaktClient.Sender, 123);
+        var shipment = new ReQuery(_fraktjaktClient.Sender, 123);
         SetupMessageHandlerForBadRequestResponse();
 
         // Act
@@ -261,8 +265,10 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.That(response as OrderResponse, Is.Not.Null);
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.HasResult, Is.True);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
+            Assert.That(response.Result.TrackingCode, Is.EqualTo("ABC12345"));
             //Binding from xml should be tested in the OrderResponseTests
         });
     }
@@ -302,7 +308,8 @@ public class FraktjaktClientTests
 
         // Assert
         Assert.Multiple(() => {
-            Assert.That(response as CreateShipmentResponse, Is.Not.Null);
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response.HasResult, Is.True);
             Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
             //Binding from xml should be tested in the OrderResponseTests
         });

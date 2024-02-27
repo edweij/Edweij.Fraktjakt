@@ -3,19 +3,18 @@ using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
-public record ShippingDocumentsResponse(string ServerStatus, ResponseStatus ResponseStatus, string WarningMessage, string ErrorMessage, IEnumerable<ShippingDocument> Documents)
-    : Response(ServerStatus, ResponseStatus, WarningMessage, ErrorMessage)
+public record ShippingDocumentsResponse(IEnumerable<ShippingDocument> Documents)
 {
 
-    public static async Task<Response> FromHttpResponse(HttpResponseMessage httpResponseMessage)
+    public static async Task<Response<ShippingDocumentsResponse>> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
-        if (httpResponseMessage == null) return CreateErrorResponse("HttpResponseMessage was null");
-        if (!httpResponseMessage.IsSuccessStatusCode) return CreateErrorResponse($"Not successful response ({httpResponseMessage.StatusCode}). Response Content: '{await httpResponseMessage.Content.ReadAsStringAsync()}'.");
+        if (httpResponseMessage == null) return Response<ShippingDocumentsResponse>.CreateErrorResponse("HttpResponseMessage was null");
+        if (!httpResponseMessage.IsSuccessStatusCode) return Response<ShippingDocumentsResponse>.CreateErrorResponse($"Not successful response ({httpResponseMessage.StatusCode}). Response Content: '{await httpResponseMessage.Content.ReadAsStringAsync()}'.");
         string xml = await httpResponseMessage.Content.ReadAsStringAsync();
         return FromXml(xml);
     }
 
-    public static Response FromXml(string xml)
+    public static Response<ShippingDocumentsResponse> FromXml(string xml)
     {
         try
         {
@@ -25,16 +24,16 @@ public record ShippingDocumentsResponse(string ServerStatus, ResponseStatus Resp
             {
                 documents.AddRange(element.Element("shipping_documents")!.Elements("shipping_document").Select(ShippingDocument.FromXml));
             }
-            var result = new ShippingDocumentsResponse(element.Element("server_status")!.Value,
+            var result = new Response<ShippingDocumentsResponse>(element.Element("server_status")!.Value,
                 (ResponseStatus)int.Parse(element.Element("code")!.Value),
                 element.Element("warning_message")!.Value,
                 element.Element("error_message")!.Value,
-                documents);
+                new ShippingDocumentsResponse(documents));
             return result;
         }
         catch (Exception ex)
         {
-            return CreateErrorResponse($"Invalid xml: {ex.Message}");
+            return Response<ShippingDocumentsResponse>.CreateErrorResponse($"Invalid xml: {ex.Message}");
         }
     }
 

@@ -8,18 +8,18 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
     public class ShipmentResponseTests
     {
         [Test]
-        public async Task FromHttpResponse_NullHttpResponseMessage_ShouldReturnUnbindableResponse()
+        public async Task FromHttpResponse_NullHttpResponseMessage_ShouldReturnErrorResponse()
         {
             // Arrange
             HttpResponseMessage httpResponseMessage = null;
 
             // Act
-            Response response = await QueryResponse.FromHttpResponse(httpResponseMessage!);
+            var response = await QueryResponse.FromHttpResponse(httpResponseMessage!);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
+                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid, or no response."));
                 Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
                 Assert.That(response.WarningMessage, Is.Empty);
                 Assert.That(response.ErrorMessage, Is.EqualTo("HttpResponseMessage was null"));
@@ -28,21 +28,21 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
         }
 
         [Test]
-        public async Task FromHttpResponse_NonSuccessStatusCode_ShouldReturnUnbindableResponse()
+        public async Task FromHttpResponse_NonSuccessStatusCode_ShouldReturnErrorResponse()
         {
             // Arrange
-            HttpResponseMessage httpResponseMessage = new HttpResponseMessage(HttpStatusCode.BadRequest)
+            HttpResponseMessage httpResponseMessage = new(HttpStatusCode.BadRequest)
             {
                 Content = new StringContent("Error Content")
             };
 
             // Act
-            Response response = await QueryResponse.FromHttpResponse(httpResponseMessage);
+            var response = await QueryResponse.FromHttpResponse(httpResponseMessage);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid or no response."));
+                Assert.That(response.ServerStatus, Is.EqualTo("Server status unknown, invalid, or no response."));
                 Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Error));
                 Assert.That(response.WarningMessage, Is.Empty);
                 Assert.That(response.ErrorMessage, Is.EqualTo("Not successful response (BadRequest). Response Content: 'Error Content'."));
@@ -57,24 +57,25 @@ namespace Edweij.Fraktjakt.APIClient.Tests.ResponseModelTests
             string validXml = "<shipmentResponse><server_status>OK</server_status><code>0</code><warning_message>Warning</warning_message><error_message>Error</error_message><currency>USD</currency><id>123</id><access_code>ABC</access_code><access_link>http://example.com</access_link><tracking_code>123456</tracking_code><tracking_link>http://tracking.com</tracking_link><shipping_products></shipping_products></shipmentResponse>";
 
             // Act
-            QueryResponse shipmentResponse = QueryResponse.FromXml(validXml) as QueryResponse;
+            var response = QueryResponse.FromXml(validXml);
 
             // Assert
             Assert.Multiple(() =>
             {
-                Assert.That(shipmentResponse, Is.Not.Null);
-                Assert.That(shipmentResponse.ServerStatus, Is.EqualTo("OK"));
-                Assert.That(shipmentResponse.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
-                Assert.That(shipmentResponse.WarningMessage, Is.EqualTo("Warning"));
-                Assert.That(shipmentResponse.ErrorMessage, Is.EqualTo("Error"));
-                Assert.That(shipmentResponse.Currency.ToString(), Is.EqualTo("USD"));
-                Assert.That(shipmentResponse.Id, Is.EqualTo(123));
-                Assert.That(shipmentResponse.AccessCode, Is.EqualTo("ABC"));
-                Assert.That(shipmentResponse.AccessLink, Is.EqualTo("http://example.com"));
-                Assert.That(shipmentResponse.TrackingCode, Is.EqualTo("123456"));
-                Assert.That(shipmentResponse.TrackingLink, Is.EqualTo("http://tracking.com"));
-                Assert.That(shipmentResponse.AgentSelectionLink, Is.Null);
-                Assert.That(shipmentResponse.Products, Is.Empty);
+                Assert.That(response, Is.Not.Null);
+                Assert.That(response.HasResult, Is.True);
+                Assert.That(response.ServerStatus, Is.EqualTo("OK"));
+                Assert.That(response.ResponseStatus, Is.EqualTo(ResponseStatus.Ok));
+                Assert.That(response.WarningMessage, Is.EqualTo("Warning"));
+                Assert.That(response.ErrorMessage, Is.EqualTo("Error"));
+                Assert.That(response.Result.Currency.ToString(), Is.EqualTo("USD"));
+                Assert.That(response.Result.Id, Is.EqualTo(123));
+                Assert.That(response.Result.AccessCode, Is.EqualTo("ABC"));
+                Assert.That(response.Result.AccessLink, Is.EqualTo("http://example.com"));
+                Assert.That(response.Result.TrackingCode, Is.EqualTo("123456"));
+                Assert.That(response.Result.TrackingLink, Is.EqualTo("http://tracking.com"));
+                Assert.That(response.Result.AgentSelectionLink, Is.Null);
+                Assert.That(response.Result.Products, Is.Empty);
             });
 
         }
