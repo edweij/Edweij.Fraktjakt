@@ -18,6 +18,14 @@ public record CreateShipmentResponse(int ShipmentId, string AccessCode, string A
         try
         {
             XElement element = XElement.Parse(xml);
+            var status = (ResponseStatus)int.Parse(element.Element("code")!.Value);
+
+            if (status == ResponseStatus.Error)
+            {
+                return Response<CreateShipmentResponse>.CreateErrorResponseFromXml(element);
+            }
+
+
             var createShipmentResponse = new CreateShipmentResponse(
                 int.Parse(element.Element("shipment_id")!.Value),
                 element.Element("access_code")!.Value,
@@ -28,7 +36,7 @@ public record CreateShipmentResponse(int ShipmentId, string AccessCode, string A
                 element.Element("tracking_link")!.Value);
             
             var result = new Response<CreateShipmentResponse>(element.Element("server_status")!.Value,
-                (ResponseStatus)int.Parse(element.Element("code")!.Value),
+                status,
                 element.Element("warning_message") != null ? element.Element("warning_message")!.Value : string.Empty,
                 element.Element("error_message") != null ? element.Element("error_message")!.Value : string.Empty,
                 createShipmentResponse);

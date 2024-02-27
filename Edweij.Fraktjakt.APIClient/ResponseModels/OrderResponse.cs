@@ -21,6 +21,13 @@ public record OrderResponse(int ShipmentId, string AccessCode, string AccessLink
         try
         {
             XElement element = XElement.Parse(xml);
+            var status = (ResponseStatus)int.Parse(element.Element("code")!.Value);
+
+            if (status == ResponseStatus.Error)
+            {
+                return Response<OrderResponse>.CreateErrorResponseFromXml(element);
+            }
+
             var orderResponse = new OrderResponse(
                 int.Parse(element.Element("shipment_id")!.Value),
                 element.Element("access_code")!.Value,
@@ -40,7 +47,7 @@ public record OrderResponse(int ShipmentId, string AccessCode, string AccessLink
             };
 
             var result = new Response<OrderResponse>(element.Element("server_status")!.Value,
-                (ResponseStatus)int.Parse(element.Element("code")!.Value),
+                status,
                 element.Element("warning_message")!.Value,
                 element.Element("error_message")!.Value,
                 orderResponse);

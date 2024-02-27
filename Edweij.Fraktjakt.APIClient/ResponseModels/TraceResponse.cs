@@ -22,10 +22,16 @@ public record TraceResponse(string TrackingCode, string TrackingLink, IEnumerabl
     {
         try
         {
-            XElement element = XElement.Parse(xml);            
+            XElement element = XElement.Parse(xml);
+            var status = (ResponseStatus)int.Parse(element.Element("code")!.Value);
+
+            if (status == ResponseStatus.Error)
+            {
+                return Response<TraceResponse>.CreateErrorResponseFromXml(element);
+            }
 
             var result = new Response<TraceResponse>(element.Element("server_status")!.Value,
-                (ResponseStatus)int.Parse(element.Element("code")!.Value),
+                status,
                 element.Element("warning_message")!.Value,
                 element.Element("error_message")!.Value,
                 TraceResponseFromXml(element));
