@@ -20,12 +20,9 @@ public readonly struct CurrencyCode
         return new CurrencyCode(code);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
+        if (obj == null || GetType() != obj.GetType()) return false;
 
         CurrencyCode other = (CurrencyCode)obj;
         return Code == other.Code;

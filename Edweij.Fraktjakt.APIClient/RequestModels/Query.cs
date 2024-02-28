@@ -315,15 +315,12 @@ public class Query : XmlRequestObject
         throw new ArgumentException("Shipment element is not valid");
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj == null || GetType() != obj.GetType()) return false;
 
         Query other = (Query)obj;
-
         return Equals(Sender, other.Sender) &&
                Equals(ToAddress, other.ToAddress) &&
                Equals(FromAddress, other.FromAddress) &&

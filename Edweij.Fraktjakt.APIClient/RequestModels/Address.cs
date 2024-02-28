@@ -115,13 +115,11 @@ public abstract class Address : XmlRequestObject
         throw new ArgumentException("Address element is not valid");
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj == null || GetType() != obj.GetType()) return false;
+        
         Address other = (Address)obj;
 
         return StreetAddress1 == other.StreetAddress1 &&
@@ -133,6 +131,26 @@ public abstract class Address : XmlRequestObject
                Equals(CountryCode, other.CountryCode) &&
                Instructions == other.Instructions &&
                EntryCode == other.EntryCode;
+    }
+
+    public static bool operator ==(Address left, Address right)
+    {
+        if (ReferenceEquals(left, right))
+        {
+            return true;
+        }
+
+        if (left is null || right is null)
+        {
+            return false;
+        }
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Address left, Address right)
+    {
+        return !(left == right);
     }
 
     public override int GetHashCode()

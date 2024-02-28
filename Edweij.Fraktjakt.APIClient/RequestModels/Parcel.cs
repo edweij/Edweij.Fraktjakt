@@ -64,7 +64,7 @@ public class Parcel : XmlRequestObject
         }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null || GetType() != obj.GetType())
         {
@@ -72,8 +72,6 @@ public class Parcel : XmlRequestObject
         }
 
         Parcel other = (Parcel)obj;
-
-        // Compare the relevant properties for equality
         return Weight == other.Weight
             && Nullable.Equals(Length, other.Length)
             && Nullable.Equals(Width, other.Width)
@@ -85,8 +83,6 @@ public class Parcel : XmlRequestObject
         unchecked
         {
             int hash = 17;
-
-            // Combine hash codes for relevant properties
             hash = hash * 23 + Weight.GetHashCode();
             hash = hash * 23 + (Length?.GetHashCode() ?? 0);
             hash = hash * 23 + (Width?.GetHashCode() ?? 0);

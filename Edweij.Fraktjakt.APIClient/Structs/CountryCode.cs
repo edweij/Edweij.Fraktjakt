@@ -20,12 +20,9 @@ public readonly struct CountryCode
         return new CountryCode(cc);
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
+        if (obj == null || GetType() != obj.GetType()) return false;
 
         CountryCode other = (CountryCode)obj;
         return CC == other.CC;

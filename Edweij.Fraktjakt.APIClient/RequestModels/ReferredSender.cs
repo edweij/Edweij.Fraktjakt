@@ -55,12 +55,10 @@ public class ReferredSender : XmlRequestObject
         throw new ArgumentException("ReferredSender element is not valid");
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj == null || GetType() != obj.GetType()) return false;
 
         ReferredSender other = (ReferredSender)obj;
         return Id == other.Id && Key == other.Key;

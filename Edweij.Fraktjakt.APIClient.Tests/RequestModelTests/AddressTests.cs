@@ -191,6 +191,28 @@ public class AddressTests
         // Assert
         Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
     }
+
+    [Test]
+    public void EqualityOperator_SameAddresses_ReturnsTrue()
+    {
+        // Arrange
+        var address1 = new TestAddress("123456");
+        var address2 = new TestAddress("123456");
+
+        // Act & Assert
+        Assert.That(address1 == address2, Is.True);
+    }
+
+    [Test]
+    public void EqualityOperator_DifferentAddresses_ReturnsFalse()
+    {
+        // Arrange
+        var address1 = new TestAddress("12345");
+        var address2 = new TestAddress("67890");
+
+        // Act & Assert
+        Assert.That(address1 != address2, Is.True);
+    }
 }
 
 // Creating a TestAddress class to expose protected members for testing

@@ -162,16 +162,12 @@ public class ShipmentItem : XmlRequestObject
         }
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-
+        if (ReferenceEquals(this, obj)) return true;
+        if (obj == null || GetType() != obj.GetType()) return false;
+        
         ShipmentItem other = (ShipmentItem)obj;
-
-        // Compare the relevant properties for equality
         return Name == other.Name
             && Quantity == other.Quantity
             && UnitPrice == other.UnitPrice
@@ -195,20 +191,24 @@ public class ShipmentItem : XmlRequestObject
         unchecked
         {
             int hash = 17;
-
-            // Combine hash codes for relevant properties
             hash = hash * 23 + (Name?.GetHashCode() ?? 0);
             hash = hash * 23 + Quantity.GetHashCode();
             hash = hash * 23 + UnitPrice.GetHashCode();
             hash = hash * 23 + TotalWeight.GetHashCode();
             hash = hash * 23 + Shipped.GetHashCode();
-            hash = hash * 23 + (Taric?.GetHashCode() ?? 0);
+            if (Taric.HasValue)
+                hash = hash * 23 + Taric.Value.GetHashCode();
+
             hash = hash * 23 + QuantityUnit.GetHashCode();
             hash = hash * 23 + (Description?.GetHashCode() ?? 0);
             hash = hash * 23 + CountryOfManufacture.GetHashCode();
-            hash = hash * 23 + (UnitLength?.GetHashCode() ?? 0);
-            hash = hash * 23 + (UnitWidth?.GetHashCode() ?? 0);
-            hash = hash * 23 + (UnitHeight?.GetHashCode() ?? 0);
+            if (UnitLength.HasValue)
+                hash = hash * 23 + UnitLength.Value.GetHashCode();
+            if (UnitWidth.HasValue)
+                hash = hash * 23 + UnitWidth.Value.GetHashCode();
+            if (UnitHeight.HasValue)
+                hash = hash * 23 + UnitHeight.Value.GetHashCode();
+            
             hash = hash * 23 + Currency.GetHashCode();
             hash = hash * 23 + InOwnParcel.GetHashCode();
             hash = hash * 23 + (ArticleNumber?.GetHashCode() ?? 0);

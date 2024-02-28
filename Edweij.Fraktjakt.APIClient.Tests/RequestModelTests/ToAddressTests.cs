@@ -176,4 +176,26 @@ public class ToAddressTests
         // Assert
         Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
     }
+
+    [Test]
+    public void EqualityOperator_SameToAddresses_ReturnsTrue()
+    {
+        // Arrange
+        var toAddress1 = new ToAddress("12345");
+        var toAddress2 = new ToAddress("12345");
+
+        // Act & Assert
+        Assert.That(toAddress1 == toAddress2, Is.True);
+    }
+
+    [Test]
+    public void EqualityOperator_DifferentToAddresses_ReturnsFalse()
+    {
+        // Arrange
+        var toAddress1 = new ToAddress("12345");
+        var toAddress2 = new ToAddress("67890");
+
+        // Act & Assert
+        Assert.That(toAddress1 != toAddress2, Is.True);
+    }
 }
