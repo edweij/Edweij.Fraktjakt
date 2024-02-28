@@ -1,5 +1,4 @@
 using Edweij.Fraktjakt.APIClient.RequestModels;
-using System.Net;
 using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
@@ -51,7 +50,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
                 Assert.That(element.Element("currency"), Is.Not.Null);
                 Assert.That(element.Element("currency").Value, Is.EqualTo("SEK"));
                 Assert.That(element.Element("language"), Is.Not.Null);
-                Assert.That(element.Element("language").Value, Is.EqualTo("SV"));
+                Assert.That(element.Element("language").Value, Is.EqualTo("sv"));
                 Assert.That(element.Element("encoding"), Is.Not.Null);
                 Assert.That(element.Element("encoding").Value, Is.EqualTo("UTF-8"));
                 Assert.That(element.Element("api_version"), Is.Not.Null);
@@ -92,7 +91,242 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
                 Assert.That(result, Contains.Substring("<system_version>&lt;&gt;&amp;'\"</system_version>"));
                 Assert.That(result, Contains.Substring("<module_version>&lt;&gt;&amp;'\"</module_version>"));
             });
+        }
 
+        [Test]
+        public void Equals_Sender_SameInstance_ReturnsTrue()
+        {
+            // Arrange
+            var sender = new Sender(1, "key");
+
+            // Act
+            var result = sender.Equals(sender);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Equals_Sender_SameValues_ReturnsTrue()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "key");
+            var sender2 = new Sender(1, "key");
+
+            // Act
+            var result = sender1.Equals(sender2);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Equals_Sender_DifferentValues_ReturnsFalse()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "key1");
+            var sender2 = new Sender(2, "key2");
+
+            // Act
+            var result = sender1.Equals(sender2);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void Equals_Sender_DifferentType_ReturnsFalse()
+        {
+            // Arrange
+            var sender = new Sender(1, "key");
+            var otherObject = new object();
+
+            // Act
+            var result = sender.Equals(otherObject);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void GetHashCode_Sender_SameValues_ReturnsSameHashCode()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "key");
+            var sender2 = new Sender(1, "key");
+
+            // Act
+            var hashCode1 = sender1.GetHashCode();
+            var hashCode2 = sender2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.EqualTo(hashCode2));
+        }
+
+        [Test]
+        public void GetHashCode_Sender_DifferentValues_ReturnsDifferentHashCode()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "key1");
+            var sender2 = new Sender(2, "key2");
+
+            // Act
+            var hashCode1 = sender1.GetHashCode();
+            var hashCode2 = sender2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
+        }
+
+        [Test]
+        public void GetHashCode_Sender_NullProperties_ReturnsHashCode()
+        {
+            // Arrange
+            var sender = new Sender(1, "key")
+            {
+                SystemName = null,
+                SystemVersion = null,
+                ModuleVersion = null
+            };
+
+            // Act
+            var hashCode = sender.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode, Is.Not.EqualTo(0)); // Ensure non-zero hash code
+        }
+
+        [Test]
+        public void Constructor_ReferredSender_ValidArguments_PropertiesSetCorrectly()
+        {
+            // Arrange
+            int id = 1;
+            string key = "key";
+
+            // Act
+            var referredSender = new ReferredSender(id, key);
+
+            // Assert
+            Assert.That(referredSender.Id, Is.EqualTo(id));
+            Assert.That(referredSender.Key, Is.EqualTo(key));
+        }
+
+        [Test]
+        public void Constructor_ReferredSender_InvalidId_ThrowsArgumentException()
+        {
+            // Arrange
+            int invalidId = 0;
+            string key = "key";
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => new ReferredSender(invalidId, key));
+        }
+
+        [Test]
+        public void Constructor_ReferredSender_NullOrWhitespaceKey_ThrowsArgumentException()
+        {
+            // Arrange
+            int id = 1;
+            string invalidKey = null;
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => new ReferredSender(id, invalidKey));
+        }
+
+        [Test]
+        public void Constructor_ReferredSender_WhitespaceKey_ThrowsArgumentException()
+        {
+            // Arrange
+            int id = 1;
+            string invalidKey = " ";
+
+            // Act & Assert
+            Assert.Throws<ArgumentException>(() => new ReferredSender(id, invalidKey));
+        }
+
+        [Test]
+        public void Equals_ReferredSender_SameInstance_ReturnsTrue()
+        {
+            // Arrange
+            var referredSender = new ReferredSender(1, "key");
+
+            // Act
+            var result = referredSender.Equals(referredSender);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Equals_ReferredSender_SameValues_ReturnsTrue()
+        {
+            // Arrange
+            var referredSender1 = new ReferredSender(1, "key");
+            var referredSender2 = new ReferredSender(1, "key");
+
+            // Act
+            var result = referredSender1.Equals(referredSender2);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Equals_ReferredSender_DifferentValues_ReturnsFalse()
+        {
+            // Arrange
+            var referredSender1 = new ReferredSender(1, "key1");
+            var referredSender2 = new ReferredSender(2, "key2");
+
+            // Act
+            var result = referredSender1.Equals(referredSender2);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void Equals_ReferredSender_DifferentType_ReturnsFalse()
+        {
+            // Arrange
+            var referredSender = new ReferredSender(1, "key");
+            var otherObject = new object();
+
+            // Act
+            var result = referredSender.Equals(otherObject);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void GetHashCode_ReferredSender_SameValues_ReturnsSameHashCode()
+        {
+            // Arrange
+            var referredSender1 = new ReferredSender(1, "key");
+            var referredSender2 = new ReferredSender(1, "key");
+
+            // Act
+            var hashCode1 = referredSender1.GetHashCode();
+            var hashCode2 = referredSender2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.EqualTo(hashCode2));
+        }
+
+        [Test]
+        public void GetHashCode_ReferredSender_DifferentValues_ReturnsDifferentHashCode()
+        {
+            // Arrange
+            var referredSender1 = new ReferredSender(1, "key1");
+            var referredSender2 = new ReferredSender(2, "key2");
+
+            // Act
+            var hashCode1 = referredSender1.GetHashCode();
+            var hashCode2 = referredSender2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
         }
 
     }

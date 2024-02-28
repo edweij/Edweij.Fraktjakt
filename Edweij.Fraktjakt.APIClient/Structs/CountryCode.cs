@@ -11,15 +11,29 @@ public readonly struct CountryCode
 
     public CountryCode(string cc)
     {
-        if (!validcodes.Contains(cc.ToUpper()))
-        {
-            throw new ArgumentOutOfRangeException(nameof(cc), "Country code not valid");
-        }
+        if (string.IsNullOrEmpty(cc)) throw new ArgumentNullException(nameof(cc), "Country code not valid");
+        if (!validcodes.Contains(cc.ToUpper())) throw new ArgumentOutOfRangeException(nameof(cc), "Country code not valid");
         CC = cc.ToUpper();
     }
     public static implicit operator CountryCode(string cc)
     {
         return new CountryCode(cc);
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        CountryCode other = (CountryCode)obj;
+        return CC == other.CC;
+    }
+
+    public override int GetHashCode()
+    {
+        return CC.GetHashCode();
     }
 
     public override string ToString() => $"{CC}";

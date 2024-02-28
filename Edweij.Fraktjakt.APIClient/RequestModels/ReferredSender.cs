@@ -4,6 +4,15 @@ namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 public class ReferredSender : XmlRequestObject
 {
+    /// <summary>
+    /// Constructor of Referredsender
+    /// </summary>
+    /// <param name="id">Your integration id in fraktjakt</param>
+    /// <param name="key">Your integration key in fraktjakt</param>
+    /// <exception cref="ArgumentException">
+    /// Throws if id is negative
+    /// Throws if key empty or whitespace only
+    /// </exception>
     public ReferredSender(int id, string key)
     {
         if (id < 1) throw new ArgumentException("Id must be a positive integer");
@@ -44,5 +53,27 @@ public class ReferredSender : XmlRequestObject
             return sb.ToString();
         }
         throw new ArgumentException("ReferredSender element is not valid");
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        ReferredSender other = (ReferredSender)obj;
+        return Id == other.Id && Key == other.Key;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + Id.GetHashCode();
+            hash = hash * 23 + (Key?.GetHashCode() ?? 0);
+            return hash;
+        }
     }
 }

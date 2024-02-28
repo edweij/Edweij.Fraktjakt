@@ -3,24 +3,24 @@ using Edweij.Fraktjakt.APIClient.Structs;
 namespace Edweij.Fraktjakt.APIClient.Tests.StructTests;
 
 [TestFixture]
-public class CountryCodeTests
+public class CurrencyCodeTests
 {
     [Test]
     public void Constructor_ValidCode_PropertiesSetCorrectly()
     {
         // Arrange & Act
-        var countryCode = new CountryCode("SE");
+        var currencyCode = new CurrencyCode("SEK");
 
         // Assert
-        Assert.That(countryCode.CC, Is.EqualTo("SE"));
+        Assert.That(currencyCode.Code, Is.EqualTo("SEK"));
     }
 
     [TestCase("invalid")]
-    [TestCase("US ")] // With trailing space
+    [TestCase("USD ")] // With trailing space
     public void Constructor_InvalidCode_ThrowsArgumentOutOfRangeException(string invalidCode)
     {
         // Arrange, Act & Assert
-        Assert.Throws<ArgumentOutOfRangeException>(() => new CountryCode(invalidCode));
+        Assert.Throws<ArgumentOutOfRangeException>(() => new CurrencyCode(invalidCode));
     }
 
     [TestCase(null)]
@@ -28,27 +28,27 @@ public class CountryCodeTests
     public void Constructor_InvalidCode_ThrowsArgumentNullException(string invalidCode)
     {
         // Arrange, Act & Assert
-        Assert.Throws<ArgumentNullException>(() => new CountryCode(invalidCode));
+        Assert.Throws<ArgumentNullException>(() => new CurrencyCode(invalidCode));
     }
 
     [Test]
-    public void ImplicitConversionFromString_ValidCode_ReturnsCountryCodeInstance()
+    public void ImplicitConversionFromString_ValidCode_ReturnsCurrencyCodeInstance()
     {
         // Arrange & Act
-        CountryCode countryCode = "SE";
+        CurrencyCode currencyCode = "SEK";
 
         // Assert
-        Assert.That(countryCode.CC, Is.EqualTo("SE"));
+        Assert.That(currencyCode.Code, Is.EqualTo("SEK"));
     }
 
     [Test]
     public void Equals_SameInstance_ReturnsTrue()
     {
         // Arrange
-        var countryCode = new CountryCode("SE");
+        var currencyCode = new CurrencyCode("SEK");
 
         // Act
-        var result = countryCode.Equals(countryCode);
+        var result = currencyCode.Equals(currencyCode);
 
         // Assert
         Assert.That(result, Is.True);
@@ -58,11 +58,11 @@ public class CountryCodeTests
     public void Equals_SameValues_ReturnsTrue()
     {
         // Arrange
-        var countryCode1 = new CountryCode("SE");
-        var countryCode2 = new CountryCode("SE");
+        var currencyCode1 = new CurrencyCode("SEK");
+        var currencyCode2 = new CurrencyCode("SEK");
 
         // Act
-        var result = countryCode1.Equals(countryCode2);
+        var result = currencyCode1.Equals(currencyCode2);
 
         // Assert
         Assert.That(result, Is.True);
@@ -72,11 +72,11 @@ public class CountryCodeTests
     public void Equals_DifferentValues_ReturnsFalse()
     {
         // Arrange
-        var countryCode1 = new CountryCode("SE");
-        var countryCode2 = new CountryCode("US");
+        var currencyCode1 = new CurrencyCode("SEK");
+        var currencyCode2 = new CurrencyCode("USD");
 
         // Act
-        var result = countryCode1.Equals(countryCode2);
+        var result = currencyCode1.Equals(currencyCode2);
 
         // Assert
         Assert.That(result, Is.False);
@@ -86,11 +86,11 @@ public class CountryCodeTests
     public void Equals_DifferentType_ReturnsFalse()
     {
         // Arrange
-        var countryCode = new CountryCode("SE");
+        var currencyCode = new CurrencyCode("SEK");
         var otherObject = new object();
 
         // Act
-        var result = countryCode.Equals(otherObject);
+        var result = currencyCode.Equals(otherObject);
 
         // Assert
         Assert.That(result, Is.False);
@@ -100,12 +100,12 @@ public class CountryCodeTests
     public void GetHashCode_SameValues_ReturnsSameHashCode()
     {
         // Arrange
-        var countryCode1 = new CountryCode("SE");
-        var countryCode2 = new CountryCode("SE");
+        var currencyCode1 = new CurrencyCode("SEK");
+        var currencyCode2 = new CurrencyCode("SEK");
 
         // Act
-        var hashCode1 = countryCode1.GetHashCode();
-        var hashCode2 = countryCode2.GetHashCode();
+        var hashCode1 = currencyCode1.GetHashCode();
+        var hashCode2 = currencyCode2.GetHashCode();
 
         // Assert
         Assert.That(hashCode1, Is.EqualTo(hashCode2));
@@ -115,12 +115,12 @@ public class CountryCodeTests
     public void GetHashCode_DifferentValues_ReturnsDifferentHashCode()
     {
         // Arrange
-        var countryCode1 = new CountryCode("SE");
-        var countryCode2 = new CountryCode("US");
+        var currencyCode1 = new CurrencyCode("SEK");
+        var currencyCode2 = new CurrencyCode("USD");
 
         // Act
-        var hashCode1 = countryCode1.GetHashCode();
-        var hashCode2 = countryCode2.GetHashCode();
+        var hashCode1 = currencyCode1.GetHashCode();
+        var hashCode2 = currencyCode2.GetHashCode();
 
         // Assert
         Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
@@ -130,12 +130,12 @@ public class CountryCodeTests
     public void ToString_ReturnsCode()
     {
         // Arrange
-        var countryCode = new CountryCode("SE");
+        var currencyCode = new CurrencyCode("SEK");
 
         // Act
-        var result = countryCode.ToString();
+        var result = currencyCode.ToString();
 
         // Assert
-        Assert.That(result, Is.EqualTo("SE"));
+        Assert.That(result, Is.EqualTo("SEK"));
     }
 }

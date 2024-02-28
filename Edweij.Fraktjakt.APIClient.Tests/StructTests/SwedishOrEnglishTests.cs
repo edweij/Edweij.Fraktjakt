@@ -15,7 +15,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.StructTests
             SwedishOrEnglish languageCode = new SwedishOrEnglish(validCode);
 
             // Assert
-            Assert.That(languageCode.Code, Is.EqualTo(validCode.ToUpper()));
+            Assert.That(languageCode.Code, Is.EqualTo(validCode.ToLower()));
         }
 
         [TestCase("SE")]
@@ -28,10 +28,10 @@ namespace Edweij.Fraktjakt.APIClient.Tests.StructTests
             Assert.Throws<ArgumentOutOfRangeException>(() => new SwedishOrEnglish(invalidCode));
         }
 
-        [TestCase("SV", "SV")]
-        [TestCase("sv", "SV")]
-        [TestCase("EN", "EN")]
-        [TestCase("en", "EN")]
+        [TestCase("SV", "sv")]
+        [TestCase("sv", "sv")]
+        [TestCase("EN", "en")]
+        [TestCase("en", "en")]
         public void ToString_ShouldReturnCorrectCode(string inputCode, string expectedCode)
         {
             // Arrange
@@ -51,7 +51,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.StructTests
             SwedishOrEnglish languageCode = "SV";
 
             // Assert
-            Assert.That(languageCode.Code, Is.EqualTo("SV"));
+            Assert.That(languageCode.Code, Is.EqualTo("sv"));
         }
 
         [Test]

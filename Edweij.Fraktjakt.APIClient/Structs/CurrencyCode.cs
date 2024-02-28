@@ -11,17 +11,34 @@ public readonly struct CurrencyCode
 
     public CurrencyCode(string code)
     {
-        if (!validcodes.Contains(code.ToUpper()))
-        {
-            throw new ArgumentOutOfRangeException(nameof(code), "Currency code not valid");
-        }
+        if (string.IsNullOrEmpty(code)) throw new ArgumentNullException(nameof(code), "Currency code not valid");
+        if (!validcodes.Contains(code.ToUpper())) throw new ArgumentOutOfRangeException(nameof(code), "Currency code not valid");
         Code = code.ToUpper();
     }
     public static implicit operator CurrencyCode(string code)
     {
         return new CurrencyCode(code);
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        CurrencyCode other = (CurrencyCode)obj;
+        return Code == other.Code;
+    }
+
+    public override int GetHashCode()
+    {
+        return Code.GetHashCode();
+    }
+
     public override string ToString() => $"{Code}";
+
+
     private readonly string[] validcodes = new string[]
     {
         "SEK", "EUR", "USD", "AED", "AFN", "ALL", "AMD", "ANG", "AOA", "ARS", "AUD", "AWG", "AZN", "BAM", "BBD", "BDT", "BGN", "BHD", "BIF", "BMD", "BND",
