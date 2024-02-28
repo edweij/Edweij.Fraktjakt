@@ -80,4 +80,37 @@ public class Sender : ReferredSender
         }
         throw new ArgumentException("Sender element is not valid");
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Sender other = (Sender)obj;
+
+        return base.Equals(obj) &&
+               Equals(Currency, other.Currency) &&
+               Equals(Language, other.Language) &&
+               SystemName == other.SystemName &&
+               SystemVersion == other.SystemVersion &&
+               ModuleVersion == other.ModuleVersion &&
+               ApiVersion == other.ApiVersion;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = base.GetHashCode();
+            hash = hash * 23 + Currency.GetHashCode();
+            hash = hash * 23 + Language.GetHashCode();
+            hash = hash * 23 + (SystemName?.GetHashCode() ?? 0);
+            hash = hash * 23 + (SystemVersion?.GetHashCode() ?? 0);
+            hash = hash * 23 + (ModuleVersion?.GetHashCode() ?? 0);
+            hash = hash * 23 + ApiVersion.GetHashCode();
+            return hash;
+        }
+    }
 }

@@ -12,22 +12,24 @@ public abstract class XmlRequestObject : ValidationObject
 
     public XmlRequestObject()
     {
-        xmlWriterSettings = new XmlWriterSettings();
-        xmlWriterSettings.Indent = false;
-        xmlWriterSettings.Encoding = Encoding.UTF8;
-        xmlWriterSettings.NewLineOnAttributes = false;
-        xmlWriterSettings.CheckCharacters = true;
-        xmlWriterSettings.OmitXmlDeclaration = true;
-        xmlWriterSettings.WriteEndDocumentOnClose = true;
+        xmlWriterSettings = new XmlWriterSettings
+        {
+            Indent = false,
+            Encoding = Encoding.UTF8,
+            NewLineOnAttributes = false,
+            CheckCharacters = true,
+            OmitXmlDeclaration = true,
+            WriteEndDocumentOnClose = true
+        };
     }
 
     public abstract string ToXml();
 
-    public XmlWriter CreateXmlWriter(StringBuilder sb, ConformanceLevel conformanceLevel = ConformanceLevel.Document)
+    public virtual XmlWriter CreateXmlWriter(StringBuilder sb, ConformanceLevel conformanceLevel = ConformanceLevel.Document)
     {
         xmlWriterSettings.ConformanceLevel = conformanceLevel;
         return XmlWriter.Create(sb, xmlWriterSettings);
-    } 
+    }
 
     public bool IsValidXml(string xml)
     {
@@ -40,6 +42,21 @@ public abstract class XmlRequestObject : ValidationObject
         {
             return false;
         }
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
     }
 }
 

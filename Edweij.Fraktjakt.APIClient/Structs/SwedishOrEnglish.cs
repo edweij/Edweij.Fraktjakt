@@ -6,10 +6,10 @@ public readonly struct SwedishOrEnglish
 
     private static readonly HashSet<string> ValidCodes = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
         {
-            "SV", "EN"
+            "sv", "en"
         };
 
-    public SwedishOrEnglish() { Code = "SV"; }
+    public SwedishOrEnglish() { Code = "sv"; }
 
     public SwedishOrEnglish(string code)
     {
@@ -17,7 +17,7 @@ public readonly struct SwedishOrEnglish
         {
             throw new ArgumentOutOfRangeException(nameof(code), "Language code not valid");
         }
-        Code = code.ToUpper();
+        Code = code.ToLower();
     }
 
     public static implicit operator SwedishOrEnglish(string code)
@@ -29,11 +29,11 @@ public readonly struct SwedishOrEnglish
 
     public static SwedishOrEnglish Swedish()
     {
-        return new SwedishOrEnglish("SV");
+        return new SwedishOrEnglish("sv");
     }
 
     public static SwedishOrEnglish English()
     {
-        return new SwedishOrEnglish("EN");
+        return new SwedishOrEnglish("en");
     }
 }

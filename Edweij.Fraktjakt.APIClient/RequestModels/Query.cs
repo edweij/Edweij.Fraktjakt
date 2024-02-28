@@ -314,4 +314,70 @@ public class Query : XmlRequestObject
         }
         throw new ArgumentException("Shipment element is not valid");
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Query other = (Query)obj;
+
+        return Equals(Sender, other.Sender) &&
+               Equals(ToAddress, other.ToAddress) &&
+               Equals(FromAddress, other.FromAddress) &&
+               Enumerable.SequenceEqual(Items, other.Items) &&
+               Enumerable.SequenceEqual(Parcels, other.Parcels) &&
+               CallbackUrl == other.CallbackUrl &&
+               InsureDefault == other.InsureDefault &&
+               Value == other.Value &&
+               Equals(Currency, other.Currency) &&
+               PriceSort == other.PriceSort &&
+               Express == other.Express &&
+               Pickup == other.Pickup &&
+               Dropoff == other.Dropoff &&
+               Green == other.Green &&
+               Quality == other.Quality &&
+               TimeGuarantee == other.TimeGuarantee &&
+               ColdContent == other.ColdContent &&
+               FrozenContent == other.FrozenContent &&
+               ShippingProductId == other.ShippingProductId &&
+               NoAgents == other.NoAgents &&
+               NoPrices == other.NoPrices &&
+               AgentsIn == other.AgentsIn &&
+               ShipperInfo == other.ShipperInfo;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+            hash = hash * 23 + Sender?.GetHashCode() ?? 0;
+            hash = hash * 23 + ToAddress?.GetHashCode() ?? 0;
+            hash = hash * 23 + FromAddress?.GetHashCode() ?? 0;
+            hash = hash * 23 + (Items?.GetHashCode() ?? 0);
+            hash = hash * 23 + (Parcels?.GetHashCode() ?? 0);
+            hash = hash * 23 + (CallbackUrl?.GetHashCode() ?? 0);
+            hash = hash * 23 + InsureDefault.GetHashCode();
+            hash = hash * 23 + Value?.GetHashCode() ?? 0;
+            hash = hash * 23 + Currency.GetHashCode();
+            hash = hash * 23 + PriceSort.GetHashCode();
+            hash = hash * 23 + Express.GetHashCode();
+            hash = hash * 23 + Pickup.GetHashCode();
+            hash = hash * 23 + Dropoff.GetHashCode();
+            hash = hash * 23 + Green.GetHashCode();
+            hash = hash * 23 + Quality.GetHashCode();
+            hash = hash * 23 + TimeGuarantee.GetHashCode();
+            hash = hash * 23 + ColdContent.GetHashCode();
+            hash = hash * 23 + FrozenContent.GetHashCode();
+            hash = hash * 23 + ShippingProductId?.GetHashCode() ?? 0;
+            hash = hash * 23 + NoAgents.GetHashCode();
+            hash = hash * 23 + NoPrices.GetHashCode();
+            hash = hash * 23 + AgentsIn.GetHashCode();
+            hash = hash * 23 + ShipperInfo.GetHashCode();
+            return hash;
+        }
+    }
 }

@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
@@ -65,5 +64,35 @@ public class Parcel : XmlRequestObject
         }
     }
 
-    
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        Parcel other = (Parcel)obj;
+
+        // Compare the relevant properties for equality
+        return Weight == other.Weight
+            && Nullable.Equals(Length, other.Length)
+            && Nullable.Equals(Width, other.Width)
+            && Nullable.Equals(Height, other.Height);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+
+            // Combine hash codes for relevant properties
+            hash = hash * 23 + Weight.GetHashCode();
+            hash = hash * 23 + (Length?.GetHashCode() ?? 0);
+            hash = hash * 23 + (Width?.GetHashCode() ?? 0);
+            hash = hash * 23 + (Height?.GetHashCode() ?? 0);
+
+            return hash;
+        }
+    }
 }

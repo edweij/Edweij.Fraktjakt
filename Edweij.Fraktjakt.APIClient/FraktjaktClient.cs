@@ -2,6 +2,7 @@
 using Edweij.Fraktjakt.APIClient.ResponseModels;
 using Edweij.Fraktjakt.APIClient.Structs;
 using Microsoft.Extensions.DependencyInjection;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 
@@ -13,6 +14,9 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
     private readonly bool _useMD5Checksum = true;
 
     public Sender Sender { get; init; }
+
+    private Dictionary<Query, int> cachedQueries = new();
+
     public FraktjaktClient(int id, string key, bool useMD5Checksum = true) {
         if (id <= 0) throw new ArgumentException(nameof(id));
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException(nameof(key));
@@ -70,19 +74,30 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         return await ShippingDocumentsResponse.FromHttpResponse(response);
     }
 
-    public async Task<Response<QueryResponse>> Query(Query shipment)
+    public async Task<Response<QueryResponse>> Query(Query query)
     {
-        if (!shipment.IsValid) throw new ArgumentException("Shipment is not valid");
-        if (shipment.Sender != Sender) throw new ArgumentException("Sender in shipment is different from the clients sender");
+        var c = cachedQueries.SingleOrDefault(q => q.Key.Equals(query)).Key;
+        if (c != null)
+        {            
+            var shipmentId = cachedQueries[c];
+            return await ReQuery(shipmentId, query.ShipperInfo, query.Value);
+        }
+        if (!query.IsValid) throw new ArgumentException("Shipment is not valid");
+        if (query.Sender != Sender) throw new ArgumentException("Sender in shipment is different from the clients sender");
 
-        var xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>" + shipment.ToXml();
+        var xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>" + query.ToXml();
         var url = $"/fraktjakt/query_xml?xml={UrlEncode(xml)}";
         if (_useMD5Checksum)
         {
             url += $"&md5_checksum={MD5(xml)}";
         }
-        var response = await _httpClient.GetAsync(url);
-        return await QueryResponse.FromHttpResponse(response);
+        
+        var response = await QueryResponse.FromHttpResponse(await _httpClient.GetAsync(url));
+        if (response.HasResult && !cachedQueries.ContainsKey(query))
+        {
+            cachedQueries.Add(query, response.Result!.Id);
+        }
+        return response;
     }
 
     public async Task<Response<QueryResponse>> ReQuery(ReQuery shipment)

@@ -28,4 +28,26 @@ public class ToAddress : Address
         }
         throw new ArgumentException("Address element is not valid");
     }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        ToAddress other = (ToAddress)obj;
+        return base.Equals(obj) && Language.Equals(other.Language);
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = base.GetHashCode();
+            hash = hash * 23 + Language.GetHashCode();
+            return hash;
+        }
+    }
+
 }

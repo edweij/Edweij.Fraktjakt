@@ -14,7 +14,7 @@ public class ShipmentItem : XmlRequestObject
     /// <param name="unitPrice">The item value per unit of this item type. The value the item was sold for. If you sell with VAT, the VAT must be included in the value, and if you sell without VAT, it must not be included.</param>
     /// <param name="totalWeight">Total weight in kg of the type of goods in the shipment.</param>
     /// <exception cref="ArgumentException">For invalid parameters</exception>
-    public ShipmentItem(string name, int quantity, float unitPrice, float totalWeight) 
+    public ShipmentItem(string name, int quantity, float unitPrice, float totalWeight)
     {
         if (string.IsNullOrWhiteSpace(name)) throw new ArgumentException("Name can not be null or whitespace only");
         if (name.Length > 64) throw new ArgumentException("Name is too long (max 64 characters)");
@@ -77,7 +77,7 @@ public class ShipmentItem : XmlRequestObject
     /// Default value is SE.
     /// </summary>
     public CountryCode CountryOfManufacture { get; set; } = "SE";
-   
+
     /// <summary>
     /// Unit length in centimeters
     /// </summary>
@@ -96,7 +96,7 @@ public class ShipmentItem : XmlRequestObject
     /// Default value is SEK
     /// </summary>
     public CurrencyCode Currency { get; set; } = "SEK";
-    
+
     /// <summary>
     /// Indicates whether the item has its own package and should not be placed in another package.
     /// Default value is false.
@@ -137,19 +137,19 @@ public class ShipmentItem : XmlRequestObject
                 w.WriteElementString("in_own_parcel", InOwnParcel ? "1" : "0");
                 if (!string.IsNullOrWhiteSpace(ArticleNumber)) w.WriteElementString("article_number", ArticleNumber);
                 if (!string.IsNullOrWhiteSpace(ShelfPosition)) w.WriteElementString("shelf_position", ShelfPosition);
-            }                    
-            
+            }
+
             return sb.ToString();
         }
         throw new ArgumentException("Shipment item element is not valid");
     }
 
     public override IEnumerable<RuleViolation> GetRuleViolations()
-    {   
+    {
         if (!string.IsNullOrWhiteSpace(Description) && (Description.Length < 15 || Description.Length > 128))
         {
             yield return new RuleViolation("Description", "Description is too short or too long (15-128 characters)");
-        }          
+        }
 
         if (!string.IsNullOrWhiteSpace(ArticleNumber) && ArticleNumber.Length > 64)
         {
@@ -159,6 +159,62 @@ public class ShipmentItem : XmlRequestObject
         if (!string.IsNullOrWhiteSpace(ShelfPosition) && ShelfPosition.Length > 64)
         {
             yield return new RuleViolation("ShelfPosition", "ShelfPosition is too long (max 64 characters)");
+        }
+    }
+
+    public override bool Equals(object obj)
+    {
+        if (obj == null || GetType() != obj.GetType())
+        {
+            return false;
+        }
+
+        ShipmentItem other = (ShipmentItem)obj;
+
+        // Compare the relevant properties for equality
+        return Name == other.Name
+            && Quantity == other.Quantity
+            && UnitPrice == other.UnitPrice
+            && TotalWeight == other.TotalWeight
+            && Shipped == other.Shipped
+            && Taric == other.Taric
+            && QuantityUnit == other.QuantityUnit
+            && Description == other.Description
+            && CountryOfManufacture.Equals(other.CountryOfManufacture)
+            && UnitLength == other.UnitLength
+            && UnitWidth == other.UnitWidth
+            && UnitHeight == other.UnitHeight
+            && Currency.Equals(other.Currency)
+            && InOwnParcel == other.InOwnParcel
+            && ArticleNumber == other.ArticleNumber
+            && ShelfPosition == other.ShelfPosition;
+    }
+
+    public override int GetHashCode()
+    {
+        unchecked
+        {
+            int hash = 17;
+
+            // Combine hash codes for relevant properties
+            hash = hash * 23 + (Name?.GetHashCode() ?? 0);
+            hash = hash * 23 + Quantity.GetHashCode();
+            hash = hash * 23 + UnitPrice.GetHashCode();
+            hash = hash * 23 + TotalWeight.GetHashCode();
+            hash = hash * 23 + Shipped.GetHashCode();
+            hash = hash * 23 + (Taric?.GetHashCode() ?? 0);
+            hash = hash * 23 + QuantityUnit.GetHashCode();
+            hash = hash * 23 + (Description?.GetHashCode() ?? 0);
+            hash = hash * 23 + CountryOfManufacture.GetHashCode();
+            hash = hash * 23 + (UnitLength?.GetHashCode() ?? 0);
+            hash = hash * 23 + (UnitWidth?.GetHashCode() ?? 0);
+            hash = hash * 23 + (UnitHeight?.GetHashCode() ?? 0);
+            hash = hash * 23 + Currency.GetHashCode();
+            hash = hash * 23 + InOwnParcel.GetHashCode();
+            hash = hash * 23 + (ArticleNumber?.GetHashCode() ?? 0);
+            hash = hash * 23 + (ShelfPosition?.GetHashCode() ?? 0);
+
+            return hash;
         }
     }
 }
