@@ -3,7 +3,7 @@ using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 {
-    public class ShipmentQueryTests
+    public class QueryTests
     {
         [SetUp]
         public void Setup()
@@ -66,12 +66,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
                 query.ToAddress.StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam";
                 Assert.That(errors.Count(), Is.EqualTo(5));
             });
-
         }
-
-
-
-
 
         [Test]
         public void ShipmentItemGeneratesCorrectXml()
@@ -114,8 +109,6 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
                 Assert.That(element.Element("commodities"), Is.Not.Null);
                 Assert.That(element.Element("address_to"), Is.Not.Null);
             });
-
-
         }
 
         [Test]
@@ -127,6 +120,99 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             };
             var result = query.ToXml();
             Assert.That(result, Contains.Substring("<callback_url>&lt;&amp;'\"&gt;</callback_url>"));
+        }
+
+        [Test]
+        public void Equals_SameInstance_ReturnsTrue()
+        {
+            // Arrange
+            var sender = new Sender(1, "ApiKey");
+            var toAddress = new ToAddress("12345");
+            var query = new Query(sender, toAddress);
+
+            // Act
+            var result = query.Equals(query);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Equals_SameValues_ReturnsTrue()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "ApiKey");
+            var toAddress1 = new ToAddress("12345");
+            var query1 = new Query(sender1, toAddress1);
+
+            var sender2 = new Sender(1, "ApiKey");
+            var toAddress2 = new ToAddress("12345");
+            var query2 = new Query(sender2, toAddress2);
+
+            // Act
+            var result = query1.Equals(query2);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Equals_DifferentValues_ReturnsFalse()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "ApiKey1");
+            var toAddress1 = new ToAddress("12345");
+            var query1 = new Query(sender1, toAddress1);
+
+            var sender2 = new Sender(2, "ApiKey2");
+            var toAddress2 = new ToAddress("67890");
+            var query2 = new Query(sender2, toAddress2);
+
+            // Act
+            var result = query1.Equals(query2);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void GetHashCode_SameValues_ReturnsSameHashCode()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "ApiKey");
+            var toAddress1 = new ToAddress("12345");
+            var query1 = new Query(sender1, toAddress1);
+
+            var sender2 = new Sender(1, "ApiKey");
+            var toAddress2 = new ToAddress("12345");
+            var query2 = new Query(sender2, toAddress2);
+
+            // Act
+            var hashCode1 = query1.GetHashCode();
+            var hashCode2 = query2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.EqualTo(hashCode2));
+        }
+
+        [Test]
+        public void GetHashCode_DifferentValues_ReturnsDifferentHashCode()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "ApiKey1");
+            var toAddress1 = new ToAddress("12345");
+            var query1 = new Query(sender1, toAddress1);
+
+            var sender2 = new Sender(2, "ApiKey2");
+            var toAddress2 = new ToAddress("67890");
+            var query2 = new Query(sender2, toAddress2);
+
+            // Act
+            var hashCode1 = query1.GetHashCode();
+            var hashCode2 = query2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
         }
 
     }

@@ -45,38 +45,6 @@ public class XmlRequestObjectTests
         // Act & Assert
         Assert.That(xmlRequestObject.IsValidXml(invalidXml), Is.False);
     }
-
-    [Test]
-    public void Equals_DifferentType_ReturnsFalse()
-    {
-        // Arrange
-        var obj1 = new MyXmlRequestObject();
-        var obj2 = new AnotherXmlRequestObject(); // Ensure a different type
-        var obj3 = new MyXmlRequestObject();
-
-        // Act
-        var result = obj1.Equals(obj2);
-
-        // Assert
-        Assert.Multiple(() => {
-            Assert.That(result, Is.False);
-            Assert.That(obj1.Equals(obj3), Is.True);
-        });
-        
-    }
-
-    [Test]
-    public void GetHashCode_ReturnsHashCode()
-    {
-        // Arrange
-        var obj = new MyXmlRequestObject();
-
-        // Act
-        var hashCode = obj.GetHashCode();
-
-        // Assert
-        Assert.That(hashCode, Is.EqualTo(obj.GetHashCode())); // Ensure consistent hash code
-    }
 }
 
 public class MockXmlRequestObject : XmlRequestObject

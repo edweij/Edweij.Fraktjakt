@@ -92,5 +92,120 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             // Assert
             Assert.That(ruleViolations.Select(v => v.Error), Is.EquivalentTo(expectedMessages));
         }
+
+        [Test]
+        public void Equals_SameInstance_ReturnsTrue()
+        {
+            // Arrange
+            var parcel = new Parcel(2.5f);
+
+            // Act
+            var result = parcel.Equals(parcel);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Equals_SameValues_ReturnsTrue()
+        {
+            // Arrange
+            var parcel1 = new Parcel(2.5f)
+            {
+                Length = 10.0f,
+                Width = 5.0f,
+                Height = 2.0f
+            };
+
+            var parcel2 = new Parcel(2.5f)
+            {
+                Length = 10.0f,
+                Width = 5.0f,
+                Height = 2.0f
+            };
+
+            // Act
+            var result = parcel1.Equals(parcel2);
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void Equals_DifferentValues_ReturnsFalse()
+        {
+            // Arrange
+            var parcel1 = new Parcel(2.5f)
+            {
+                Length = 10.0f,
+                Width = 5.0f,
+                Height = 2.0f
+            };
+
+            var parcel2 = new Parcel(3.0f)
+            {
+                Length = 15.0f,
+                Width = 6.0f,
+                Height = 3.0f
+            };
+
+            // Act
+            var result = parcel1.Equals(parcel2);
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void GetHashCode_SameValues_ReturnsSameHashCode()
+        {
+            // Arrange
+            var parcel1 = new Parcel(2.5f)
+            {
+                Length = 10.0f,
+                Width = 5.0f,
+                Height = 2.0f
+            };
+
+            var parcel2 = new Parcel(2.5f)
+            {
+                Length = 10.0f,
+                Width = 5.0f,
+                Height = 2.0f
+            };
+
+            // Act
+            var hashCode1 = parcel1.GetHashCode();
+            var hashCode2 = parcel2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.EqualTo(hashCode2));
+        }
+
+        [Test]
+        public void GetHashCode_DifferentValues_ReturnsDifferentHashCode()
+        {
+            // Arrange
+            var parcel1 = new Parcel(2.5f)
+            {
+                Length = 10.0f,
+                Width = 5.0f,
+                Height = 2.0f
+            };
+
+            var parcel2 = new Parcel(3.0f)
+            {
+                Length = 15.0f,
+                Width = 6.0f,
+                Height = 3.0f
+            };
+
+            // Act
+            var hashCode1 = parcel1.GetHashCode();
+            var hashCode2 = parcel2.GetHashCode();
+
+            // Assert
+            Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
+        }
     }
 }

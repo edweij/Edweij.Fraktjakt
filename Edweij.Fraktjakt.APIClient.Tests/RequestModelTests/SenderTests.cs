@@ -197,6 +197,76 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
         }
 
         [Test]
+        public void EqualityOperator_Sender_SameInstance_ReturnsTrue()
+        {
+            // Arrange
+            var sender = new Sender(1, "ApiKey1");
+
+            // Act & Assert
+            Assert.That(sender, Is.EqualTo(sender));
+        }
+
+        [Test]
+        public void EqualityOperator_Sender_SameValues_ReturnsTrue()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "ApiKey1");
+            var sender2 = new Sender(1, "ApiKey1");
+
+            // Act & Assert
+            Assert.That(sender1, Is.EqualTo(sender2));
+        }
+
+        [Test]
+        public void EqualityOperator_Sender_DifferentValues_ReturnsFalse()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "ApiKey1");
+            var sender2 = new Sender(2, "ApiKey2");
+
+            // Act & Assert
+            Assert.That(sender1, Is.Not.EqualTo(sender2));
+        }
+
+        [Test]
+        public void InequalityOperator_Sender_NullObject_ReturnsFalse()
+        {
+            // Arrange
+            var sender = new Sender(1, "ApiKey1");
+
+            // Act & Assert
+            Assert.That(sender == null, Is.False);
+        }
+
+        [Test]
+        public void InequalityOperator_Sender_SameValues_ReturnsFalse()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "ApiKey1");
+            var sender2 = new Sender(1, "ApiKey1");
+
+            // Act
+            var result = sender1 != sender2;
+
+            // Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void InequalityOperator_Sender_DifferentValues_ReturnsTrue()
+        {
+            // Arrange
+            var sender1 = new Sender(1, "ApiKey1");
+            var sender2 = new Sender(2, "ApiKey2");
+
+            // Act
+            var result = sender1 != sender2;
+
+            // Act & Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
         public void Constructor_ReferredSender_ValidArguments_PropertiesSetCorrectly()
         {
             // Arrange
@@ -327,6 +397,66 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
 
             // Assert
             Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
+        }
+
+        [Test]
+        public void EqualityOperator_ReferredSender_SameValues_ReturnsTrue()
+        {
+            // Arrange
+            var sender1 = new ReferredSender(1, "Key1");
+            var sender2 = new ReferredSender(1, "Key1");
+
+            // Act & Assert
+            Assert.That(sender1, Is.EqualTo(sender2));
+        }
+
+        [Test]
+        public void EqualityOperator_ReferredSender_DifferentValues_ReturnsFalse()
+        {
+            // Arrange
+            var sender1 = new ReferredSender(1, "Key1");
+            var sender2 = new ReferredSender(2, "Key2");
+
+            // Act & Assert
+            Assert.That(sender1, Is.Not.EqualTo(sender2));
+        }
+
+        [Test]
+        public void InequalityOperator_ReferredSender_SameValues_ReturnsFalse()
+        {
+            // Arrange
+            var sender1 = new ReferredSender(1, "Key1");
+            var sender2 = new ReferredSender(1, "Key1");
+
+            // Act 
+            var result = sender1 != sender2;
+
+            // Act & Assert
+            Assert.That(result, Is.False);
+        }
+
+        [Test]
+        public void InequalityOperator_ReferredSender_DifferentValues_ReturnsTrue()
+        {
+            // Arrange
+            var sender1 = new ReferredSender(1, "Key1");
+            var sender2 = new ReferredSender(2, "Key2");
+
+            // Act 
+            var result = sender1 != sender2;
+
+            // Assert
+            Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public void EqualityOperator_ReferredSender_NullObject_ReturnsFalse()
+        {
+            // Arrange
+            ReferredSender sender = new ReferredSender(1, "Key1");
+
+            // Act & Assert
+            Assert.That(sender == null, Is.False);
         }
 
     }

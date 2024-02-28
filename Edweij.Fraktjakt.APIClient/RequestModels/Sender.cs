@@ -113,4 +113,20 @@ public class Sender : ReferredSender
             return hash;
         }
     }
+
+    public static bool operator ==(Sender left, Sender right)
+    {
+        if (ReferenceEquals(left, right))
+            return true;
+
+        if (left is null || right is null)
+            return false;
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(Sender left, Sender right)
+    {
+        return !(left == right);
+    }
 }

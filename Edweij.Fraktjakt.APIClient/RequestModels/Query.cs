@@ -354,14 +354,29 @@ public class Query : XmlRequestObject
         unchecked
         {
             int hash = 17;
-            hash = hash * 23 + Sender?.GetHashCode() ?? 0;
-            hash = hash * 23 + ToAddress?.GetHashCode() ?? 0;
-            hash = hash * 23 + FromAddress?.GetHashCode() ?? 0;
-            hash = hash * 23 + (Items?.GetHashCode() ?? 0);
-            hash = hash * 23 + (Parcels?.GetHashCode() ?? 0);
+            hash = hash * 23 + Sender.GetHashCode();
+            hash = hash * 23 + ToAddress.GetHashCode();
+            
+            if (FromAddress != null)
+                hash = hash * 23 + FromAddress.GetHashCode();
+            
+            if (Items != null)
+            {
+                foreach (var item in Items)
+                    hash = hash * 23 + item.GetHashCode();
+            }
+
+            if (Parcels != null)
+            {
+                foreach (var p in Parcels)
+                    hash = hash * 23 + p.GetHashCode();
+            }
+            
             hash = hash * 23 + (CallbackUrl?.GetHashCode() ?? 0);
             hash = hash * 23 + InsureDefault.GetHashCode();
-            hash = hash * 23 + Value?.GetHashCode() ?? 0;
+            if (Value.HasValue)
+                hash = hash * 23 + Value.Value.GetHashCode();
+
             hash = hash * 23 + Currency.GetHashCode();
             hash = hash * 23 + PriceSort.GetHashCode();
             hash = hash * 23 + Express.GetHashCode();
@@ -372,7 +387,9 @@ public class Query : XmlRequestObject
             hash = hash * 23 + TimeGuarantee.GetHashCode();
             hash = hash * 23 + ColdContent.GetHashCode();
             hash = hash * 23 + FrozenContent.GetHashCode();
-            hash = hash * 23 + ShippingProductId?.GetHashCode() ?? 0;
+            if (ShippingProductId.HasValue)
+                hash = hash * 23 + ShippingProductId.Value.GetHashCode();
+            
             hash = hash * 23 + NoAgents.GetHashCode();
             hash = hash * 23 + NoPrices.GetHashCode();
             hash = hash * 23 + AgentsIn.GetHashCode();

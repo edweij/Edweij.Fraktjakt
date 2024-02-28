@@ -132,4 +132,191 @@ public class ShipmentItemTests
         Assert.That(ruleViolations, Has.Some.Property("PropertyName").EqualTo("ShelfPosition"));
         Assert.That(ruleViolations, Has.Some.Property("Error").Contains("too long"));
     }
+
+    [Test]
+    public void Equals_SameInstance_ReturnsTrue()
+    {
+        // Arrange
+        var shipmentItem = new ShipmentItem("Item1", 1, 10.0f, 2.5f);
+
+        // Act
+        var result = shipmentItem.Equals(shipmentItem);
+
+        // Assert
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void Equals_SameValues_ReturnsTrue()
+    {
+        // Arrange
+        var shipmentItem1 = new ShipmentItem("Item1", 2, 15.0f, 3.5f)
+        {
+            Shipped = false,
+            Taric = 123,
+            QuantityUnit = QuantityUnit.KG,
+            Description = "Description",
+            CountryOfManufacture = "SE",
+            UnitLength = 10.5f,
+            UnitWidth = 5.0f,
+            UnitHeight = 2.0f,
+            Currency = "USD",
+            InOwnParcel = true,
+            ArticleNumber = "12345",
+            ShelfPosition = "A12"
+        };
+
+        var shipmentItem2 = new ShipmentItem("Item1", 2, 15.0f, 3.5f)
+        {
+            Shipped = false,
+            Taric = 123,
+            QuantityUnit = QuantityUnit.KG,
+            Description = "Description",
+            CountryOfManufacture = "SE",
+            UnitLength = 10.5f,
+            UnitWidth = 5.0f,
+            UnitHeight = 2.0f,
+            Currency = "USD",
+            InOwnParcel = true,
+            ArticleNumber = "12345",
+            ShelfPosition = "A12"
+        };
+
+        // Act
+        var result = shipmentItem1.Equals(shipmentItem2);
+
+        // Assert
+        Assert.That(result, Is.True);
+    }
+
+    [Test]
+    public void Equals_DifferentValues_ReturnsFalse()
+    {
+        // Arrange
+        var shipmentItem1 = new ShipmentItem("Item1", 2, 15.0f, 3.5f)
+        {
+            Shipped = false,
+            Taric = 123,
+            QuantityUnit = QuantityUnit.KG,
+            Description = "Description",
+            CountryOfManufacture = "SE",
+            UnitLength = 10.5f,
+            UnitWidth = 5.0f,
+            UnitHeight = 2.0f,
+            Currency = "USD",
+            InOwnParcel = true,
+            ArticleNumber = "12345",
+            ShelfPosition = "A12"
+        };
+
+        var shipmentItem2 = new ShipmentItem("Item2", 3, 20.0f, 4.0f)
+        {
+            Shipped = true,
+            Taric = 456,
+            QuantityUnit = QuantityUnit.EA,
+            Description = "Different Description",
+            CountryOfManufacture = "US",
+            UnitLength = 15.0f,
+            UnitWidth = 6.0f,
+            UnitHeight = 3.0f,
+            Currency = "EUR",
+            InOwnParcel = false,
+            ArticleNumber = "67890",
+            ShelfPosition = "B34"
+        };
+
+        // Act
+        var result = shipmentItem1.Equals(shipmentItem2);
+
+        // Assert
+        Assert.That(result, Is.False);
+    }
+
+    [Test]
+    public void GetHashCode_SameValues_ReturnsSameHashCode()
+    {
+        // Arrange
+        var shipmentItem1 = new ShipmentItem("Item1", 2, 15.0f, 3.5f)
+        {
+            Shipped = false,
+            Taric = 123,
+            QuantityUnit = QuantityUnit.KG,
+            Description = "Description",
+            CountryOfManufacture = "SE",
+            UnitLength = 10.5f,
+            UnitWidth = 5.0f,
+            UnitHeight = 2.0f,
+            Currency = "USD",
+            InOwnParcel = true,
+            ArticleNumber = "12345",
+            ShelfPosition = "A12"
+        };
+
+        var shipmentItem2 = new ShipmentItem("Item1", 2, 15.0f, 3.5f)
+        {
+            Shipped = false,
+            Taric = 123,
+            QuantityUnit = QuantityUnit.KG,
+            Description = "Description",
+            CountryOfManufacture = "SE",
+            UnitLength = 10.5f,
+            UnitWidth = 5.0f,
+            UnitHeight = 2.0f,
+            Currency = "USD",
+            InOwnParcel = true,
+            ArticleNumber = "12345",
+            ShelfPosition = "A12"
+        };
+
+        // Act
+        var hashCode1 = shipmentItem1.GetHashCode();
+        var hashCode2 = shipmentItem2.GetHashCode();
+
+        // Assert
+        Assert.That(hashCode1, Is.EqualTo(hashCode2));
+    }
+
+    [Test]
+    public void GetHashCode_DifferentValues_ReturnsDifferentHashCode()
+    {
+        // Arrange
+        var shipmentItem1 = new ShipmentItem("Item1", 2, 15.0f, 3.5f)
+        {
+            Shipped = false,
+            Taric = 123,
+            QuantityUnit = QuantityUnit.KG,
+            Description = "Description",
+            CountryOfManufacture = "SE",
+            UnitLength = 10.5f,
+            UnitWidth = 5.0f,
+            UnitHeight = 2.0f,
+            Currency = "USD",
+            InOwnParcel = true,
+            ArticleNumber = "12345",
+            ShelfPosition = "A12"
+        };
+
+        var shipmentItem2 = new ShipmentItem("Item2", 3, 20.0f, 4.0f)
+        {
+            Shipped = true,
+            Taric = 456,
+            QuantityUnit = QuantityUnit.EA,
+            Description = "Different Description",
+            CountryOfManufacture = "US",
+            UnitLength = 15.0f,
+            UnitWidth = 6.0f,
+            UnitHeight = 3.0f,
+            Currency = "EUR",
+            InOwnParcel = false,
+            ArticleNumber = "67890",
+            ShelfPosition = "B34"
+        };
+
+        // Act
+        var hashCode1 = shipmentItem1.GetHashCode();
+        var hashCode2 = shipmentItem2.GetHashCode();
+
+        // Assert
+        Assert.That(hashCode1, Is.Not.EqualTo(hashCode2));
+    }
 }
