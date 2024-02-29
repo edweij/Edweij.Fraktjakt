@@ -42,34 +42,7 @@ public abstract class XmlRequestObject : ValidationObject
         {
             return false;
         }
-    }
-
-    
-    public override bool Equals(object? obj)
-    {
-        if (obj is null || GetType() != obj.GetType()) return false;
-        return base.Equals(obj);
-    }
-
-    public override int GetHashCode()
-    {
-        return base.GetHashCode();
-    }
-
-
-    public static bool operator ==(XmlRequestObject left, XmlRequestObject right)
-    {
-        if (ReferenceEquals(left, right)) return true;
-        if (left is null || right is null) return false;
-        
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(XmlRequestObject left, XmlRequestObject right)
-    {
-        return !(left == right);
-    }
-
+    }    
 }
 
 public static class XmlRequestObjectExtensions

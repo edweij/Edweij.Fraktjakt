@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;

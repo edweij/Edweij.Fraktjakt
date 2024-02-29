@@ -62,33 +62,5 @@ public class Parcel : XmlRequestObject
         {
             yield return new RuleViolation("Height", "Height must be larger than 0");
         }
-    }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        Parcel other = (Parcel)obj;
-        return Weight == other.Weight
-            && Nullable.Equals(Length, other.Length)
-            && Nullable.Equals(Width, other.Width)
-            && Nullable.Equals(Height, other.Height);
-    }
-
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            int hash = 17;
-            hash = hash * 23 + Weight.GetHashCode();
-            hash = hash * 23 + (Length?.GetHashCode() ?? 0);
-            hash = hash * 23 + (Width?.GetHashCode() ?? 0);
-            hash = hash * 23 + (Height?.GetHashCode() ?? 0);
-
-            return hash;
-        }
-    }
+    }    
 }

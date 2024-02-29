@@ -114,41 +114,4 @@ public abstract class Address : XmlRequestObject
         }
         throw new ArgumentException("Address element is not valid");
     }
-
-    public override bool Equals(object? obj)
-    {
-        if (ReferenceEquals(this, obj)) return true;
-        if (obj == null || GetType() != obj.GetType()) return false;
-        
-        Address other = (Address)obj;
-
-        return StreetAddress1 == other.StreetAddress1 &&
-               StreetAddress2 == other.StreetAddress2 &&
-               StreetAddress3 == other.StreetAddress3 &&
-               PostalCode == other.PostalCode &&
-               CityName == other.CityName &&
-               IsResidental == other.IsResidental &&
-               Equals(CountryCode, other.CountryCode) &&
-               Instructions == other.Instructions &&
-               EntryCode == other.EntryCode;
-    }
-
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            int hash = 17;
-            hash = hash * 23 + (StreetAddress1?.GetHashCode() ?? 0);
-            hash = hash * 23 + (StreetAddress2?.GetHashCode() ?? 0);
-            hash = hash * 23 + (StreetAddress3?.GetHashCode() ?? 0);
-            hash = hash * 23 + PostalCode.GetHashCode();
-            hash = hash * 23 + (CityName?.GetHashCode() ?? 0);
-            hash = hash * 23 + IsResidental.GetHashCode();
-            hash = hash * 23 + CountryCode.GetHashCode();
-            hash = hash * 23 + (Instructions?.GetHashCode() ?? 0);
-            hash = hash * 23 + (EntryCode?.GetHashCode() ?? 0);
-            return hash;
-        }
-    }
-
 }

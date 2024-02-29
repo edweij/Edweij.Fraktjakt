@@ -2,7 +2,6 @@
 using Edweij.Fraktjakt.APIClient.ResponseModels;
 using Edweij.Fraktjakt.APIClient.Structs;
 using Microsoft.Extensions.DependencyInjection;
-using System.Data.Common;
 using System.Reflection;
 using System.Web;
 
@@ -15,7 +14,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     public Sender Sender { get; init; }
 
-    private readonly Dictionary<Query, int> cachedQueries = new();
+    private readonly Dictionary<string, int> cachedQueries = new();
 
     public FraktjaktClient(int id, string key, bool useMD5Checksum = true) {
         if (id <= 0) throw new ArgumentException("invalid id", nameof(id));
@@ -78,16 +77,16 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     public async Task<Response<QueryResponse>> Query(Query query)
     {
-        var c = cachedQueries.SingleOrDefault(q => q.Key.Equals(query)).Key;
-        if (c is not null)
+        var xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>" + query.ToXml();
+        if (cachedQueries.ContainsKey(xml))
         {
-            var shipmentId = cachedQueries[c];
+            var shipmentId = cachedQueries[xml];
             return await ReQuery(shipmentId, query.ShipperInfo, query.Value);
         }
         if (!query.IsValid) throw new ArgumentException("Shipment is not valid");
         if (query.Sender != Sender) throw new ArgumentException("Sender in shipment is different from the clients sender");
 
-        var xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>" + query.ToXml();
+        
         var url = $"/fraktjakt/query_xml?xml={UrlEncode(xml)}";
         if (_useMD5Checksum)
         {
@@ -95,9 +94,9 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         }
 
         var response = await QueryResponse.FromHttpResponse(await _httpClient.GetAsync(url));
-        if (response.HasResult && !cachedQueries.ContainsKey(query))
+        if (response.HasResult && !cachedQueries.ContainsKey(xml))
         {
-            cachedQueries.Add(query, response.Result!.Id);
+            cachedQueries.Add(xml, response.Result!.Id);
         }
         return response;
     }
