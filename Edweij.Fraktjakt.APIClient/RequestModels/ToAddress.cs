@@ -29,27 +29,14 @@ public class ToAddress : Address
         throw new ArgumentException("Address element is not valid");
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (ReferenceEquals(this, obj)) return true;
         if (obj == null || GetType() != obj.GetType()) return false;
         
         ToAddress other = (ToAddress)obj;
         return base.Equals(obj) && Language.Equals(other.Language);
-    }
-
-    //public static bool operator ==(ToAddress left, ToAddress right)
-    //{
-    //    if (ReferenceEquals(left, right)) return true;
-    //    if (left is null || right is null) return false;
-        
-    //    return left.Equals(right);
-    //}
-
-    //public static bool operator !=(ToAddress left, ToAddress right)
-    //{
-    //    return !(left == right);
-    //}
+    }    
 
     public override int GetHashCode()
     {

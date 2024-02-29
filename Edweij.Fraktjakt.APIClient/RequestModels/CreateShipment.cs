@@ -4,7 +4,7 @@ using System.Text.RegularExpressions;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
-public class CreateShipment : XmlRequestObject
+public partial class CreateShipment : XmlRequestObject
 {
     public Sender Sender { get; init; }
     public ToAddress ToAddress { get; init; }    
@@ -28,10 +28,9 @@ public class CreateShipment : XmlRequestObject
 
         if (!Sender.IsValid) throw new ArgumentException("Provided sender not valid");
         if (!ToAddress.IsValid) throw new ArgumentException("Provided toAddress not valid");
-
-        if (fromAddress != null) FromAddress = fromAddress;
         if (items != null) Items = items.ToList();
         if (parcels != null) Parcels = parcels.ToList();
+        FromAddress = fromAddress;
     }
 
     private ReferredSender? referredSender = null;
@@ -43,8 +42,7 @@ public class CreateShipment : XmlRequestObject
         get { return referredSender; }
         set
         {
-            if (referredSender == null) throw new ArgumentNullException(nameof(value));
-            if (referredSender != null && !value!.IsValid) throw new ArgumentException("ReferredSender not valid");
+            if (!value?.IsValid ?? false) throw new ArgumentException("ReferredSender not valid");
             referredSender = value;
         }
     }
@@ -56,8 +54,7 @@ public class CreateShipment : XmlRequestObject
 
         set
         {
-            if (value == null) throw new ArgumentNullException("FromAddress");
-            if (!value.IsValid) throw new ArgumentException("FromAddress not valid");
+            if (!value?.IsValid ?? false) throw new ArgumentException("FromAddress not valid");
             fromAddress = value;
         }
     }
@@ -72,7 +69,7 @@ public class CreateShipment : XmlRequestObject
             items = value.ToList();
         }
     }
-    private List<Parcel> parcels = new List<Parcel>();
+    private List<Parcel> parcels = new();
     public IEnumerable<Parcel> Parcels
     {
         get { return parcels; }
@@ -86,12 +83,12 @@ public class CreateShipment : XmlRequestObject
 
     public void AddShipmentItem(ShipmentItem item)
     {
-        if (item != null && item.IsValid) items.Add(item);
+        if (item.IsValid) items.Add(item);
     }
 
     public void AddParcel(Parcel parcel)
     {
-        if (parcel != null && parcel.IsValid) parcels.Add(parcel);
+        if (parcel.IsValid) parcels.Add(parcel);
     }
 
     /// <summary>
@@ -145,23 +142,23 @@ public class CreateShipment : XmlRequestObject
         if (!string.IsNullOrEmpty(Reference))
         {
             if (Reference.Length > 50) yield return new RuleViolation("Reference", "Max length 50");
-            Regex r = new("^[ a-zA-Z0-9]*$");
+            Regex r = ReferenceCheckRegex();
             if (!r.IsMatch(Reference)) yield return new RuleViolation("Reference", "May only contain space, 0-9 and a-z or A-Z");
         }
 
-        if (Dispatcher != null && !Dispatcher.IsValid)
+        if (!Dispatcher?.IsValid ?? false)
         {
-            foreach (var err in Dispatcher.GetRuleViolations())
+            foreach (var err in Dispatcher!.GetRuleViolations())
             {
                 yield return err;
             }
         }
 
-        if (Recipient == null)
+        if (Recipient is null)
         {
             yield return new RuleViolation("Recipient", "Required");
         }
-        else if (!Recipient.IsValid)
+        else if (!Recipient!.IsValid)
         {
             foreach (var err in Recipient.GetRuleViolations())
             {
@@ -186,10 +183,10 @@ public class CreateShipment : XmlRequestObject
             foreach (var err in ToAddress.GetRuleViolations()) yield return err;
         }
 
-        if (FromAddress != null && !FromAddress.IsValid)
+        if (!FromAddress?.IsValid ?? false)
         {
             yield return new RuleViolation("FromAddress", "FromAddress is not valid");
-            foreach (var err in FromAddress.GetRuleViolations()) yield return err;
+            foreach (var err in FromAddress!.GetRuleViolations()) yield return err;
         }
 
         if (!Items.Any() && !Parcels.Any())
@@ -241,7 +238,7 @@ public class CreateShipment : XmlRequestObject
             {
                 w.WriteStartElement("CreateShipment");
                 w.WriteRaw(Sender.ToXml());
-                if (ReferredSender != null)
+                if (!(ReferredSender is null))
                 {
                     w.WriteRaw(ReferredSender.ToXml());
                 }
@@ -263,7 +260,7 @@ public class CreateShipment : XmlRequestObject
                     w.WriteElementString("reference", Reference);
                 }
                 w.WriteElementString("price_sort", PriceSort ? "1" : "0");
-                if (FromAddress != null) w.WriteRaw(FromAddress.ToXml());
+                if (!(FromAddress is null)) w.WriteRaw(FromAddress.ToXml());
                 w.WriteRaw(ToAddress.ToXml());
 
                 w.WriteElementString("export_reason", ExportReason.ToString());
@@ -271,15 +268,15 @@ public class CreateShipment : XmlRequestObject
                 {
                     w.WriteElementString("sender_email", SenderEmail);
                 }
-                if (Dispatcher != null)
+                if (!(Dispatcher is null))
                 {
                     w.WriteRaw(Dispatcher.ToXml());
                 }
-                if (Recipient != null)
+                if (!(Recipient is null))
                 {
                     w.WriteRaw(Recipient.ToXml());
                 }
-                if (Items != null && Items.Any())
+                if (Items.Any())
                 {
                     w.WriteStartElement("commodities");
                     foreach (var item in Items)
@@ -289,7 +286,7 @@ public class CreateShipment : XmlRequestObject
                     w.WriteEndElement();
                 }
 
-                if (Parcels != null && Parcels.Any())
+                if (Parcels.Any())
                 {
                     w.WriteStartElement("parcels");
                     foreach (var p in Parcels)
@@ -303,4 +300,7 @@ public class CreateShipment : XmlRequestObject
         }
         throw new ArgumentException("Shipment element is not valid");
     }
+
+    [GeneratedRegex("^[ a-zA-Z0-9]*$")]
+    private static partial Regex ReferenceCheckRegex();
 }

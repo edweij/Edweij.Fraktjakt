@@ -33,7 +33,6 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             var query = new Query(new Sender(1, "key"), new ToAddress("62141"));
             Assert.Multiple(() =>
             {
-                Assert.Throws<ArgumentNullException>(() => query.FromAddress = null); // Set fromadress to null
                 Assert.Throws<ArgumentException>(() => query.FromAddress = new FromAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }); // Set fromadress to invalid address
                 Assert.Throws<ArgumentNullException>(() => query.Items = null); // Set items to null
                 Assert.Throws<ArgumentException>(() => query.Items = new List<ShipmentItem>() { new ShipmentItem("TestItem", 0, 1.5f, 10.0f) }); // Set items with invalid item

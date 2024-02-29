@@ -1,5 +1,4 @@
 ﻿using System.Text;
-using System.Xml;
 using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
@@ -11,14 +10,18 @@ public class DirectOrder : Order
 {
     public DirectOrder(Sender sender, ToAddress toAddress, int shippingProductId, IEnumerable<ShipmentItem>? items = null, FromAddress? fromAddress = null, IEnumerable<Parcel>? parcels = null) : base(sender, shippingProductId, items)
     {
-        if (toAddress == null) throw new ArgumentNullException(nameof(toAddress));
-        if (toAddress != null && !toAddress.IsValid) throw new ArgumentException(nameof(toAddress));
+        if (!toAddress.IsValid) throw new ArgumentException("toAddress not valid");
         ToAddress = toAddress!;
-        if (fromAddress != null)
+
+        if (!fromAddress?.IsValid ?? false) throw new ArgumentException("fromAddress not valid");
+        FromAddress = fromAddress;
+
+        if (items != null)
         {
-            if (!fromAddress!.IsValid) throw new ArgumentException("fromAddress not valid");
-            FromAddress = fromAddress;
+            if (items.Any(i => !i.IsValid)) throw new ArgumentException("items not valid");
+            Items = items.ToList();
         }
+
         if (parcels != null)
         {
             if (parcels.Any(p => !p.IsValid)) throw new ArgumentException("parcels not valid");
@@ -35,8 +38,7 @@ public class DirectOrder : Order
 
         set
         {
-            if (value == null) throw new ArgumentNullException("FromAddress");
-            if (!value.IsValid) throw new ArgumentException("FromAddress not valid");
+            if (!value?.IsValid ?? false) throw new ArgumentException("FromAddress not valid");
             fromAddress = value;
         }
     }

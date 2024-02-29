@@ -81,7 +81,7 @@ public class Sender : ReferredSender
         throw new ArgumentException("Sender element is not valid");
     }
 
-    public override bool Equals(object obj)
+    public override bool Equals(object? obj)
     {
         if (obj == null || GetType() != obj.GetType())
         {
@@ -114,19 +114,4 @@ public class Sender : ReferredSender
         }
     }
 
-    public static bool operator ==(Sender left, Sender right)
-    {
-        if (ReferenceEquals(left, right))
-            return true;
-
-        if (left is null || right is null)
-            return false;
-
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(Sender left, Sender right)
-    {
-        return !(left == right);
-    }
 }

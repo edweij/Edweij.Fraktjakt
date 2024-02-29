@@ -42,25 +42,27 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             var validParcels = new List<Parcel> { new Parcel(0.5f) };
 
             // Act & Assert
-            // Invalid sender
-            Assert.That(() => new DirectOrder(null, validToAddress, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("sender"));
+            Assert.Multiple(() => {
+                // Invalid sender
+                Assert.That(() => new DirectOrder(null, validToAddress, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("sender"));
 
 
-            // Invalid toAddress
-            Assert.That(() => new DirectOrder(validSender, null, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentNullException>().With.Property("ParamName").EqualTo("toAddress"));
-            Assert.That(() => new DirectOrder(validSender, new ToAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("toAddress"));
+                // Invalid toAddress
+                Assert.That(() => new DirectOrder(validSender, new ToAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }, 1, validItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("toAddress not valid"));
 
-            // Invalid items
-            var invalidItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 1, 1.5f, 10.0f) { Description = "Description" } }; // Invalid item
-            Assert.That(() => new DirectOrder(validSender, validToAddress, 1, invalidItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Items contain invalid item"));
+                // Invalid items
+                var invalidItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 1, 1.5f, 10.0f) { Description = "Description" } }; // Invalid item
+                Assert.That(() => new DirectOrder(validSender, validToAddress, 1, invalidItems, validFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("Items contain invalid item"));
 
-            // Invalid fromAddress
-            var invalidFromAddress = new FromAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }; // Invalid fromAddress
-            Assert.That(() => new DirectOrder(validSender, validToAddress, 1, validItems, invalidFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("fromAddress not valid"));
+                // Invalid fromAddress
+                var invalidFromAddress = new FromAddress("12345") { StreetAddress1 = "Lorem ipsum dolor sit amet orci aliquam" }; // Invalid fromAddress
+                Assert.That(() => new DirectOrder(validSender, validToAddress, 1, validItems, invalidFromAddress, validParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("fromAddress not valid"));
 
-            // Invalid parcels
-            var invalidParcels = new List<Parcel> { new Parcel(0.5f) { Length = 0 } }; // Invalid parcel
-            Assert.That(() => new DirectOrder(validSender, validToAddress, 1, validItems, validFromAddress, invalidParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("parcels not valid"));
+                // Invalid parcels
+                var invalidParcels = new List<Parcel> { new Parcel(0.5f) { Length = 0 } }; // Invalid parcel
+                Assert.That(() => new DirectOrder(validSender, validToAddress, 1, validItems, validFromAddress, invalidParcels), Throws.TypeOf<ArgumentException>().With.Message.EqualTo("parcels not valid"));
+            });
+            
         }
 
         [Test]

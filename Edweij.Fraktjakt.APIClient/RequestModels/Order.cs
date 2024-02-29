@@ -5,7 +5,7 @@ using System.Xml;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
-public abstract class Order : XmlRequestObject
+public abstract partial class Order : XmlRequestObject
 {
     public Order(Sender sender, int shippingProductId, IEnumerable<ShipmentItem>? items = null)
     {
@@ -28,8 +28,7 @@ public abstract class Order : XmlRequestObject
         get { return referredSender; }
         set
         {
-            if (referredSender == null) throw new ArgumentNullException(nameof(value));
-            if (referredSender != null && !value!.IsValid) throw new ArgumentException("ReferredSender not valid");
+            if (!value?.IsValid ?? false) throw new ArgumentException("ReferredSender not valid");
             referredSender = value;
         }
     }
@@ -75,21 +74,21 @@ public abstract class Order : XmlRequestObject
         if (!string.IsNullOrEmpty(Reference))
         {
             if (Reference.Length > 50) yield return new RuleViolation("Reference", "Max length 50");
-            Regex r = new Regex("^[ a-zA-Z0-9]*$");
+            Regex r = ValidReferenceRegex();
             if (!r.IsMatch(Reference)) yield return new RuleViolation("Reference", "May only contain space, 0-9 and a-z or A-Z");
         }
 
-        if (Dispatcher != null && !Dispatcher.IsValid)
+        if (!Dispatcher?.IsValid ?? false)
         {
-            foreach (var err in Dispatcher.GetRuleViolations())
+            foreach (var err in Dispatcher!.GetRuleViolations())
             {
                 yield return err;
             }
         }
 
-        if (Recipient != null && !Recipient.IsValid)
+        if (!Recipient?.IsValid ?? false)
         {
-            foreach (var err in Recipient.GetRuleViolations())
+            foreach (var err in Recipient!.GetRuleViolations())
             {
                 yield return err;
             }
@@ -100,9 +99,9 @@ public abstract class Order : XmlRequestObject
             yield return new RuleViolation("SenderEmail", "Must be a valid email address");
         }
 
-        if (PickupInfo != null && !PickupInfo.IsValid)
+        if (!PickupInfo?.IsValid ?? false)
         {
-            foreach (var err in PickupInfo.GetRuleViolations())
+            foreach (var err in PickupInfo!.GetRuleViolations())
             {
                 yield return err;
             }
@@ -124,7 +123,7 @@ public abstract class Order : XmlRequestObject
                     w.WriteElementString("value", Value.Value.ToStringPeriodDecimalSeparator());
                 }
                 w.WriteRaw(Sender.ToXml());
-                if (ReferredSender != null)
+                if (ReferredSender is not null)
                 {
                     w.WriteRaw(ReferredSender.ToXml());
                 }
@@ -158,29 +157,22 @@ public abstract class Order : XmlRequestObject
                     }
                     w.WriteEndElement();
                 }
-                if (Dispatcher != null)
-                {
-                    w.WriteRaw(Dispatcher.ToXml());
-                }
-                if (Recipient != null)
-                {
-                    w.WriteRaw(Recipient.ToXml());
-                }
-
-                if (PickupInfo != null)
-                {
-                    w.WriteRaw(PickupInfo.ToXml());
-                }
-
-                if (!string.IsNullOrEmpty(SenderEmail))
-                {
-                    w.WriteElementString("sender_email", SenderEmail);
-                }
+                if (Dispatcher is not null) w.WriteRaw(Dispatcher.ToXml());
+                
+                if (Recipient is not null) w.WriteRaw(Recipient.ToXml());
+                
+                if (PickupInfo is not null) w.WriteRaw(PickupInfo.ToXml());
+                
+                if (!string.IsNullOrEmpty(SenderEmail)) w.WriteElementString("sender_email", SenderEmail);
+                
             }
             return sb.ToString();
         }
         throw new ArgumentException("Order element is not valid");
     }
+
+    [GeneratedRegex("^[ a-zA-Z0-9]*$")]
+    private static partial Regex ValidReferenceRegex();
 }
 
 

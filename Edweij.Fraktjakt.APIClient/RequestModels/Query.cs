@@ -26,9 +26,9 @@ public class Query : XmlRequestObject
         if (!Sender.IsValid) throw new ArgumentException("Provided sender not valid");
         if (!ToAddress.IsValid) throw new ArgumentException("Provided toAddress not valid");
 
-        if (fromAddress != null) FromAddress = fromAddress;
         if (items != null) Items = items.ToList();
-        if (parcels != null) Parcels = parcels.ToList();            
+        if (parcels != null) Parcels = parcels.ToList();
+        FromAddress = fromAddress;
     }
 
     private FromAddress? fromAddress = null;
@@ -38,8 +38,7 @@ public class Query : XmlRequestObject
 
         set
         {
-            if (value == null) throw new ArgumentNullException("FromAddress");
-            if (!value.IsValid) throw new ArgumentException("FromAddress not valid");
+            if (!value?.IsValid ?? false) throw new ArgumentException("FromAddress not valid"); 
             fromAddress = value;
         }
     }
@@ -47,7 +46,7 @@ public class Query : XmlRequestObject
 
     /// <summary>
     /// What is to be transported. If not specified, but there are parcel tags, and the integration has a default Commodity Template in Fraktjakt and it specified to be used in searches, the default Commodity Template is used to create content.
-    /// A valid ShipmentQuery requires at least one parcel or one ShipmentItem
+    /// A valid Query requires at least one parcel OR one ShipmentItem
     /// </summary>
     public IEnumerable<ShipmentItem> Items
     {
@@ -63,7 +62,7 @@ public class Query : XmlRequestObject
 
     /// <summary>
     /// The parcels that will be sent. Can be specified if commodities are not known, or if you already have decided how big the packages should be and do not want to use Fraktjakt’s package calculations.
-    /// A valid ShipmentQuery requires at least one parcel or one ShipmentItem
+    /// A valid Query requires at least one parcel OR one ShipmentItem
     /// </summary>
     public IEnumerable<Parcel> Parcels 
     {
@@ -82,7 +81,7 @@ public class Query : XmlRequestObject
     /// <param name="item">The ShipmentItem to add</param>
     public void AddShipmentItem(ShipmentItem item)
     {
-        if (item != null && item.IsValid) items.Add(item);
+        if (item.IsValid) items.Add(item);
     }
 
     /// <summary>
@@ -91,7 +90,7 @@ public class Query : XmlRequestObject
     /// <param name="item">The ShipmentItem to add</param>
     public void AddParcel(Parcel parcel)
     {
-        if (parcel != null && parcel.IsValid) parcels.Add(parcel);
+        if (parcel.IsValid) parcels.Add(parcel);
     }
 
 
@@ -197,10 +196,10 @@ public class Query : XmlRequestObject
             foreach (var err in ToAddress.GetRuleViolations()) yield return err;
         }
 
-        if (FromAddress != null && !FromAddress.IsValid)
+        if (!FromAddress?.IsValid ?? false)
         {
             yield return new RuleViolation("FromAddress", "FromAddress is not valid");
-            foreach (var err in FromAddress.GetRuleViolations()) yield return err;
+            foreach (var err in FromAddress!.GetRuleViolations()) yield return err;
         }
 
         if (!Items.Any() && !Parcels.Any())
@@ -307,7 +306,11 @@ public class Query : XmlRequestObject
                     w.WriteEndElement();
                 }
 
-                if (FromAddress != null) w.WriteRaw(FromAddress.ToXml());
+                
+                if (FromAddress?.IsValid ?? false)
+                {
+                    w.WriteRaw(FromAddress.ToXml());
+                }
                 w.WriteRaw(ToAddress.ToXml());
             }
             return sb.ToString();                
@@ -353,10 +356,11 @@ public class Query : XmlRequestObject
             int hash = 17;
             hash = hash * 23 + Sender.GetHashCode();
             hash = hash * 23 + ToAddress.GetHashCode();
-            
-            if (FromAddress != null)
-                hash = hash * 23 + FromAddress.GetHashCode();
-            
+
+            //if (FromAddress != null)
+            //    hash = hash * 23 + FromAddress.GetHashCode();
+            hash = hash * 23 + (FromAddress?.GetHashCode() ?? 0);
+
             if (Items != null)
             {
                 foreach (var item in Items)

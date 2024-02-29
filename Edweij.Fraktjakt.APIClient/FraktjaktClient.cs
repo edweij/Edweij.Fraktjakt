@@ -2,7 +2,7 @@
 using Edweij.Fraktjakt.APIClient.ResponseModels;
 using Edweij.Fraktjakt.APIClient.Structs;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
+using System.Data.Common;
 using System.Reflection;
 using System.Web;
 
@@ -15,22 +15,24 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     public Sender Sender { get; init; }
 
-    private Dictionary<Query, int> cachedQueries = new();
+    private readonly Dictionary<Query, int> cachedQueries = new();
 
     public FraktjaktClient(int id, string key, bool useMD5Checksum = true) {
-        if (id <= 0) throw new ArgumentException(nameof(id));
-        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException(nameof(key));
+        if (id <= 0) throw new ArgumentException("invalid id", nameof(id));
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Invalid key", nameof(key));
 
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri("https://api.fraktjakt.se");
+        _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri("https://api.fraktjakt.se")
+        };
         Sender = new Sender(id, key);
         _useMD5Checksum = useMD5Checksum;
     }
 
     public FraktjaktClient(int id, string key, HttpClient httpClient, bool useMD5Checksum = true)
     {
-        if (id <= 0) throw new ArgumentException(nameof(id));
-        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException(nameof(key));
+        if (id <= 0) throw new ArgumentException("invalid id", nameof(id));
+        if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("invalid key", nameof(key));
 
         _httpClient = httpClient ?? new HttpClient();
         _httpClient.BaseAddress = new Uri("https://api.fraktjakt.se");
@@ -40,19 +42,19 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     public FraktjaktClient(Sender sender, bool useMD5Checksum = true)
     {
-        if (sender == null) throw new ArgumentNullException(nameof(sender));
-        if (!sender.IsValid) throw new ArgumentException("Sender is not valid");
+        if (!sender.IsValid) throw new ArgumentException("Sender is not valid", nameof(sender));
 
-        _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri("https://api.fraktjakt.se");
+        _httpClient = new HttpClient
+        {
+            BaseAddress = new Uri("https://api.fraktjakt.se")
+        };
         Sender = sender;
         _useMD5Checksum = useMD5Checksum;
     }
 
     public FraktjaktClient(Sender sender, HttpClient httpClient, bool useMD5Checksum = true)
     {
-        if (sender == null) throw new ArgumentNullException(nameof(sender));
-        if (!sender.IsValid) throw new ArgumentException("Sender is not valid");
+        if (!sender.IsValid) throw new ArgumentException("Sender is not valid", nameof(sender));
 
         _httpClient = httpClient ?? new HttpClient();
         _httpClient.BaseAddress = new Uri("https://api.fraktjakt.se");
@@ -77,8 +79,8 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
     public async Task<Response<QueryResponse>> Query(Query query)
     {
         var c = cachedQueries.SingleOrDefault(q => q.Key.Equals(query)).Key;
-        if (c != null)
-        {            
+        if (c is not null)
+        {
             var shipmentId = cachedQueries[c];
             return await ReQuery(shipmentId, query.ShipperInfo, query.Value);
         }
@@ -91,7 +93,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         {
             url += $"&md5_checksum={MD5(xml)}";
         }
-        
+
         var response = await QueryResponse.FromHttpResponse(await _httpClient.GetAsync(url));
         if (response.HasResult && !cachedQueries.ContainsKey(query))
         {
@@ -169,18 +171,25 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     public static string MD5(string input)
     {
-        using (System.Security.Cryptography.MD5 md5 = System.Security.Cryptography.MD5.Create())
-        {
-            byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
-            byte[] hashBytes = md5.ComputeHash(inputBytes);
-            return Convert.ToHexString(hashBytes);
-        }
+        byte[] inputBytes = System.Text.Encoding.ASCII.GetBytes(input);
+        byte[] hashBytes = System.Security.Cryptography.MD5.HashData(inputBytes);
+        return Convert.ToHexString(hashBytes);
     }
 
+    
     public void Dispose()
     {
-        _httpClient.Dispose();
-    }    
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    protected virtual void Dispose(bool disposing)
+    {
+        if (disposing)
+        {
+            _httpClient?.Dispose();
+        }
+    }
 }
 
 public static class FraktjaktClientExtensions

@@ -75,24 +75,4 @@ public class ReferredSender : XmlRequestObject
         }
     }
 
-    public static bool operator ==(ReferredSender left, ReferredSender right)
-    {
-        if (ReferenceEquals(left, right))
-        {
-            return true;
-        }
-
-        if (left is null || right is null)
-        {
-            return false;
-        }
-
-        return left.Equals(right);
-    }
-
-    public static bool operator !=(ReferredSender left, ReferredSender right)
-    {
-        return !(left == right);
-    }
-
 }
