@@ -34,14 +34,59 @@ PackageReference
  
 To use this API client you need an integration configured for your/your companys account on fraktjakt.se, please read their manuals for instructions.
 
-Add your integrations Consignor ID and Consignor key to your project in a way that fits you best.
+### Setup
+Add your integrations ID and KEY to your project in a way that fits you best. 
 
 In your program.cs file setup DI with the clients helper method
 ```C#
-builder.Services.AddFraktjaktClient({your id}, {your key});
+builder.Services.AddFraktjaktClient({ID}, {KEY});
 ```
 
 Inject IFraktjaktClient where needed
+```C#
+private readonly IFraktjaktClient _client;
+private readonly IFraktjaktShippingRepository _shippingRepository;
+
+public FraktjaktController(IFraktjaktClient client)
+{
+    _client = client;    
+}
+```
+
+### Query
+
+To search for shippings use the Queri API, you need a way to mapp your own objects to a Query, i.e.
+```C#
+// Maps a order object to a query with optional parameters to make customn configurations
+public static Query CreateQueryFromOrder(Sender sender, Core.Order order, bool isResidental, bool dropoff = false, bool isExpress = false)
+{
+    // A helper method to map address
+    var toAddress = ToAddressFromOrder(order.Customer.GetDeliveryAddress(), isResidental);
+    var items = new List<ShipmentItem>();
+    foreach (var item in order.Items)
+    {
+        // A helper method to map shipmentItems
+        items.Add(ShipmentItemFromOrderItem(item));
+    }
+    var result = new Query(sender, toAddress, items: items)
+    {
+        Express = isExpress,
+        Pickup = true,
+        Dropoff = dropoff,
+        ShipperInfo = true,                
+        InsureDefault = false
+    };
+
+    return result;
+}
+```
+
+Use the injected client to search for shippings
+```C#
+var query = FraktjaktMapping.CreateQueryFromOrder(_client.Sender, order, model.IsResidental, model.Dropoff, model.IsExpress);
+var result = await _client.Query(query);
+```
+
 
  
 ## Authors
