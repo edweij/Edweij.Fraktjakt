@@ -2,6 +2,7 @@
 using Edweij.Fraktjakt.APIClient.Enums;
 using Edweij.Fraktjakt.APIClient.RequestModels;
 using Edweij.Fraktjakt.APIClient.ResponseModels;
+using Edweij.Fraktjakt.APIClient.Structs;
 using Microsoft.Extensions.Configuration;
 
 namespace Edweij.Fraktjakt.TestConsole
@@ -14,6 +15,8 @@ namespace Edweij.Fraktjakt.TestConsole
             var configuration = builder.Build();
             int id = int.Parse(configuration["Id"] ?? "0");
             string key = configuration["Key"] ?? string.Empty;
+
+            CurrencyCode sek = "SEK";
 
             //var sender = new Sender(id, key)
             //{
@@ -62,7 +65,7 @@ namespace Edweij.Fraktjakt.TestConsole
             //            int agentId = agents.Agents.First().Id;
             //        }
             //    }
-                
+
             //}
             var k = Console.ReadKey();
         }

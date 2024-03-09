@@ -12,7 +12,7 @@ public class CountryCodeTests
         var countryCode = new CountryCode("SE");
 
         // Assert
-        Assert.That(countryCode.CC, Is.EqualTo("SE"));
+        Assert.That(countryCode.Code, Is.EqualTo("SE"));
     }
 
     [TestCase("invalid")]
@@ -38,7 +38,7 @@ public class CountryCodeTests
         CountryCode countryCode = "SE";
 
         // Assert
-        Assert.That(countryCode.CC, Is.EqualTo("SE"));
+        Assert.That(countryCode.Code, Is.EqualTo("SE"));
     }
 
     [Test]
