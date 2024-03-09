@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using System.Globalization;
+﻿using System.Globalization;
 using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
@@ -21,12 +20,22 @@ namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 public record ShippingProductResponse(int Id, string Name, string Description, string ArrivalTime, float price,
         float TaxClass, float InsuranceFee, float InsuranceTaxClass, bool ToAgent, string AgentInfo, string AgentLink)
 {
+    /// <summary>
+    /// Creates an instance of <see cref="ShippingProductResponse"/> from an XML string.
+    /// </summary>
+    /// <param name="xml">The XML representation to parse.</param>
+    /// <returns>An instance of <see cref="ShippingProductResponse"/> representing the parsed response.</returns>
     public static ShippingProductResponse FromXml(string xml)
     {
         XElement element = XElement.Parse(xml);
         return FromXml(element);
     }
 
+    /// <summary>
+    /// Creates an instance of <see cref="ShippingProductResponse"/> from an <see cref="XElement"/>.
+    /// </summary>
+    /// <param name="xml">The XML representation to parse.</param>
+    /// <returns>An instance of <see cref="ShippingProductResponse"/> representing the parsed response.</returns>
     public static ShippingProductResponse FromXml(XElement element)
     {
         var result = new ShippingProductResponse(
@@ -56,13 +65,16 @@ public record ShippingProductResponse(int Id, string Name, string Description, s
 
     /// <summary>
     /// The shipping agent location that is closest to the sender's address (does not apply to shipping products with pickup). 
+    /// <br />
     /// Is only sent if AgentsIn in the Query is true.
     /// </summary>
     public string? AgentInInfo { get; init; } = null;
 
     /// <summary>
     /// A link to a map that shows where the shipping agent defined is located.
+    /// <br />
     /// Is only sent if AgentsIn in the Query is true.
+    /// <br />
     /// If you have your own Layout Settings in the integration settings, these are used on the page.In this way, the page can be easily adapted to your own page.
     /// </summary>
     public string? AgentInLink { get; init; } = null;
@@ -74,18 +86,21 @@ public record ShippingProductResponse(int Id, string Name, string Description, s
 
     /// <summary>
     /// The id for the shipper delivering the shipping product.
+    /// <br />
     /// This is only availabe if ShipperInfo is set to True in the Query
     /// </summary>
     public int? ShipperId { get; init; } = null;
 
     /// <summary>
     /// The name of the shipper delivering the shipping product.
+    /// <br />
     /// This is only availabe if ShipperInfo is set to True in the Query
     /// </summary>
     public string? ShipperName { get; init; } = null;
 
     /// <summary>
     /// A url to a logo for the shipper delivering the shipping product.
+    /// <br />
     /// This is only availabe if ShipperInfo is set to True in the Query
     /// </summary>
     public string? ShipperLogoUrl { get; init; } = null;

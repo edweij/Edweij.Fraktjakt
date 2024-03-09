@@ -2,5 +2,8 @@
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
-public record AddressResponse(string PostalCode, string street, string City, CountryCode Country)
+/// <summary>
+/// Represents a response containing address information, including postal code, street, city, and country code.
+/// </summary>
+public record AddressResponse(string PostalCode, string Street, string City, CountryCode Country)
 { }

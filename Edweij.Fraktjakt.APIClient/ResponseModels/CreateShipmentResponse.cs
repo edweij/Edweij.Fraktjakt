@@ -3,8 +3,16 @@ using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
+/// <summary>
+/// Represents the response from creating a shipment.
+/// </summary>
 public record CreateShipmentResponse(int ShipmentId, string AccessCode, string AccessLink, string ReturnLink, string CancelLink, string TrackingCode, string TrackingLink)
 {
+    /// <summary>
+    /// Creates an instance of <see cref="Response{CreateShipmentResponse}"/> from an HTTP response message.
+    /// </summary>
+    /// <param name="httpResponseMessage">The HTTP response message to parse.</param>
+    /// <returns>An instance of <see cref="Response{CreateShipmentResponse}"/> representing the parsed response.</returns>
     public static async Task<Response<CreateShipmentResponse>> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
         if (httpResponseMessage == null) return Response<CreateShipmentResponse>.CreateErrorResponse("HttpResponseMessage was null");
@@ -13,6 +21,11 @@ public record CreateShipmentResponse(int ShipmentId, string AccessCode, string A
         return FromXml(xml);
     }
 
+    /// <summary>
+    /// Creates an instance of <see cref="Response{CreateShipmentResponse}"/> from an XML string.
+    /// </summary>
+    /// <param name="xml">The XML string to parse.</param>
+    /// <returns>An instance of <see cref="Response{CreateShipmentResponse}"/> representing the parsed response.</returns>
     public static Response<CreateShipmentResponse> FromXml(string xml)
     {
         try

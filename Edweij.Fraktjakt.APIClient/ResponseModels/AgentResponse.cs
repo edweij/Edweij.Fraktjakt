@@ -2,11 +2,22 @@
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
+/// <summary>
+/// Represents a response containing information about an agent.
+/// </summary>
 public record AgentResponse(float Distance, string HtmlInfo, int ShipperId, float Latitude,
     float Longitude, string Name, string Shipper, int Id, AddressResponse Address)
 {
+    /// <summary>
+    /// Gets or sets the operation hours of the agent.
+    /// </summary>
     string? AgentOperationHours { get; set; } = null;
 
+    /// <summary>
+    /// Creates a collection of <see cref="AgentResponse"/> instances from a JSON element.
+    /// </summary>
+    /// <param name="json">The JSON element to parse.</param>
+    /// <returns>A collection of <see cref="AgentResponse"/> instances.</returns>
     public static IEnumerable<AgentResponse> FromJson(JsonElement json)
     {
         var result = new List<AgentResponse>();

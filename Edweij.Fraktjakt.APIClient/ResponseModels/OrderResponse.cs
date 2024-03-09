@@ -5,9 +5,32 @@ using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
+/// <summary>
+/// Represents the response from placing an order.
+/// </summary>
 public record OrderResponse(int ShipmentId, string AccessCode, string AccessLink,
     string ReturnLink, string CancelLink, string TrackingCode, string TrackingLink, float Amount, CurrencyCode Currency, string AgentInfo, string AgentLink)
 {
+    /// <summary>
+    /// Gets or sets the service point locator API link.
+    /// </summary>
+    public string? ServicePointLocatorApi { get; init; } = null;
+
+    /// <summary>
+    /// Gets or sets the payment link.
+    /// </summary>
+    public string? PaymentLink { get; init; } = null;
+
+    /// <summary>
+    /// Gets or sets the sender email link.
+    /// </summary>
+    public string? SenderEmailLink { get; init; } = null;
+
+    /// <summary>
+    /// Creates an instance of <see cref="Response{OrderResponse}"/> from an HTTP response message.
+    /// </summary>
+    /// <param name="httpResponseMessage">The HTTP response message to parse.</param>
+    /// <returns>An instance of <see cref="Response{OrderResponse}"/> representing the parsed response.</returns>
     public static async Task<Response<OrderResponse>> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
         if (httpResponseMessage == null) return Response<OrderResponse>.CreateErrorResponse("HttpResponseMessage was null");
@@ -16,6 +39,11 @@ public record OrderResponse(int ShipmentId, string AccessCode, string AccessLink
         return FromXml(xml);
     }
 
+    /// <summary>
+    /// Creates an instance of <see cref="Response{OrderResponse}"/> from an XML string.
+    /// </summary>
+    /// <param name="xml">The XML string to parse.</param>
+    /// <returns>An instance of <see cref="Response{OrderResponse}"/> representing the parsed response.</returns>
     public static Response<OrderResponse> FromXml(string xml)
     {
         try
@@ -60,9 +88,6 @@ public record OrderResponse(int ShipmentId, string AccessCode, string AccessLink
         }
     }
 
-    public string? ServicePointLocatorApi { get; init; } = null;
-    public string? PaymentLink { get; init; } = null;
-    public string? SenderEmailLink { get; init; } = null;
 
 
 

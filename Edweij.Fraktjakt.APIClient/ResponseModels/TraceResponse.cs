@@ -3,13 +3,29 @@ using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
+/// <summary>
+/// Represents the tracking information and shipping states for a shipment trace.
+/// </summary>
 public record TraceResponse(string TrackingCode, string TrackingLink, IEnumerable<ShippingState> ShippingStates)
 {
-
+    /// <summary>
+    /// Gets or sets the optional tracking number associated with the trace response.
+    /// </summary>
     public string? TrackingNumber { get; init; }
+    /// <summary>
+    /// Gets or sets the optional shipping company name associated with the trace response.
+    /// </summary>
     public string? ShippingCompany { get; init; }
+    /// <summary>
+    /// Gets or sets the optional list of shipping documents associated with the trace response.
+    /// </summary>
     public IEnumerable<string>? ShippingDocuments { get; init; }
 
+    /// <summary>
+    /// Creates an instance of <see cref="TraceResponse"/> from an HTTP response message.
+    /// </summary>
+    /// <param name="httpResponseMessage">The HTTP response message containing trace information.</param>
+    /// <returns>An instance of <see cref="TraceResponse"/> representing the parsed trace information.</returns>
     public static async Task<Response<TraceResponse>> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
         if (httpResponseMessage == null) return Response<TraceResponse>.CreateErrorResponse("HttpResponseMessage was null");
@@ -18,6 +34,11 @@ public record TraceResponse(string TrackingCode, string TrackingLink, IEnumerabl
         return FromXml(xml);
     }
 
+    /// <summary>
+    /// Creates a response instance of <see cref="TraceResponse"/> from an XML representation.
+    /// </summary>
+    /// <param name="xml">The XML string containing the trace information.</param>
+    /// <returns>A response instance of <see cref="TraceResponse"/> representing the parsed trace information.</returns>
     public static Response<TraceResponse> FromXml(string xml)
     {
         try
@@ -44,6 +65,11 @@ public record TraceResponse(string TrackingCode, string TrackingLink, IEnumerabl
         }
     }
 
+    /// <summary>
+    /// Parses and creates an instance of <see cref="TraceResponse"/> from an XML element.
+    /// </summary>
+    /// <param name="element">The XML element containing the trace information.</param>
+    /// <returns>An instance of <see cref="TraceResponse"/> representing the parsed trace information.</returns>
     private static TraceResponse TraceResponseFromXml(XElement element)
     {
         var traceResponse = new TraceResponse(
@@ -58,6 +84,11 @@ public record TraceResponse(string TrackingCode, string TrackingLink, IEnumerabl
         return traceResponse;
     }
 
+    /// <summary>
+    /// Parses and creates a list of <see cref="ShippingState"/> instances from an XML element.
+    /// </summary>
+    /// <param name="element">The XML element containing shipping states information.</param>
+    /// <returns>A list of <see cref="ShippingState"/> instances representing the parsed shipping states.</returns>
     private static IEnumerable<ShippingState> ShippingStatesFromXml(XElement element)
     {
         var states = new List<ShippingState>();

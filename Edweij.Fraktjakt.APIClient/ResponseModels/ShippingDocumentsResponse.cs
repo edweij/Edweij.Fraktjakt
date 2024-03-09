@@ -3,9 +3,17 @@ using System.Xml.Linq;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
+/// <summary>
+/// Represents a response containing a collection of shipping documents.
+/// </summary>
+/// <param name="Documents">Array of <see cref="ShippingDocument"/></param>
 public record ShippingDocumentsResponse(IEnumerable<ShippingDocument> Documents)
 {
-
+    /// <summary>
+    /// Creates an instance of <see cref="ShippingDocumentsResponse"/> from an HTTP response message.
+    /// </summary>
+    /// <param name="httpResponseMessage">The HTTP response message to parse.</param>
+    /// <returns>An instance of <see cref="ShippingDocumentsResponse"/> representing the parsed response.</returns>
     public static async Task<Response<ShippingDocumentsResponse>> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
         if (httpResponseMessage == null) return Response<ShippingDocumentsResponse>.CreateErrorResponse("HttpResponseMessage was null");
@@ -14,6 +22,11 @@ public record ShippingDocumentsResponse(IEnumerable<ShippingDocument> Documents)
         return FromXml(xml);
     }
 
+    /// <summary>
+    /// Creates an instance of <see cref="ShippingDocumentsResponse"/> from an XML representation.
+    /// </summary>
+    /// <param name="xml">The XML representation to parse.</param>
+    /// <returns>An instance of <see cref="ShippingDocumentsResponse"/> representing the parsed response.</returns>
     public static Response<ShippingDocumentsResponse> FromXml(string xml)
     {
         try

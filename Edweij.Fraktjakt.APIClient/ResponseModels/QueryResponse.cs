@@ -5,7 +5,7 @@ using System.Xml.Linq;
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
 /// <summary>
-/// The successful response from a Query or ReRuery request
+/// Represents the response from querying a shipment. Query or ReQuery
 /// </summary>
 /// <param name="Currency">Currency</param>
 /// <param name="Id">Fraktjakt's Id. This is used in all future references to this particular query result.</param>
@@ -16,6 +16,11 @@ namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 /// <param name="Products">Array of shipping products available for this shipment, sorted in the order defined on your configuration page at Fraktjakt.se (default is price sort).</param>
 public record QueryResponse(CurrencyCode Currency, int Id, string AccessCode, string AccessLink, string TrackingCode, string TrackingLink, IEnumerable<ShippingProductResponse> Products)
 {
+    /// <summary>
+    /// Creates an instance of <see cref="Response{QueryResponse}"/> from an HTTP response message.
+    /// </summary>
+    /// <param name="httpResponseMessage">The HTTP response message to parse.</param>
+    /// <returns>An instance of <see cref="Response{QueryResponse}"/> representing the parsed response.</returns>
     public static async Task<Response<QueryResponse>> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
         if (httpResponseMessage == null) return Response<QueryResponse>.CreateErrorResponse("HttpResponseMessage was null");
@@ -24,6 +29,11 @@ public record QueryResponse(CurrencyCode Currency, int Id, string AccessCode, st
         return FromXml(xml);
     }
 
+    /// <summary>
+    /// Creates an instance of <see cref="Response{QueryResponse}"/> from an XML string.
+    /// </summary>
+    /// <param name="xml">The XML string to parse.</param>
+    /// <returns>An instance of <see cref="Response{QueryResponse}"/> representing the parsed response.</returns>
     public static Response<QueryResponse> FromXml(string xml)
     {
         try
@@ -65,9 +75,13 @@ public record QueryResponse(CurrencyCode Currency, int Id, string AccessCode, st
 
     /// <summary>
     /// Via this link, the recipient of the freight can be offered to request an agent.
+    /// <br />
     /// Use this link unless AgentLink can be presented for the various shipping products.
+    /// <br />
     /// It shows the nearest agents for all shipping companies that have services with agents in the result.
+    /// <br />
     /// If the recipient does not choose an agent who belongs to the service that is then selected, it will of course not be the chosen agent either.
+    /// <br />
     /// Does not appear if no_agents is specified.
     /// </summary>
     public string? AgentSelectionLink { get; init; } = null;

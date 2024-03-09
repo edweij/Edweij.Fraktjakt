@@ -3,8 +3,16 @@ using System.Text.Json;
 
 namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 
+/// <summary>
+/// Represents a response containing a list of agents.
+/// </summary>
 public record AgentListResponse(IEnumerable<AgentResponse> Agents)
 {
+    /// <summary>
+    /// Creates an instance of <see cref="Response{AgentListResponse}"/> from an HTTP response message.
+    /// </summary>
+    /// <param name="httpResponseMessage">The HTTP response message to parse.</param>
+    /// <returns>An instance of <see cref="Response{AgentListResponse}"/> representing the parsed response.</returns>
     public static async Task<Response<AgentListResponse>> FromHttpResponse(HttpResponseMessage httpResponseMessage)
     {
         if (httpResponseMessage == null) return Response<AgentListResponse>.CreateErrorResponse("HttpResponseMessage was null");
@@ -13,6 +21,11 @@ public record AgentListResponse(IEnumerable<AgentResponse> Agents)
         return FromJson(json);
     }
 
+    /// <summary>
+    /// Creates an instance of <see cref="Response{AgentListResponse}"/> from a JSON string.
+    /// </summary>
+    /// <param name="json">The JSON string to parse.</param>
+    /// <returns>An instance of <see cref="Response{AgentListResponse}"/> representing the parsed response.</returns>
     public static Response<AgentListResponse> FromJson(string json)
     {        
         try
