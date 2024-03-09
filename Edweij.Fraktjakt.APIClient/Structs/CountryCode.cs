@@ -32,7 +32,7 @@ public readonly struct CountryCode
     public CountryCode(string code)
     {
         if (string.IsNullOrEmpty(code)) throw new ArgumentNullException(nameof(code), "Country code not valid");
-        var countryInfo = validCodes.FirstOrDefault(c => c.Code == "SE");
+        var countryInfo = validCodes.FirstOrDefault(c => c.Code == code);
         if (countryInfo == default)
         {
             throw new ArgumentOutOfRangeException(nameof(code), "Country code not valid");
