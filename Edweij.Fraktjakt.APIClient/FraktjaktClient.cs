@@ -2,6 +2,7 @@
 using Edweij.Fraktjakt.APIClient.ResponseModels;
 using Edweij.Fraktjakt.APIClient.Structs;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 using System.Reflection;
 using System.Web;
 

@@ -47,7 +47,7 @@ public class Sender : ReferredSender
     /// Version number of the Fraktjakt shipping module in use.
     /// </summary>
     public string? ModuleVersion { get; set; } = null;
-    public float ApiVersion { get; private set; } = 4.5f; // Current version 2024-01-25, implement version handling later
+    public string ApiVersion { get; private set; } = "4.5.0"; // Current version 2024-01-25, implement version handling later
     
     public override IEnumerable<RuleViolation> GetRuleViolations()
     {
@@ -70,48 +70,14 @@ public class Sender : ReferredSender
                 w.WriteElementString("key", Key);
                 w.WriteElementString("currency", Currency.ToString());
                 w.WriteElementString("language", Language.ToString());
-                w.WriteElementString("encoding", "UTF-8");// this client only use utf-8 although the API also supports ISO-8859-1
+                w.WriteElementString("encoding", "utf-8");// this client only use utf-8 although the API also supports ISO-8859-1
                 if (!string.IsNullOrEmpty(SystemName)) w.WriteElementString("system_name", SystemName);
                 if (!string.IsNullOrEmpty(SystemVersion)) w.WriteElementString("system_version", SystemVersion);
                 if (!string.IsNullOrEmpty(ModuleVersion)) w.WriteElementString("module_version", ModuleVersion);
-                w.WriteElementString("api_version", ApiVersion.ToStringPeriodDecimalSeparator());
+                w.WriteElementString("api_version", ApiVersion);
             }
             return sb.ToString();
         }
         throw new ArgumentException("Sender element is not valid");
     }
-
-    public override bool Equals(object? obj)
-    {
-        if (obj == null || GetType() != obj.GetType())
-        {
-            return false;
-        }
-
-        Sender other = (Sender)obj;
-
-        return base.Equals(obj) &&
-               Equals(Currency, other.Currency) &&
-               Equals(Language, other.Language) &&
-               SystemName == other.SystemName &&
-               SystemVersion == other.SystemVersion &&
-               ModuleVersion == other.ModuleVersion &&
-               ApiVersion == other.ApiVersion;
-    }
-
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            int hash = base.GetHashCode();
-            hash = hash * 23 + Currency.GetHashCode();
-            hash = hash * 23 + Language.GetHashCode();
-            hash = hash * 23 + (SystemName?.GetHashCode() ?? 0);
-            hash = hash * 23 + (SystemVersion?.GetHashCode() ?? 0);
-            hash = hash * 23 + (ModuleVersion?.GetHashCode() ?? 0);
-            hash = hash * 23 + ApiVersion.GetHashCode();
-            return hash;
-        }
-    }
-
 }

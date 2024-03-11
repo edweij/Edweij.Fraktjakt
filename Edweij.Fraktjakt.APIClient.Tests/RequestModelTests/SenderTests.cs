@@ -52,9 +52,9 @@ public class SenderTests
             Assert.That(element.Element("language"), Is.Not.Null);
             Assert.That(element.Element("language").Value, Is.EqualTo("sv"));
             Assert.That(element.Element("encoding"), Is.Not.Null);
-            Assert.That(element.Element("encoding").Value, Is.EqualTo("UTF-8"));
+            Assert.That(element.Element("encoding").Value, Is.EqualTo("utf-8"));
             Assert.That(element.Element("api_version"), Is.Not.Null);
-            Assert.That(element.Element("api_version").Value, Is.EqualTo("4.5"));
+            Assert.That(element.Element("api_version").Value, Is.EqualTo("4.5.0"));
         });
 
 

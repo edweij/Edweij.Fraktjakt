@@ -39,7 +39,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.StructTests
         }
 
         [TestCase(-1)]
-        [TestCase(8)]
+        [TestCase(9)]
         [TestCase(20)]
         public void ParameterizedConstructor_InvalidId_ShouldThrowException(int invalidId)
         {

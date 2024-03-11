@@ -5,7 +5,7 @@ namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 /// <summary>
 /// Anropstyp 2 - Skapa en order direkt utan att tidigare ha skapat en sändning
-/// This type of order is not recommended by fraktjakt, use query and OrderFromQuery
+/// This type of order is not recommended by fraktjakt, use Query and OrderFromQuery
 /// </summary>
 public class DirectOrder : Order
 {
