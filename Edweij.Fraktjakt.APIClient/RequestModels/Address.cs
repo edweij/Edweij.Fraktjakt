@@ -14,7 +14,7 @@ public abstract class Address : XmlRequestObject
     }
 
     /// <summary>
-    /// Max length 35 characters, If the shipment is to a 'C/O' address should be in this element.
+    /// Max length 35 characters, If the shipment is to a 'C/O' address, it should be in this element.
     /// </summary>
     public string? StreetAddress1 { get; set; } = null;
     
@@ -92,6 +92,10 @@ public abstract class Address : XmlRequestObject
 
     }
 
+    /// <summary>
+    /// Converts the address object to an one line XML string.
+    /// </summary>
+    /// <returns>An XML representation of the address.</returns>
     public override string ToXml()
     {
         if (IsValid)

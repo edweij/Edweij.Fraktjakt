@@ -54,6 +54,19 @@ public readonly struct CountryCode
         return new CountryCode(cc);
     }
 
+    // Override the equality operator (==)
+    public static bool operator ==(CountryCode obj1, CountryCode obj2)
+    {        
+        // Use the Equals method to perform the actual comparison
+        return obj1.Equals(obj2);
+    }
+
+    // Override the inequality operator (!=)
+    public static bool operator !=(CountryCode obj1, CountryCode obj2)
+    {
+        return !(obj1 == obj2);
+    }
+
     /// <inheritdoc/>
     public override bool Equals(object? obj)
     {
