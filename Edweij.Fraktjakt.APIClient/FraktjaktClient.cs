@@ -94,7 +94,8 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
             url += $"&md5_checksum={MD5(xml)}";
         }
 
-        var response = await QueryResponse.FromHttpResponse(await _httpClient.GetAsync(url));
+        var r = await _httpClient.GetAsync(url);
+        var response = await QueryResponse.FromHttpResponse(r);
         if (response.HasResult && !cachedQueries.ContainsKey(xml))
         {
             cachedQueries.Add(xml, response.Result!.Id);

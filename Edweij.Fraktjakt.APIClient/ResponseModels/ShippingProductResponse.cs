@@ -12,13 +12,10 @@ namespace Edweij.Fraktjakt.APIClient.ResponseModels;
 /// <param name="ArrivalTime">The arrival time; either the number of days from now or the expected date/time of arrival.</param>
 /// <param name="price">The shipping product's total price without VAT, but with any selected insurance if the company's settings or input determines that insurance should be used if necessary. In the requested currency.</param>
 /// <param name="TaxClass">The VAT percentage that applies to this shipping product including the VAT on any insurance.</param>
-/// <param name="InsuranceFee">The cost of any additional insurance. Included in the price tag if insurance is selected by settings or input data. Displayed in the requested currency</param>
-/// <param name="InsuranceTaxClass">The insurance's VAT (percentage). As a rule, always zero.</param>
 /// <param name="ToAgent">If the product is delivered by an agent or not. </param>
 /// <param name="AgentInfo">The shipping agent location that is closest to the receiver's address (does not apply to direct delivery shipping products). If Fraktjakt is missing information about nearest agent it is announced with the text "Agent information is missing”. Empty for shipping products that don’t use agents.</param>
 /// <param name="AgentLink">A link to a map that shows where the In this link, the consignee of the freight can be offered to choose a representative for the service. Does not appear if no_agents is specified. </param>
-public record ShippingProductResponse(int Id, string Name, string Description, string ArrivalTime, float price,
-        float TaxClass, float InsuranceFee, float InsuranceTaxClass, bool ToAgent, string AgentInfo, string AgentLink)
+public record ShippingProductResponse(int Id, string Name, string Description, string ArrivalTime, float price, float TaxClass, bool ToAgent, string AgentInfo, string AgentLink)
 {
     /// <summary>
     /// Creates an instance of <see cref="ShippingProductResponse"/> from an XML string.
@@ -34,7 +31,7 @@ public record ShippingProductResponse(int Id, string Name, string Description, s
     /// <summary>
     /// Creates an instance of <see cref="ShippingProductResponse"/> from an <see cref="XElement"/>.
     /// </summary>
-    /// <param name="xml">The XML representation to parse.</param>
+    /// <param name="element">The XML representation to parse.</param>
     /// <returns>An instance of <see cref="ShippingProductResponse"/> representing the parsed response.</returns>
     public static ShippingProductResponse FromXml(XElement element)
     {
@@ -45,23 +42,32 @@ public record ShippingProductResponse(int Id, string Name, string Description, s
             element.Element("arrival_time")!.Value,
             float.Parse(element.Element("price")!.Value, CultureInfo.InvariantCulture),
             float.Parse(element.Element("tax_class")!.Value, CultureInfo.InvariantCulture),
-            float.Parse(element.Element("insurance_fee")!.Value, CultureInfo.InvariantCulture),
-            float.Parse(element.Element("insurance_tax_class")!.Value, CultureInfo.InvariantCulture),
             element.Element("to_agent")!.Value == "1" ? true : false,
             element.Element("agent_info")!.Value,
             element.Element("agent_link")!.Value)
         {
             AgentInInfo = element.Element("agent_in_info") != null ? element.Element("agent_in_info")!.Value : null,
             AgentInLink = element.Element("agent_in_link") != null ? element.Element("agent_in_link")!.Value : null,
+            InsuranceFee = element.Element("insurance_fee") != null && !string.IsNullOrEmpty(element.Element("insurance_fee")!.Value) ? float.Parse(element.Element("insurance_fee")!.Value, CultureInfo.InvariantCulture) : null,
+            InsuranceTaxClass = element.Element("insurance_tax_class") != null && !string.IsNullOrEmpty(element.Element("insurance_tax_class")!.Value) ? float.Parse(element.Element("insurance_tax_class")!.Value, CultureInfo.InvariantCulture) : null,
             ServicePointLocatorApi = element.Element("service_point_locator_api") != null ? element.Element("service_point_locator_api")!.Value : null,
             ShipperId = element.Element("shipper") != null ? int.Parse(element.Element("shipper")!.Element("id")!.Value) : null,
             ShipperName = element.Element("shipper") != null ? element.Element("shipper")!.Element("name")!.Value : null,
             ShipperLogoUrl = element.Element("shipper") != null ? element.Element("shipper")!.Element("logo_url")!.Value : null,
-        };
-
+        };       
 
         return result;
     }
+
+    /// <summary>
+    /// The cost of any additional insurance. Included in the price tag if insurance is selected by settings or input data. Displayed in the requested currency
+    /// </summary>
+    public float? InsuranceFee { get; init; } = null;
+
+    /// <summary>
+    /// The insurance's VAT (percentage). As a rule, always zero.
+    /// </summary>
+    public float? InsuranceTaxClass { get; init; } = null;
 
     /// <summary>
     /// The shipping agent location that is closest to the sender's address (does not apply to shipping products with pickup). 

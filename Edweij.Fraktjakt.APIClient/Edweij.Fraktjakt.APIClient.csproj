@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IncrementVersionOnBuild>yyyy.1.0.0+</IncrementVersionOnBuild>
-		<Version>2024.1.0.2</Version>
+		<Version>2024.1.0.79</Version>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<Title>Fraktjakt API Client</Title>
 		<Authors>edweij</Authors>
@@ -14,7 +14,12 @@
 		<Copyright>Copyright (c) 2024 Edvin Weijmers</Copyright>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
 		<PackageIcon>profile-icon-128x128.png</PackageIcon>
+		<PackageProjectUrl>https://github.com/edweij/Edweij.Fraktjakt</PackageProjectUrl>
+		<GenerateDocumentationFile>True</GenerateDocumentationFile>
 	</PropertyGroup>
+	<ItemGroup>
+		<None Include="$(OutputPath)\$(AssemblyName).xml" Pack="true" PackagePath="docs\" />
+	</ItemGroup>
 	<ItemGroup>
 		<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
 			<_Parameter1>Edweij.Fraktjakt.APIClient.Tests</_Parameter1>

@@ -45,6 +45,8 @@ public record QueryResponse(CurrencyCode Currency, int Id, string AccessCode, st
                 return Response<QueryResponse>.CreateErrorResponseFromXml(element);
             }
 
+            var products = element.Element("shipping_products") != null ? ProductsFromXml(element.Element("shipping_products")!) : Enumerable.Empty<ShippingProductResponse>();
+
             var queryResponse = new QueryResponse(
                 element.Element("currency")!.Value,
                 int.Parse(element.Element("id")!.Value),
@@ -52,7 +54,7 @@ public record QueryResponse(CurrencyCode Currency, int Id, string AccessCode, st
                 element.Element("access_link")!.Value,
                 element.Element("tracking_code")!.Value,
                 element.Element("tracking_link")!.Value,
-                element.Element("shipping_products") != null ? ProductsFromXml(element.Element("shipping_products")!) : Enumerable.Empty<ShippingProductResponse>())
+                products)
             {
                 AgentSelectionLink = element.Element("agent_selection_link") != null ? element.Element("agent_selection_link")!.Value : null
             };
@@ -69,7 +71,7 @@ public record QueryResponse(CurrencyCode Currency, int Id, string AccessCode, st
         }
         catch (Exception ex)
         {
-            return Response<QueryResponse>.CreateErrorResponse($"Invalid xml: {ex.Message}");
+            return Response<QueryResponse>.CreateErrorResponse($"Unable to bind response XML: {ex.GetType().Name} {ex.Message}");
         }
     }
 
