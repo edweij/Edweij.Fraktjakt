@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IncrementVersionOnBuild>yyyy.1.0.0+</IncrementVersionOnBuild>
-		<Version>2024.1.0.79</Version>
+		<Version>2024.1.0.80</Version>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<Title>Fraktjakt API Client</Title>
 		<Authors>edweij</Authors>
@@ -16,6 +16,7 @@
 		<PackageIcon>profile-icon-128x128.png</PackageIcon>
 		<PackageProjectUrl>https://github.com/edweij/Edweij.Fraktjakt</PackageProjectUrl>
 		<GenerateDocumentationFile>True</GenerateDocumentationFile>
+		<PackageLicenseFile>license.txt</PackageLicenseFile>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="$(OutputPath)\$(AssemblyName).xml" Pack="true" PackagePath="docs\" />
@@ -37,6 +38,12 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="license.txt">
+	    <Pack>True</Pack>
+	    <PackagePath>\</PackagePath>
+	  </None>
 	</ItemGroup>
 
 </Project>
