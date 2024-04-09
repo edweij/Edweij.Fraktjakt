@@ -76,8 +76,8 @@ public class AddressTests
             Assert.That(element.Element("postal_code").Value, Is.EqualTo("12345"));
             Assert.That(element.Element("country_code"), Is.Not.Null);
             Assert.That(element.Element("country_code").Value, Is.EqualTo("SE"));
-            Assert.That(element.Element("residental"), Is.Not.Null);
-            Assert.That(element.Element("residental").Value, Is.EqualTo("1"));
+            Assert.That(element.Element("residential"), Is.Not.Null);
+            Assert.That(element.Element("residential").Value, Is.EqualTo("1"));
             Assert.That(element.Element("city_name"), Is.Not.Null);
             Assert.That(element.Element("city_name").Value, Is.EqualTo("City"));
             Assert.That(element.Element("street_address_1"), Is.Not.Null);
