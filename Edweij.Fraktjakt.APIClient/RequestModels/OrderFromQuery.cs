@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
 /// <summary>
-/// Anropstyp 1 - Skapa en order från en tidigare skapat sändning
+/// Create an order from a previously created shipment (Query)
 /// </summary>
 public class OrderFromQuery : Order
 {
@@ -13,7 +13,11 @@ public class OrderFromQuery : Order
         if (shipmentId < 1) throw new ArgumentException(nameof(shipmentId));
         ShipmentId = shipmentId;
     }
-
+    /// <summary>
+    /// This must be an ID that you have received in a response from the Query API. <br/>
+    /// If you have already used the same shipment ID in a previous call to the Order API, <br />
+    /// Fraktjakt will create a new copy of the existing shipment record with a new shipment ID (but with the same shipment details).
+    /// </summary>
     public int ShipmentId { get; init; }
 
     public override IEnumerable<RuleViolation> GetRuleViolations()

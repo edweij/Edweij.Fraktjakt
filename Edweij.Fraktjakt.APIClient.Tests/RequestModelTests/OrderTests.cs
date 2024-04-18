@@ -22,7 +22,7 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             var validSender = new Sender(1, "key");
             var validItems = new List<ShipmentItem> { new ShipmentItem("TestItem", 2, 1.5f, 10.0f) };
 
-            validMockOrder = new MockOrder(validSender, 1, validItems) { Value = 100.0f };
+            validMockOrder = new MockOrder(validSender, 1, validItems) { Value = 100.0f, AgentId = 100, CallbackUrl = "callbackurl", Reference = "12345", InsureDefault = true, ExportReason = Enums.ExportReason.SAMPLE, NoAgents = false, SenderEmail = "test@test.se" };
 
             // Create an invalid MockOrder instance
 
@@ -68,18 +68,18 @@ namespace Edweij.Fraktjakt.APIClient.Tests.RequestModelTests
             // Assert
             Assert.Multiple(() =>
             {
-                // String contains assertions
-                Assert.That(generatedXml, Does.Contain("<OrderSpecification>"));
-                Assert.That(generatedXml, Does.Contain("<value>100</value>"));
-                Assert.That(generatedXml, Does.Contain("<shipping_product_id>1</shipping_product_id>"));
-                // Add more assertions as needed
-
                 // XDocument assertions
                 var xDocument = XDocument.Parse(generatedXml);
                 Assert.That(xDocument.Root!.Name.LocalName, Is.EqualTo("OrderSpecification"));
                 Assert.That(xDocument.Descendants("value").Single().Value, Is.EqualTo("100"));
                 Assert.That(xDocument.Descendants("shipping_product_id").Single().Value, Is.EqualTo("1"));
-                // Add more assertions as needed
+                Assert.That(xDocument.Descendants("agent_id").Single().Value, Is.EqualTo("100"));
+                Assert.That(xDocument.Descendants("callback_url").Single().Value, Is.EqualTo("callbackurl"));
+                Assert.That(xDocument.Descendants("reference").Single().Value, Is.EqualTo("12345"));
+                Assert.That(xDocument.Descendants("insure_default").Single().Value, Is.EqualTo("1"));
+                Assert.That(xDocument.Descendants("export_reason").Single().Value, Is.EqualTo("SAMPLE"));
+                Assert.That(xDocument.Descendants("no_agents").Single().Value, Is.EqualTo("0"));
+                Assert.That(xDocument.Descendants("sender_email").Single().Value, Is.EqualTo("test@test.se"));
             });
         }
 

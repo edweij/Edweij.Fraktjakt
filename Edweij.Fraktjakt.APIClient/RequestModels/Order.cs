@@ -1,11 +1,24 @@
 ﻿using Edweij.Fraktjakt.APIClient.Enums;
+using System.Reflection.Emit;
 using System.Text;
 using System.Text.RegularExpressions;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Edweij.Fraktjakt.APIClient.RequestModels;
 
+/// <summary>
+/// Base class for order type 1 and 2
+/// </summary>
 public abstract partial class Order : XmlRequestObject
 {
+    /// <summary>
+    /// Constructor for an order object
+    /// </summary>
+    /// <param name="sender">The sender to use within the API call, use your clients sender</param>
+    /// <param name="shippingProductId">The product id to use for your order</param>
+    /// <param name="items">Shippment items in your order</param>
+    /// <exception cref="ArgumentNullException">If provided sender is null</exception>
+    /// <exception cref="ArgumentException">For invalid parameters</exception>
     public Order(Sender sender, int shippingProductId, IEnumerable<ShipmentItem>? items = null)
     {
         Sender = sender ?? throw new ArgumentNullException(nameof(sender));
@@ -19,6 +32,9 @@ public abstract partial class Order : XmlRequestObject
         }
     }
 
+    /// <summary>
+    /// The sender to use for API calls, i.e. your clients credentials and settings
+    /// </summary>
     public Sender Sender { get; init; }
 
     private ReferredSender? referredSender = null;
@@ -44,6 +60,9 @@ public abstract partial class Order : XmlRequestObject
         }
     }
 
+    /// <summary>
+    /// Commercial value of your shipment
+    /// </summary>
     public float? Value { get; set; } = null;
 
     /// <summary>
@@ -54,9 +73,24 @@ public abstract partial class Order : XmlRequestObject
     /// Should the shipping be insured, if used replaces the integration settings
     /// </summary>
     public bool InsureDefault { get; set; } = false;
+    /// <summary>
+    /// The shipping product's ID in Fraktjakt.     For call type 1: This must be an ID that you have received in a response from the Query API. Call Type 2 uses a number from the list of products. The id can be found with the call https://www.fraktjakt.se/shipping_products/xml_list If an incorrect number is entered, the shipment must be corrected in Fraktijakt
+    /// </summary>
     public int ShippingProductId { get; init; }
+    /// <summary>
+    /// If the end customer chooses a representative, the selected representative is stated here.
+    /// </summary>
     public int? AgentId { get; set; } = null;
+    /// <summary>
+    /// Free text that refers to the order in Fraktjakt.<br />
+    /// This element may contain your own system's order ID, an identifying text, or some other.<br />
+    /// This text will appear on your shipping labels.<br />
+    /// Max length 50 chars
+    /// </summary>
     public string? Reference { get; set; } = null;
+    /// <summary>
+    /// Enum of export reason, defaults to SALE
+    /// </summary>
     public ExportReason ExportReason { get; set; } = ExportReason.SALE;
     /// <summary>
     /// Set to true to exclude postal agents from the result, use for faster queries
@@ -136,7 +170,7 @@ public abstract partial class Order : XmlRequestObject
 
                 if (AgentId.HasValue)
                 {
-                    w.WriteElementString("agent_id", AgentId.HasValue.ToString());
+                    w.WriteElementString("agent_id", AgentId.Value.ToString());
                 }
 
                 if (!string.IsNullOrEmpty(Reference))
