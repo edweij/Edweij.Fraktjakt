@@ -32,7 +32,7 @@ public record Response<T>(string ServerStatus, ResponseStatus ResponseStatus, st
     public static Response<T> CreateErrorResponseFromXml(XElement element)
     {
         return new Response<T>(
-                    element.Element("server_status")!.Value,
+                    element.Element("server_status")?.Value ?? "unknown server status",
                     (ResponseStatus)int.Parse(element.Element("code")!.Value),
                     element.Element("warning_message")!.Value,
                     element.Element("error_message")!.Value,

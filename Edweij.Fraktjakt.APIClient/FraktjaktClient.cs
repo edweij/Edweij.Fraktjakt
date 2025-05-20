@@ -4,6 +4,7 @@ using Edweij.Fraktjakt.APIClient.Structs;
 using Microsoft.Extensions.DependencyInjection;
 using System.Net;
 using System.Reflection;
+using System.Text;
 using System.Web;
 
 namespace Edweij.Fraktjakt.APIClient;
@@ -17,7 +18,8 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
 
     private readonly Dictionary<string, int> cachedQueries = new();
 
-    public FraktjaktClient(int id, string key, bool useMD5Checksum = true) {
+    public FraktjaktClient(int id, string key, bool useMD5Checksum = true)
+    {
         if (id <= 0) throw new ArgumentException("invalid id", nameof(id));
         if (string.IsNullOrWhiteSpace(key)) throw new ArgumentException("Invalid key", nameof(key));
 
@@ -87,7 +89,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         if (!query.IsValid) throw new ArgumentException("Shipment is not valid");
         if (query.Sender != Sender) throw new ArgumentException("Sender in shipment is different from the clients sender");
 
-        
+
         var url = $"/fraktjakt/query_xml?xml={UrlEncode(xml)}";
         if (_useMD5Checksum)
         {
@@ -128,18 +130,40 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         return await ReQuery(query);
     }
 
+    //public async Task<Response<OrderResponse>> Order(Order order)
+    //{
+    //    if (!order.IsValid) throw new ArgumentException("Order is not valid");
+    //    if (order.Sender != Sender) throw new ArgumentException("Sender in order is different from the clients sender");
+
+    //    var xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>" + order.ToXml();
+    //    var url = $"/orders/order_xml?xml={UrlEncode(xml)}";
+    //    if (_useMD5Checksum)
+    //    {
+    //        url += $"&md5_checksum={MD5(xml)}";
+    //    }
+    //    var response = await _httpClient.GetAsync(url);
+    //    return await OrderResponse.FromHttpResponse(response);
+    //}
+
     public async Task<Response<OrderResponse>> Order(Order order)
     {
         if (!order.IsValid) throw new ArgumentException("Order is not valid");
         if (order.Sender != Sender) throw new ArgumentException("Sender in order is different from the clients sender");
 
         var xml = @"<?xml version=""1.0"" encoding=""UTF-8""?>" + order.ToXml();
-        var url = $"/orders/order_xml?xml={UrlEncode(xml)}";
+
+        var formData = new Dictionary<string, string>
+    {
+        { "xml", xml }
+    };
+
         if (_useMD5Checksum)
         {
-            url += $"&md5_checksum={MD5(xml)}";
+            formData.Add("md5_checksum", MD5(xml));
         }
-        var response = await _httpClient.GetAsync(url);
+
+        var content = new FormUrlEncodedContent(formData);
+        var response = await _httpClient.PostAsync("/orders/order_xml", content);
         return await OrderResponse.FromHttpResponse(response);
     }
 
@@ -177,7 +201,7 @@ public class FraktjaktClient : IFraktjaktClient, IDisposable
         return Convert.ToHexString(hashBytes);
     }
 
-    
+
     public void Dispose()
     {
         Dispose(true);
