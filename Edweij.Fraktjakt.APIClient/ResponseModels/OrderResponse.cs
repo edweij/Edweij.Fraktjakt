@@ -49,7 +49,10 @@ public record OrderResponse(int ShipmentId, string AccessCode, string AccessLink
         try
         {
             XElement element = XElement.Parse(xml);
-            var status = (ResponseStatus)int.Parse(element.Element("code")!.Value);
+            var codeElement = element.Element("code");
+            var status = codeElement != null && int.TryParse(codeElement.Value, out var code)
+                ? (ResponseStatus)code
+                : ResponseStatus.Error;
 
             if (status == ResponseStatus.Error)
             {
@@ -57,27 +60,28 @@ public record OrderResponse(int ShipmentId, string AccessCode, string AccessLink
             }
 
             var orderResponse = new OrderResponse(
-                int.Parse(element.Element("shipment_id")!.Value),
-                element.Element("access_code")!.Value,
-                element.Element("access_link")!.Value,
-                element.Element("return_link")!.Value,
-                element.Element("cancel_link")!.Value,
-                element.Element("tracking_code")!.Value,
-                element.Element("tracking_link")!.Value,
-                float.Parse(element.Element("amount")!.Value, CultureInfo.InvariantCulture),
-                element.Element("currency")!.Value,
-                element.Element("agent_info")!.Value,
-                element.Element("agent_link")!.Value)
+                int.Parse(element.Element("shipment_id")?.Value ?? "0"),
+                element.Element("access_code")?.Value ?? "",
+                element.Element("access_link")?.Value ?? "",
+                element.Element("return_link")?.Value ?? "",
+                element.Element("cancel_link")?.Value ?? "",
+                element.Element("tracking_code")?.Value ?? "",
+                element.Element("tracking_link")?.Value ?? "",
+                float.TryParse(element.Element("amount")?.Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var amount) ? amount : 0f,
+                element.Element("currency")?.Value ?? "",
+                element.Element("agent_info")?.Value ?? "",
+                element.Element("agent_link")?.Value ?? "")
             {
-                PaymentLink = element.Element("payment_link") != null ? element.Element("payment_link")!.Value : null,
-                SenderEmailLink = element.Element("sender_email_link") != null ? element.Element("sender_email_link")!.Value : null,
-                ServicePointLocatorApi = element.Element("service_point_locator_api") != null ? element.Element("service_point_locator_api")!.Value : null
+                PaymentLink = element.Element("payment_link")?.Value,
+                SenderEmailLink = element.Element("sender_email_link")?.Value,
+                ServicePointLocatorApi = element.Element("service_point_locator_api")?.Value
             };
 
-            var result = new Response<OrderResponse>(element.Element("server_status")!.Value,
+            var result = new Response<OrderResponse>(
+                element.Element("server_status")?.Value ?? "",
                 status,
-                element.Element("warning_message")!.Value,
-                element.Element("error_message")!.Value,
+                element.Element("warning_message")?.Value ?? "",
+                element.Element("error_message")?.Value ?? "",
                 orderResponse);
 
             return result;
@@ -87,6 +91,49 @@ public record OrderResponse(int ShipmentId, string AccessCode, string AccessLink
             return Response<OrderResponse>.CreateErrorResponse($"Invalid xml: {ex.Message}");
         }
     }
+    //public static Response<OrderResponse> FromXml(string xml)
+    //{
+    //    try
+    //    {
+    //        XElement element = XElement.Parse(xml);
+    //        var status = (ResponseStatus)int.Parse(element.Element("code")!.Value);
+
+    //        if (status == ResponseStatus.Error)
+    //        {
+    //            return Response<OrderResponse>.CreateErrorResponseFromXml(element);
+    //        }
+
+    //        var orderResponse = new OrderResponse(
+    //            int.Parse(element.Element("shipment_id")!.Value),
+    //            element.Element("access_code")!.Value,
+    //            element.Element("access_link")!.Value,
+    //            element.Element("return_link")!.Value,
+    //            element.Element("cancel_link")!.Value,
+    //            element.Element("tracking_code")!.Value,
+    //            element.Element("tracking_link")!.Value,
+    //            float.Parse(element.Element("amount")!.Value, CultureInfo.InvariantCulture),
+    //            element.Element("currency")!.Value,
+    //            element.Element("agent_info")!.Value,
+    //            element.Element("agent_link")!.Value)
+    //        {
+    //            PaymentLink = element.Element("payment_link") != null ? element.Element("payment_link")!.Value : null,
+    //            SenderEmailLink = element.Element("sender_email_link") != null ? element.Element("sender_email_link")!.Value : null,
+    //            ServicePointLocatorApi = element.Element("service_point_locator_api") != null ? element.Element("service_point_locator_api")!.Value : null
+    //        };
+
+    //        var result = new Response<OrderResponse>(element.Element("server_status")!.Value,
+    //            status,
+    //            element.Element("warning_message")!.Value,
+    //            element.Element("error_message")!.Value,
+    //            orderResponse);
+
+    //        return result;
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        return Response<OrderResponse>.CreateErrorResponse($"Invalid xml: {ex.Message}");
+    //    }
+    //}
 
 
 

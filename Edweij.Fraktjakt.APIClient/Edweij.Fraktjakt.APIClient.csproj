@@ -5,7 +5,7 @@
 		<ImplicitUsings>enable</ImplicitUsings>
 		<Nullable>enable</Nullable>
 		<IncrementVersionOnBuild>yyyy.1.0.0+</IncrementVersionOnBuild>
-		<Version>2025.1.0.441</Version>
+		<Version>2025.1.0.451</Version>
 		<GeneratePackageOnBuild>False</GeneratePackageOnBuild>
 		<Title>Fraktjakt API Client</Title>
 		<Authors>edweij</Authors>
